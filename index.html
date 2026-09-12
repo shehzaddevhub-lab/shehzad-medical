@@ -1,0 +1,2746 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr" class="h-full bg-slate-100 antialiased selection:bg-blue-600 selection:text-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1d4ed8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Shehzad Medical Store - Complete Pharmacy POS, Real AI Prescription & Bill OCR">
+    <title>Shehzad Medical Store - Pharmacy POS & Management</title>
+
+    <!-- Web App Manifest for Native PWA Installation -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Shehzad Medical Store","short_name":"Shehzad Med","start_url":".","display":"standalone","background_color":"#1d4ed8","theme_color":"#1d4ed8","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3063/3063822.png","sizes":"512x512","type":"image/png"}]}'>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons (Reliable UMD CDN with unpkg fallback) -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <script>
+        if (!window.lucide) {
+            document.write('<script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.js"><\/script>');
+        }
+    </script>
+
+    <!-- html2canvas for 1-Click Thermal Receipt Image Download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        /* Thermal Receipt Print Styles (80mm & 58mm POS Printers) */
+        @media print {
+            body * { visibility: hidden; }
+            #printable-receipt, #printable-receipt * { visibility: visible; }
+            #printable-receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 6px;
+                color: #000;
+                background: #fff;
+            }
+            .no-print { display: none !important; }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .mobile-pb {
+            padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+        }
+
+        /* Dynamic Scanner Animation */
+        @keyframes scanAnimation {
+            0% { top: 0%; opacity: 0.8; }
+            50% { top: 90%; opacity: 1; }
+            100% { top: 0%; opacity: 0.8; }
+        }
+        .scanning-line {
+            animation: scanAnimation 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 bg-slate-100 overflow-x-hidden select-none md:select-auto">
+
+    <!-- Toast Notification Message Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- In-App Confirmation Modal (Zero Browser Alert/Confirm) -->
+    <div id="custom-confirm-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
+                    <i data-lucide="help-circle" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 id="confirm-modal-title" class="font-bold text-slate-800 text-sm">Confirmation</h3>
+                    <p id="confirm-modal-message" class="text-xs text-slate-500 mt-0.5">Are you sure?</p>
+                </div>
+            </div>
+            <div class="flex gap-2 pt-2">
+                <button id="confirm-modal-cancel" class="flex-1 py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50">Cancel</button>
+                <button id="confirm-modal-ok" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-black shadow">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Install Banner -->
+    <div id="pwa-install-banner" class="bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 px-3 md:px-4 py-2 shadow-sm flex items-center justify-between z-40 sticky top-0 border-b border-amber-600">
+        <div class="flex items-center gap-2 text-xs md:text-sm font-bold truncate">
+            <i data-lucide="smartphone" class="w-4 h-4 shrink-0 text-slate-900 animate-pulse"></i>
+            <span class="truncate">Shehzad Medical Store App Mobile Mein Install Karein</span>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+            <button onclick="window.installPWADirect()" class="bg-slate-950 text-white hover:bg-slate-800 font-bold text-[11px] md:text-xs px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1.5 active:scale-95">
+                <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i> Install App
+            </button>
+            <button onclick="document.getElementById('pwa-install-banner').classList.add('hidden')" class="text-slate-800 hover:text-black p-1">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="bg-brand-700 text-white shadow-lg sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+            <!-- Brand Logo -->
+            <div class="flex items-center space-x-2 shrink-0 cursor-pointer" onclick="window.switchTab('dashboard')">
+                <div class="bg-white text-brand-700 p-2 rounded-xl shadow-md flex items-center justify-center">
+                    <i data-lucide="cross" class="w-5 h-5 text-red-600 stroke-[2.5]"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-sm sm:text-base leading-none tracking-wide text-white">
+                        Shehzad Medical Store
+                    </h1>
+                    <p class="text-[10px] text-brand-200 mt-0.5 font-medium">Smart Pharmacy POS & Management</p>
+                </div>
+            </div>
+
+            <!-- 1-Click Quick Price Lookup Bar -->
+            <div class="relative flex-1 max-w-xs md:max-w-md mx-1">
+                <div class="relative">
+                    <input type="text" id="global-search-input" onkeyup="window.globalQuickSearch()" placeholder="1-Click Rate Check (Panadol, Risek)..." class="w-full pl-8 pr-7 py-1.5 text-xs bg-brand-800 text-white placeholder-brand-200 border border-brand-500 rounded-full focus:outline-none focus:ring-2 focus:ring-white">
+                    <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-2 text-brand-200"></i>
+                    <button id="clear-global-search" onclick="window.clearGlobalSearch()" class="hidden absolute right-2 top-2 text-brand-200 hover:text-white">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+
+                <!-- Floating Quick Rate Results -->
+                <div id="global-search-results" class="hidden absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl max-h-80 overflow-y-auto z-50 divide-y divide-slate-100 p-2 text-slate-800"></div>
+            </div>
+
+            <!-- Top Actions, Cloud Sync Status & Account Auth Profile -->
+            <div class="flex items-center space-x-2 shrink-0">
+                <!-- Sync Status Badge -->
+                <div id="cloud-sync-badge" class="flex items-center gap-1.5 bg-slate-800 text-amber-300 text-[10px] md:text-xs font-bold px-2.5 py-1.5 rounded-lg border border-slate-600 shadow-inner" title="Sync Status">
+                    <span id="sync-indicator-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <i id="sync-icon" data-lucide="hard-drive" class="w-3.5 h-3.5"></i>
+                    <span id="cloud-sync-text" class="hidden sm:inline">Guest Mode (Local)</span>
+                </div>
+
+                <!-- Account Login / Sign Up & Profile Pill -->
+                <div class="flex items-center">
+                    <button id="auth-open-modal-btn" onclick="window.openAuthModal('login')" class="bg-white hover:bg-slate-100 text-brand-700 px-2.5 py-1.5 rounded-lg shadow font-bold text-xs flex items-center gap-1.5 transition active:scale-95">
+                        <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Login / Sign Up</span>
+                    </button>
+
+                    <!-- Logged In Profile Pill (Hidden in Guest mode) -->
+                    <div id="auth-profile-pill" class="hidden flex items-center gap-2 bg-brand-800 px-2 py-1 rounded-xl border border-brand-500">
+                        <div id="user-initial" class="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs border border-white">U</div>
+                        <span id="user-display-email" class="hidden md:inline text-[11px] font-bold text-white max-w-[100px] truncate">User</span>
+                        <button onclick="window.handleLogout()" class="p-1 hover:bg-brand-900 rounded-lg text-brand-200 hover:text-white" title="Logout">
+                            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 mobile-pb md:pb-8 flex flex-col gap-4">
+
+        <!-- SECTION 1: TOP AI SCANNING HUB (ONLY 2 CLEAN OPTIONS: PRESCRIPTION SCAN & BILL SCAN) -->
+        <div class="bg-gradient-to-r from-brand-900 via-indigo-900 to-slate-900 text-white p-4 rounded-2xl shadow-md border border-brand-600/50 flex flex-col gap-3">
+            <div class="flex items-center justify-between border-b border-indigo-800/80 pb-2.5">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-2 bg-amber-400 text-slate-950 rounded-xl font-bold">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="font-extrabold text-sm sm:text-base tracking-wide text-white">AI Medical Smart Scanner</h2>
+                            <span class="bg-amber-400 text-slate-950 font-black text-[9px] px-2 py-0.5 rounded-full uppercase">Instant AI</span>
+                        </div>
+                        <p class="text-[11px] text-brand-100 mt-0.5">Doctor ka nuskha mukammal samjhein ya distributor bill scan kar ke stock mein add karein:</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exactly 2 Dedicated Action Cards (No Clutter, Native Camera & File Picker Auto) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                
+                <!-- CARD 1: PRESCRIPTION SCAN (DOCTOR NUSKHA DEEP UNDERSTANDING) -->
+                <div class="bg-white/10 hover:bg-white/[0.14] transition p-3.5 rounded-xl border border-white/10 flex flex-col justify-between gap-3">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="font-black text-sm text-amber-300 flex items-center gap-1.5">
+                                <i data-lucide="file-text" class="w-4 h-4"></i> Doctor Prescription Scan (Nuskha)
+                            </span>
+                            <p class="text-[11px] text-slate-200 mt-1">Doctor ki handwriting, dawaiyon ke naam, rozana dosage, khaney ke auqaat aur parhez ki complete AI report.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="document.getElementById('ai-presc-input').click()" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-black py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
+                            <i data-lucide="scan" class="w-4 h-4"></i> Scan Prescription (Nuskha Parhein)
+                        </button>
+                        <input type="file" id="ai-presc-input" class="hidden" accept="image/*" onchange="window.handlePrescriptionScan(event)">
+                    </div>
+                </div>
+
+                <!-- CARD 2: BILL SCAN (DISTRIBUTOR INVOICE TO INVENTORY WITH BLANK MRP) -->
+                <div class="bg-white/10 hover:bg-white/[0.14] transition p-3.5 rounded-xl border border-white/10 flex flex-col justify-between gap-3">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="font-black text-sm text-emerald-300 flex items-center gap-1.5">
+                                <i data-lucide="receipt" class="w-4 h-4"></i> Distributor Bill Scan (Stock In)
+                            </span>
+                            <p class="text-[11px] text-slate-200 mt-1">Distributor invoice scan karein -> Items, batch, qty aur wholesale rate extract honge. Dabba dekh kar retail MRP likhein.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="document.getElementById('ai-bill-stock-input').click()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
+                            <i data-lucide="package-plus" class="w-4 h-4"></i> Scan Bill (Add to Stock)
+                        </button>
+                        <input type="file" id="ai-bill-stock-input" class="hidden" accept="image/*" onchange="window.handleRealInvoiceOcr(event)">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Desktop Navigation Tabs -->
+        <nav class="hidden md:flex space-x-2 bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200">
+            <button onclick="window.switchTab('dashboard')" id="desktop-tab-dashboard" class="tab-btn flex-1 py-2 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition bg-brand-600 text-white shadow">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+            </button>
+            <button onclick="window.switchTab('pos')" id="desktop-tab-pos" class="tab-btn flex-1 py-2 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100">
+                <i data-lucide="shopping-cart" class="w-4 h-4"></i> Counter POS (Sale)
+            </button>
+            <button onclick="window.switchTab('inventory')" id="desktop-tab-inventory" class="tab-btn flex-1 py-2 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100">
+                <i data-lucide="pill" class="w-4 h-4"></i> Inventory / Stock
+            </button>
+            <button onclick="window.switchTab('margin')" id="desktop-tab-margin" class="tab-btn flex-1 py-2 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition text-slate-600 hover:bg-slate-100">
+                <i data-lucide="calculator" class="w-4 h-4"></i> Margin Calculator
+            </button>
+        </nav>
+
+        <!-- VIEW 1: DASHBOARD -->
+        <section id="view-dashboard" class="tab-content flex flex-col gap-4">
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
+                    <div class="p-2.5 bg-brand-50 text-brand-600 rounded-xl">
+                        <i data-lucide="package" class="w-5 h-5"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-[11px] font-medium text-slate-500 truncate">Total Items</p>
+                        <h3 id="dash-total-items" class="text-lg font-black text-slate-800">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
+                    <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
+                        <i data-lucide="banknote" class="w-5 h-5"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-[11px] font-medium text-slate-500 truncate">Total Stock Cost</p>
+                        <h3 id="dash-total-value" class="text-lg font-black text-slate-800">Rs. 0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
+                    <div class="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
+                        <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-[11px] font-medium text-slate-500 truncate">Low Stock (&lt; 10 packs)</p>
+                        <h3 id="dash-low-stock" class="text-lg font-black text-amber-600">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
+                    <div class="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+                        <i data-lucide="trending-up" class="w-5 h-5"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-[11px] font-medium text-slate-500 truncate">Today's Sales</p>
+                        <h3 id="dash-today-sales" class="text-lg font-black text-slate-800">Rs. 0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts & Real-time Receipts Stream -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-4">
+                    <!-- Low Stock Alert -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
+                                <i data-lucide="alert-circle" class="w-4 h-4 text-amber-500"></i> Low Stock Alerts
+                            </h3>
+                            <button onclick="window.switchTab('inventory')" class="text-xs text-brand-600 font-semibold hover:underline">View Stock</button>
+                        </div>
+                        <div id="low-stock-list" class="divide-y divide-slate-100 max-h-40 overflow-y-auto">
+                            <p class="text-xs text-slate-400 py-3 text-center">Sub medicines ka stock normal hai.</p>
+                        </div>
+                    </div>
+
+                    <!-- Expiry Alert -->
+                    <div class="border-t pt-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
+                                <i data-lucide="calendar" class="w-4 h-4 text-red-500"></i> Expiring in 90 Days
+                            </h3>
+                        </div>
+                        <div id="expiry-alert-list" class="divide-y divide-slate-100 max-h-36 overflow-y-auto">
+                            <p class="text-xs text-slate-400 py-2 text-center">Koi medicine jaldi expire nahi ho rahi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Sales Receipts Feed -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-1.5 text-xs sm:text-sm">
+                            <i data-lucide="history" class="w-4 h-4 text-brand-600"></i> Today's Sales Receipts
+                        </h3>
+                        <div id="recent-sales-list" class="space-y-2 max-h-64 overflow-y-auto">
+                            <p class="text-xs text-slate-400 py-4 text-center">No sales logged yet today.</p>
+                        </div>
+                    </div>
+                    <button onclick="window.switchTab('pos')" class="mt-3 w-full py-2 bg-brand-50 text-brand-700 hover:bg-brand-100 font-bold rounded-xl text-xs flex items-center justify-center gap-1 transition">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i> Open POS Billing
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: POS BILLING -->
+        <section id="view-pos" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="lg:col-span-2 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3">
+                <div class="flex items-center justify-between border-b pb-2">
+                    <h3 class="font-black text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-600"></i> Customer Counter POS
+                    </h3>
+                    <span id="pos-invoice-no" class="text-xs font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-bold">INV-#1001</span>
+                </div>
+
+                <!-- Live Search Box -->
+                <div class="relative">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Search Medicine to Add</label>
+                    <div class="relative">
+                        <input type="text" id="pos-search" placeholder="Type medicine name (Panadol, Augmentin, Flagyl)..." onkeyup="window.searchMedicineForPos()" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 font-medium text-xs sm:text-sm">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
+                    </div>
+                    <div id="pos-search-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-52 overflow-y-auto z-20 divide-y divide-slate-100"></div>
+                </div>
+
+                <!-- Selected Item Adjustment Bar -->
+                <div id="pos-item-config" class="bg-slate-50 p-3 rounded-xl border border-slate-200 grid grid-cols-2 md:grid-cols-5 gap-2.5 items-end">
+                    <div class="col-span-2 md:col-span-1">
+                        <span class="block text-[11px] text-slate-500">Selected Item</span>
+                        <strong id="pos-selected-title" class="text-xs text-slate-800 truncate block font-bold">None Selected</strong>
+                        <span id="pos-selected-batch" class="text-[10px] text-slate-400">Batch: -</span>
+                    </div>
+
+                    <div>
+                        <span class="block text-[11px] text-slate-500">Unit Type</span>
+                        <select id="pos-unit-type" onchange="window.updatePosUnitCalculation()" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold">
+                            <option value="pack">Full Pack / Box</option>
+                            <option value="loose">Loose Tablets / Strips</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <span class="block text-[11px] text-slate-500">Quantity</span>
+                        <input type="number" id="pos-qty" min="1" value="1" oninput="window.updatePosUnitCalculation()" class="w-full px-2 py-1 bg-white border border-slate-300 rounded-lg text-xs font-bold">
+                    </div>
+
+                    <div>
+                        <span class="block text-[11px] text-slate-500">Unit Rate (Rs.)</span>
+                        <input type="number" id="pos-custom-rate" class="w-full px-2 py-1 bg-white border border-slate-300 rounded-lg text-xs font-bold">
+                    </div>
+
+                    <div class="col-span-2 md:col-span-1">
+                        <button onclick="window.addItemToCart()" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-95 text-white py-1.5 px-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 shadow">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cart Items Table -->
+                <div class="overflow-x-auto flex-1 min-h-[160px]">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 uppercase font-semibold">
+                                <th class="py-2">Item</th>
+                                <th class="py-2 text-center">Unit</th>
+                                <th class="py-2 text-center">Qty</th>
+                                <th class="py-2 text-right">Price</th>
+                                <th class="py-2 text-right">Total</th>
+                                <th class="py-2 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-table-body" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="6" class="text-center py-8 text-slate-400">Cart is empty. Search medicine above to add.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Side Checkout Summary -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between gap-4">
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-3 border-b pb-2 flex items-center gap-1.5">
+                        <i data-lucide="receipt" class="w-4 h-4 text-emerald-600"></i> Bill Summary
+                    </h4>
+
+                    <div class="space-y-2.5 text-xs">
+                        <div class="flex justify-between text-slate-600">
+                            <span>Subtotal:</span>
+                            <span id="pos-subtotal" class="font-bold text-slate-800">Rs. 0.00</span>
+                        </div>
+
+                        <div class="flex items-center justify-between text-slate-600">
+                            <span>Discount (%):</span>
+                            <input type="number" id="pos-discount" value="0" min="0" max="100" onchange="window.calculateCartTotals()" onkeyup="window.calculateCartTotals()" class="w-16 px-2 py-0.5 border border-slate-300 rounded text-right font-bold text-xs">
+                        </div>
+
+                        <div class="flex justify-between text-slate-600">
+                            <span>Discount Amount:</span>
+                            <span id="pos-discount-amt" class="font-bold text-emerald-600">- Rs. 0.00</span>
+                        </div>
+
+                        <hr class="border-dashed">
+
+                        <div class="flex justify-between text-base font-black text-slate-800 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                            <span>Net Payable:</span>
+                            <span id="pos-grand-total" class="text-brand-600">Rs. 0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2.5 pt-2 border-t border-slate-100">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1">Payment Method</label>
+                        <select id="pos-pay-mode" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl text-xs bg-slate-50 font-bold">
+                            <option value="Cash">Cash Sale (Naqad)</option>
+                            <option value="Easypaisa / JazzCash">Easypaisa / JazzCash / Bank</option>
+                            <option value="Udhaar (Khata)">Udhaar (Customer Khata)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1">Customer Name / Mobile (for WhatsApp)</label>
+                        <input type="text" id="pos-customer" placeholder="Walk-in Customer (0300...)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl text-xs">
+                    </div>
+
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="window.clearCartPrompt()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
+                            Clear Bill
+                        </button>
+                        <button onclick="window.completeSale()" class="flex-2 w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black rounded-xl shadow-lg transition flex items-center justify-center gap-1.5 text-xs">
+                            <i data-lucide="check-circle-2" class="w-4 h-4"></i> Complete & Digital Slip
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: INVENTORY MANAGEMENT -->
+        <section id="view-inventory" class="tab-content hidden flex flex-col gap-3">
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:flex-row gap-2.5 justify-between items-center">
+                <div class="relative w-full lg:w-80">
+                    <input type="text" id="inv-search" onkeyup="window.filterInventoryTable()" placeholder="Search stock by name, generic, batch, distributor..." class="w-full pl-8 pr-3 py-1.5 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500">
+                    <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400"></i>
+                </div>
+                
+                <div class="flex flex-wrap gap-2 w-full lg:w-auto">
+                    <button onclick="document.getElementById('ai-bill-stock-input').click()" class="flex-1 sm:flex-initial bg-emerald-500 hover:bg-emerald-600 text-white px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition shadow active:scale-95">
+                        <i data-lucide="scan-line" class="w-4 h-4"></i> AI Scan Bill (Stock In)
+                    </button>
+
+                    <button onclick="window.openDistributorComparisonModal()" class="flex-1 sm:flex-initial bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i> Compare Distributor Rates
+                    </button>
+                    
+                    <button onclick="window.openAddMedicineModal()" class="flex-1 sm:flex-initial bg-brand-600 hover:bg-brand-700 active:scale-95 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition shadow">
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add New Medicine
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead class="bg-slate-50 border-b border-slate-200 text-[11px] text-slate-500 uppercase font-bold">
+                        <tr>
+                            <th class="p-3">Item Name</th>
+                            <th class="p-3">Generic / Formula</th>
+                            <th class="p-3">Distributor (Supplier)</th>
+                            <th class="p-3 text-center">Pack</th>
+                            <th class="p-3">Batch</th>
+                            <th class="p-3">Expiry</th>
+                            <th class="p-3 text-right">Buy Rate</th>
+                            <th class="p-3 text-right">MRP (Retail)</th>
+                            <th class="p-3 text-center">Stock</th>
+                            <th class="p-3 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-table-body" class="divide-y divide-slate-100">
+                        <tr>
+                            <td colspan="10" class="text-center py-8 text-slate-400">Stock database load ho raha hai...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- VIEW 4: MARGIN CALCULATOR WITH AI INVOICE MARGIN SCANNER -->
+        <section id="view-margin" class="tab-content hidden flex flex-col gap-4 max-w-2xl mx-auto w-full">
+            
+            <!-- AI Bill Discount & Margin Scanner Card -->
+            <div class="bg-gradient-to-r from-indigo-900 to-brand-900 text-white p-4 rounded-2xl shadow-md border border-indigo-500/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-amber-400 text-slate-950 rounded-xl">
+                        <i data-lucide="scan-line" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold text-xs sm:text-sm">AI Bill Se Margins Auto-Calculate Karein</h4>
+                        <p class="text-[11px] text-indigo-200 mt-0.5">Distributor bill upload karein, AI tamam items ke discounts aur profit calculate karega.</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('margin-ai-bill-input').click()" class="w-full sm:w-auto bg-amber-400 hover:bg-amber-500 text-slate-950 font-black px-3.5 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow transition shrink-0 active:scale-95">
+                    <i data-lucide="scan" class="w-4 h-4"></i> Scan Bill For Margins
+                </button>
+                <input type="file" id="margin-ai-bill-input" class="hidden" accept="image/*" onchange="window.handleAiMarginBillScan(event)">
+            </div>
+
+            <!-- Scanned Margins Table Container (Hidden until scanned) -->
+            <div id="ai-margin-results-card" class="hidden bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                <div class="flex items-center justify-between border-b pb-2">
+                    <h4 class="font-black text-xs text-slate-800 flex items-center gap-1.5">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i> AI Invoiced Bill Margin Breakdown
+                    </h4>
+                    <button onclick="document.getElementById('ai-margin-results-card').classList.add('hidden')" class="text-xs text-slate-400 hover:text-slate-600">Close</button>
+                </div>
+                <div class="overflow-x-auto border border-slate-200 rounded-xl max-h-56">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 border-b font-bold text-slate-600">
+                            <tr>
+                                <th class="p-2">Item</th>
+                                <th class="p-2 text-right">Buy Rate</th>
+                                <th class="p-2 text-right">Retail MRP</th>
+                                <th class="p-2 text-center">Scheme</th>
+                                <th class="p-2 text-center">Discount %</th>
+                                <th class="p-2 text-center">Net Margin %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ai-margin-table-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Manual Interactive Margin & Scheme Calculator -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div class="border-b border-slate-100 pb-2">
+                    <h3 class="font-black text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                        <i data-lucide="percent" class="w-4 h-4 text-brand-600"></i> Manual Trade Margin & Bonus Scheme Calculator
+                    </h3>
+                    <p class="text-[11px] text-slate-500">Retail price (MRP) vs Wholesale buy rate aur free scheme ka munafa calculate karein.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Retail Price (MRP)</label>
+                        <input type="number" id="calc-mrp" placeholder="e.g. 500" oninput="window.runMarginCalc()" class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Distributor Net Buy Rate</label>
+                        <input type="number" id="calc-rate" placeholder="e.g. 425" oninput="window.runMarginCalc()" class="w-full px-3 py-1.5 border border-slate-300 rounded-xl text-xs font-bold">
+                    </div>
+                </div>
+
+                <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                    <label class="block text-xs font-bold text-blue-900 mb-1">Scheme / Bonus (e.g. 10 + 1 free)</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="calc-scheme-buy" placeholder="Packs Bought (10)" oninput="window.runMarginCalc()" class="px-2.5 py-1 bg-white border border-blue-200 rounded-lg text-xs font-bold">
+                        <input type="number" id="calc-scheme-free" placeholder="Free Packs (1)" oninput="window.runMarginCalc()" class="px-2.5 py-1 bg-white border border-blue-200 rounded-lg text-xs font-bold">
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 grid grid-cols-2 gap-3 text-center">
+                    <div>
+                        <span class="text-[11px] text-slate-500 font-medium">Trade Discount</span>
+                        <h2 id="calc-disc-res" class="text-xl font-black text-brand-600">0.00%</h2>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-slate-500 font-medium">Net Profit Margin</span>
+                        <h2 id="calc-profit-res" class="text-xl font-black text-emerald-600">0.00%</h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ANDROID NATIVE STYLE BOTTOM BAR (Mobile) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-2xl z-40 flex items-center justify-around py-2 px-1">
+        <button onclick="window.switchTab('dashboard')" id="mobile-tab-dashboard" class="mobile-tab flex flex-col items-center justify-center flex-1 py-1 text-brand-600 font-bold text-[10px]">
+            <i data-lucide="layout-dashboard" class="w-5 h-5 mb-0.5"></i>
+            <span>Home</span>
+        </button>
+
+        <button onclick="window.switchTab('pos')" id="mobile-tab-pos" class="mobile-tab flex flex-col items-center justify-center flex-1 py-1 text-slate-500 font-semibold text-[10px]">
+            <i data-lucide="shopping-cart" class="w-5 h-5 mb-0.5"></i>
+            <span>POS Bill</span>
+        </button>
+
+        <button onclick="window.openAddMedicineModal()" class="flex flex-col items-center justify-center -mt-5 bg-brand-600 text-white rounded-full p-3 shadow-lg active:scale-95 transition">
+            <i data-lucide="plus" class="w-6 h-6 stroke-[2.5]"></i>
+        </button>
+
+        <button onclick="window.switchTab('inventory')" id="mobile-tab-inventory" class="mobile-tab flex flex-col items-center justify-center flex-1 py-1 text-slate-500 font-semibold text-[10px]">
+            <i data-lucide="pill" class="w-5 h-5 mb-0.5"></i>
+            <span>Stock</span>
+        </button>
+
+        <button onclick="window.switchTab('margin')" id="mobile-tab-margin" class="mobile-tab flex flex-col items-center justify-center flex-1 py-1 text-slate-500 font-semibold text-[10px]">
+            <i data-lucide="calculator" class="w-5 h-5 mb-0.5"></i>
+            <span>Margin</span>
+        </button>
+    </nav>
+
+    <!-- MODAL 1: ADD / EDIT MEDICINE -->
+    <div id="medicine-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-2">
+                <h3 id="med-modal-title" class="font-black text-slate-800 text-sm sm:text-base flex items-center gap-1.5">
+                    <i data-lucide="plus-circle" class="w-4 h-4 text-brand-600"></i> Add Medicine
+                </h3>
+                <button onclick="window.closeMedicineModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <form id="med-form" onsubmit="window.handleSaveMedicine(event)" class="space-y-2.5 text-xs">
+                <input type="hidden" id="med-id">
+
+                <div>
+                    <label class="block font-bold text-slate-600 mb-0.5">Brand / Medicine Name *</label>
+                    <input type="text" id="med-name" required placeholder="e.g. Panadol 500mg Tab" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl font-semibold">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-0.5">Generic / Formula</label>
+                        <input type="text" id="med-generic" placeholder="e.g. Paracetamol" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-0.5">Distributor (Maal Kis Se Aya) *</label>
+                        <input type="text" id="med-distributor" required placeholder="e.g. GSK, Ali Agency, Tariq Med" class="w-full px-2.5 py-1.5 border border-indigo-300 bg-indigo-50/40 rounded-xl font-bold text-indigo-900">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-0.5">Pack Size</label>
+                        <input type="number" id="med-pack" value="10" min="1" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-0.5">Batch Number</label>
+                        <input type="text" id="med-batch" placeholder="e.g. B-9981" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-0.5">Expiry Date *</label>
+                        <input type="date" id="med-expiry" required class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl font-mono">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-0.5">Buy Rate (Rs.) *</label>
+                        <input type="number" step="0.01" id="med-buy" required placeholder="280" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-0.5 text-amber-700">Retail MRP (Rs.) *</label>
+                        <input type="number" step="0.01" id="med-mrp" required placeholder="Box dekh kar MRP likhein" class="w-full px-2.5 py-1.5 border-2 border-amber-400 bg-amber-50/40 rounded-xl font-black text-slate-900">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-0.5">Packs Stock *</label>
+                        <input type="number" id="med-stock" required min="0" placeholder="25" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl font-bold">
+                    </div>
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="window.closeMedicineModal()" class="flex-1 py-2 border border-slate-300 rounded-xl font-bold text-slate-600 hover:bg-slate-50">Cancel</button>
+                    <button type="submit" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-black shadow">Save Medicine</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: AI INVOICE SCAN REVIEW (MRP STRICTLY BLANK FOR MANUAL ENTRY) -->
+    <div id="ai-scan-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-4xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-2">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-amber-100 text-amber-600 rounded-xl">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-slate-800 text-sm sm:text-base">AI Extracted Distributor Bill</h3>
+                        <p class="text-[11px] text-slate-500">Distributor confirm karein aur dawaiyon ke dabbay dekh kar <strong>MRP manually enter karein</strong>:</p>
+                    </div>
+                </div>
+                <button onclick="window.closeAiScanModal()" class="text-slate-400 hover:text-slate-600 p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+
+            <!-- Global Invoice Distributor Bar -->
+            <div class="bg-indigo-50 border border-indigo-200 p-3 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-2.5">
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <i data-lucide="truck" class="w-4 h-4 text-indigo-700"></i>
+                    <span class="text-xs font-bold text-indigo-950">Yeh Bill Kis Distributor Se Aya Hai?</span>
+                </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto flex-1 max-w-sm">
+                    <input type="text" id="ai-bill-distributor" placeholder="Distributor Name (e.g. GSK, Tariq Agencies)..." class="w-full px-3 py-1.5 bg-white border border-indigo-300 rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button type="button" onclick="window.applyDistributorToAllAiRows()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold shrink-0">
+                        Apply All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Scanning Indicator -->
+            <div id="ai-loading-state" class="hidden flex flex-col items-center justify-center py-12 gap-3">
+                <div class="relative w-20 h-24 border-2 border-brand-500 rounded-xl overflow-hidden bg-brand-50/50 flex items-center justify-center shadow-inner">
+                    <i data-lucide="file-text" class="w-10 h-10 text-brand-300"></i>
+                    <div class="absolute left-0 right-0 h-1 bg-amber-400 shadow-md scanning-line"></div>
+                </div>
+                <div class="text-center">
+                    <p class="font-bold text-xs text-slate-800">Distributor Bill Analyze Ho Raha Hai...</p>
+                    <p class="text-[10px] text-slate-400">Gemini AI medicines, batch, quantity aur wholesale buy rates parh raha hai.</p>
+                </div>
+            </div>
+
+            <!-- Editable Extracted Items Table -->
+            <div id="ai-review-content" class="space-y-3">
+                <div class="overflow-x-auto border border-slate-200 rounded-xl max-h-72">
+                    <table class="w-full text-left text-[11px]">
+                        <thead class="bg-slate-50 border-b text-slate-600 font-bold uppercase sticky top-0">
+                            <tr>
+                                <th class="p-2">Item Name</th>
+                                <th class="p-2">Distributor</th>
+                                <th class="p-2 text-center">Batch</th>
+                                <th class="p-2 text-center">Qty (Packs)</th>
+                                <th class="p-2 text-right">Buy Rate (Rs.)</th>
+                                <th class="p-2 text-right text-amber-700 bg-amber-50/80">Retail MRP * (Manual Box Rate)</th>
+                                <th class="p-2 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ai-scanned-table-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+
+                <div class="flex items-center justify-between text-[11px] text-amber-800 bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+                    <span class="flex items-center gap-1.5">
+                        <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0"></i>
+                        <span><strong>Note:</strong> MRP boxes empty hain taake aap pack par printed retail price dekh kar khud likhein.</span>
+                    </span>
+                </div>
+
+                <div class="flex gap-2 pt-1">
+                    <button onclick="window.closeAiScanModal()" class="flex-1 py-2 border rounded-xl text-xs font-bold text-slate-600">Cancel</button>
+                    <button onclick="window.saveAiScannedItemsToInventory()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow flex items-center justify-center gap-1.5">
+                        <i data-lucide="check" class="w-4 h-4"></i> Add All to Inventory Stock
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: DISTRIBUTOR PRICE COMPARISON -->
+    <div id="distributor-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-2">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-indigo-100 text-indigo-700 rounded-xl">
+                        <i data-lucide="arrow-left-right" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-slate-800 text-sm sm:text-base">Distributor Rate Muqabla (Price Comparison)</h3>
+                        <p class="text-[11px] text-slate-500">Check karein kon sa distributor kis dawai par kitna sasta buy rate de raha hai:</p>
+                    </div>
+                </div>
+                <button onclick="window.closeDistributorComparisonModal()" class="text-slate-400 hover:text-slate-600 p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+
+            <div class="relative">
+                <input type="text" id="dist-compare-search" onkeyup="window.renderDistributorComparison()" placeholder="Filter medicine name (e.g. Panadol, Risek)..." class="w-full pl-8 pr-3 py-1.5 border border-slate-300 rounded-xl text-xs">
+                <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400"></i>
+            </div>
+
+            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 border-b font-bold text-slate-600">
+                        <tr>
+                            <th class="p-2.5">Medicine</th>
+                            <th class="p-2.5">Distributor (Supplier)</th>
+                            <th class="p-2.5 text-right">Buy Rate</th>
+                            <th class="p-2.5 text-right">Retail MRP</th>
+                            <th class="p-2.5 text-center">Margin %</th>
+                            <th class="p-2.5 text-center">Current Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dist-compare-body" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: AUTHENTICATION (LOGIN / SIGN UP) -->
+    <div id="auth-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl flex flex-col gap-3">
+            <div class="flex items-center justify-between border-b pb-2">
+                <div>
+                    <h3 id="auth-modal-title" class="font-black text-slate-800 text-sm flex items-center gap-1.5">
+                        <i data-lucide="log-in" class="w-4 h-4 text-brand-600"></i> Account Login
+                    </h3>
+                    <p id="auth-modal-sub" class="text-[11px] text-slate-500 mt-0.5">Apna account login karein.</p>
+                </div>
+                <button onclick="window.closeAuthModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div id="auth-error-box" class="hidden bg-red-50 border border-red-200 text-red-700 text-xs p-2 rounded-xl"></div>
+
+            <form id="auth-form" onsubmit="window.handleAuthFormSubmit(event)" class="space-y-2.5 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-600 mb-0.5">Email Address *</label>
+                    <input type="email" id="auth-email-input" required placeholder="shehzad@medical.com" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl font-medium">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 mb-0.5">Password *</label>
+                    <input type="password" id="auth-password-input" required minlength="6" placeholder="Kam az kam 6 characters" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-xl font-medium">
+                </div>
+                <button type="submit" id="auth-submit-btn" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-black shadow flex items-center justify-center gap-1">
+                    <span id="auth-submit-text">Login Karein</span>
+                </button>
+            </form>
+
+            <div class="pt-2 border-t border-slate-100 flex flex-col gap-1.5 text-center">
+                <button type="button" id="auth-toggle-btn" onclick="window.toggleAuthMode()" class="text-xs font-bold text-brand-600 hover:underline">
+                    Naya account banana hai? Sign Up Karein
+                </button>
+                <button type="button" onclick="window.continueAsGuest()" class="text-[11px] text-slate-500 hover:text-slate-700 font-medium">
+                    Bagair account (Guest Mode) chalayein
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: PWA INSTALLATION UNIVERSAL HELPER & DIRECT TRIGGER -->
+    <div id="install-guide-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl flex flex-col gap-3">
+            <div class="flex items-center justify-between border-b pb-2">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-amber-100 text-amber-600 rounded-xl">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="font-black text-slate-800 text-sm">App Mobile Me Install Karein</h3>
+                </div>
+                <button onclick="document.getElementById('install-guide-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="space-y-2.5 text-xs text-slate-600">
+                <div class="p-2.5 bg-blue-50/70 rounded-xl border border-blue-200">
+                    <strong class="text-blue-950 block mb-0.5 flex items-center gap-1">
+                        <i data-lucide="smartphone" class="w-3.5 h-3.5 text-brand-600"></i> Android Phone (Chrome):
+                    </strong>
+                    <p class="text-[11px]">Browser ke ooper <strong>3 dots (⋮)</strong> par tap karein aur <strong>"Install app"</strong> ya <strong>"Add to Home screen"</strong> par click karein.</p>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <strong class="text-slate-800 block mb-0.5 flex items-center gap-1">
+                        <i data-lucide="monitor" class="w-3.5 h-3.5 text-brand-600"></i> Computer (Chrome/Edge):
+                    </strong>
+                    <p class="text-[11px]">Address bar ke right side par bane install icon <i data-lucide="download" class="w-3 h-3 inline"></i> par click karein.</p>
+                </div>
+            </div>
+
+            <button onclick="document.getElementById('install-guide-modal').classList.add('hidden')" class="w-full py-2 bg-slate-800 text-white rounded-xl text-xs font-bold shadow">
+                Samajh Gaya (Close)
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 6: DOCTOR PRESCRIPTION DEEP ANALYSIS MODAL -->
+    <div id="ai-presc-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[92vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-2">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-amber-100 text-amber-700 rounded-xl">
+                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-slate-800 text-sm sm:text-base">Doctor Prescription (Nuskha) Report</h3>
+                        <p class="text-[11px] text-slate-500">Handwriting & Dosage Timing Full Breakdown</p>
+                    </div>
+                </div>
+                <button onclick="window.closePrescriptionModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Loading Spinner & Scan Animation -->
+            <div id="presc-loading-state" class="flex flex-col items-center justify-center py-10 gap-3">
+                <div class="relative w-16 h-20 border-2 border-amber-500 rounded-xl overflow-hidden bg-amber-50/50 flex items-center justify-center shadow-inner">
+                    <i data-lucide="file-text" class="w-8 h-8 text-amber-400"></i>
+                    <div class="absolute left-0 right-0 h-1 bg-brand-600 shadow-md scanning-line"></div>
+                </div>
+                <div class="text-center">
+                    <p class="font-bold text-xs text-slate-800">Doctor Ka Nuskha Parha Ja Raha Hai...</p>
+                    <p class="text-[10px] text-slate-400">Gemini AI doctor ki handwriting, medicines, dosage timings aur parhez extract kar raha hai.</p>
+                </div>
+            </div>
+
+            <!-- Analysis Result Output -->
+            <div id="presc-result-content" class="hidden space-y-3">
+                <div id="presc-result-body" class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 leading-relaxed max-h-80 overflow-y-auto space-y-2.5"></div>
+
+                <div class="flex gap-2 pt-1">
+                    <button onclick="window.copyPrescriptionText()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Full Text
+                    </button>
+                    <button onclick="window.closePrescriptionModal()" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold shadow">
+                        Done (Close)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 7: DYNAMIC SNUG THERMAL RECEIPT (AUTO-SIZING + WHATSAPP & IMAGE DOWNLOAD) -->
+    <div id="digital-receipt-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-2xl flex flex-col gap-3 max-h-[92vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-1.5">
+                <div class="flex items-center gap-2">
+                    <div class="p-1.5 bg-emerald-100 text-emerald-700 rounded-lg">
+                        <i data-lucide="receipt" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Customer Digital Slip</h3>
+                </div>
+                <button onclick="window.closeDigitalReceiptModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- CAPTURE TARGET: SNUG THERMAL RECEIPT CARD (HEIGHT FITS EXACT ITEMS WITH ZERO EXCESS BLANK) -->
+            <div id="thermal-card-capture" class="bg-white border border-slate-300 rounded-xl p-3.5 font-mono text-[11px] text-slate-900 shadow-sm leading-tight">
+                <!-- Header -->
+                <div class="text-center pb-2 border-b border-dashed border-slate-400">
+                    <h2 class="text-xs font-black uppercase tracking-wider">SHEHZAD MEDICAL STORE</h2>
+                    <p class="text-[9px] text-slate-500 font-sans">Main Bazar, Faisalabad • Ph: 0300-1234567</p>
+                    <div class="flex justify-between items-center text-[9px] text-slate-500 mt-1 font-sans">
+                        <span id="card-receipt-inv">INV: #1001</span>
+                        <span id="card-receipt-datetime">12/09/2026, 12:30 PM</span>
+                    </div>
+                    <div class="text-left text-[9px] text-slate-600 font-sans mt-0.5">
+                        <span>Customer: <strong id="card-receipt-cust" class="text-slate-800">Walk-in</strong></span>
+                    </div>
+                </div>
+
+                <!-- Items Table (Snug and dynamic) -->
+                <table class="w-full my-2 text-[10px]">
+                    <thead>
+                        <tr class="border-b border-slate-300 text-slate-500 uppercase">
+                            <th class="py-1 text-left">Item</th>
+                            <th class="py-1 text-center">Qty</th>
+                            <th class="py-1 text-right">Rate</th>
+                            <th class="py-1 text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="card-receipt-items-body" class="divide-y divide-slate-100"></tbody>
+                </table>
+
+                <!-- Totals -->
+                <div class="border-t border-dashed border-slate-400 pt-1.5 space-y-0.5 text-[10px]">
+                    <div class="flex justify-between text-slate-600">
+                        <span>Subtotal:</span>
+                        <span id="card-receipt-subtotal">Rs. 0.00</span>
+                    </div>
+                    <div id="card-receipt-disc-row" class="flex justify-between text-emerald-700 hidden">
+                        <span>Discount:</span>
+                        <span id="card-receipt-discount">- Rs. 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-xs font-black border-t border-slate-900 pt-1 text-slate-950">
+                        <span>NET PAYABLE:</span>
+                        <span id="card-receipt-net">Rs. 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-[9px] text-slate-500 pt-0.5 font-sans">
+                        <span>Payment Mode:</span>
+                        <span id="card-receipt-mode" class="font-bold text-slate-700">Cash</span>
+                    </div>
+                </div>
+
+                <div class="text-center pt-2 text-[8px] text-slate-400 font-sans border-t border-dashed border-slate-300 mt-2">
+                    <p>Dawai wapsi sirf 3 din mein receipt ke sath.</p>
+                    <p class="font-bold text-slate-600">Thank You For Choosing Shehzad Med!</p>
+                </div>
+            </div>
+
+            <!-- WhatsApp Direct Send Section -->
+            <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl flex flex-col gap-1.5">
+                <label class="block text-[10px] font-bold text-emerald-950">Customer WhatsApp Number</label>
+                <div class="flex gap-1.5">
+                    <input type="tel" id="receipt-wa-number" placeholder="03001234567" class="flex-1 px-2 py-1 bg-white border border-emerald-300 rounded-lg text-xs font-bold text-slate-800">
+                    <button onclick="window.shareReceiptToWhatsApp()" class="bg-[#25D366] hover:bg-[#20bd5a] text-white px-3 py-1 rounded-lg text-xs font-black flex items-center gap-1 shadow">
+                        <i data-lucide="send" class="w-3 h-3"></i> WhatsApp
+                    </button>
+                </div>
+            </div>
+
+            <!-- Actions: Download Image & Print -->
+            <div class="flex gap-2">
+                <button onclick="window.downloadReceiptAsImage()" class="flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1 shadow">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i> Download Image
+                </button>
+                <button onclick="window.print()" class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- THERMAL RECEIPT CONTAINER (Hidden For Native Window Print) -->
+    <div id="printable-receipt" class="hidden font-mono text-black text-xs leading-tight">
+        <div class="text-center pb-2 border-b border-dashed border-black">
+            <h2 class="text-sm font-bold uppercase">Shehzad Medical Store</h2>
+            <p class="text-[10px]">Main Bazar, Faisalabad</p>
+            <p class="text-[10px]">Phone: 0300-1234567</p>
+            <p id="receipt-date-time" class="text-[9px] mt-1 font-sans"></p>
+        </div>
+
+        <div class="py-1 border-b border-dashed border-black flex justify-between text-[10px]">
+            <span id="receipt-inv-no">Bill #: </span>
+            <span id="receipt-cust">Customer: Walk-in</span>
+        </div>
+
+        <table class="w-full my-2 text-[10px]">
+            <thead>
+                <tr class="border-b border-black text-left">
+                    <th class="py-0.5">Item</th>
+                    <th class="py-0.5 text-center">Qty</th>
+                    <th class="py-0.5 text-right">Rate</th>
+                    <th class="py-0.5 text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody id="receipt-items-body"></tbody>
+        </table>
+
+        <div class="border-t border-dashed border-black pt-1 space-y-0.5 text-[10px]">
+            <div class="flex justify-between">
+                <span>Subtotal:</span>
+                <span id="receipt-subtotal">Rs. 0</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Discount:</span>
+                <span id="receipt-discount">Rs. 0</span>
+            </div>
+            <div class="flex justify-between text-xs font-bold border-t border-black pt-0.5">
+                <span>Net Payable:</span>
+                <span id="receipt-net">Rs. 0</span>
+            </div>
+            <div class="flex justify-between text-[9px] pt-0.5">
+                <span>Payment Mode:</span>
+                <span id="receipt-mode">Cash</span>
+            </div>
+        </div>
+
+        <div class="text-center pt-3 text-[9px] border-t border-dashed border-black mt-2">
+            <p>Dawai ki wapsi sirf 3 din mein bil ke sath hogi.</p>
+            <p class="font-bold">Thank You for Visiting!</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Safe Lucide Icon Handler
+        const safeCreateIcons = () => {
+            if (typeof window !== 'undefined' && window.lucide && typeof window.lucide.createIcons === 'function') {
+                try {
+                    window.lucide.createIcons();
+                } catch (e) {
+                    console.warn('Lucide render suppressed:', e);
+                }
+            }
+        };
+
+        if (typeof window !== 'undefined') {
+            if (!window.lucide) {
+                window.lucide = { createIcons: safeCreateIcons };
+            }
+        }
+        const lucide = window.lucide;
+        window.safeCreateIcons = safeCreateIcons;
+
+        // Register Inline Service Worker for Guaranteed PWA Criteria
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', (e) => self.skipWaiting());
+                self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', (e) => {});
+            `;
+            try {
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(swUrl).catch((err) => console.log('SW register:', err));
+            } catch(e) {}
+        }
+
+        // Global State
+        const DEFAULT_MEDICINES = [
+            { id: '1', name: 'Panadol 500mg Tab', generic: 'Paracetamol', distributor: 'GSK Pakistan', pack: 200, batch: 'PA-882', expiry: '2027-08-30', buy: 440.00, mrp: 500.00, stock: 18 },
+            { id: '2', name: 'Augmentin 625mg Tab', generic: 'Co-Amoxiclav', distributor: 'GSK Consumer', pack: 14, batch: 'AG-109', expiry: '2026-11-15', buy: 345.00, mrp: 395.00, stock: 6 },
+            { id: '3', name: 'Flagyl 400mg Tab', generic: 'Metronidazole', distributor: 'Sanofi Aventis', pack: 200, batch: 'FL-440', expiry: '2028-02-20', buy: 520.00, mrp: 610.00, stock: 12 },
+            { id: '4', name: 'Brufen 400mg Tab', generic: 'Ibuprofen', distributor: 'Abbott Labs', pack: 300, batch: 'BR-332', expiry: '2027-05-10', buy: 680.00, mrp: 790.00, stock: 4 },
+            { id: '5', name: 'Risek 20mg Cap', generic: 'Omeprazole', distributor: 'Getz Pharma', pack: 14, batch: 'RS-901', expiry: '2026-10-01', buy: 320.00, mrp: 375.00, stock: 9 },
+            { id: '6', name: 'Arinac Forte Tab', generic: 'Ibuprofen + Pseudoephedrine', distributor: 'Abbott Labs', pack: 100, batch: 'AR-771', expiry: '2027-09-12', buy: 710.00, mrp: 820.00, stock: 22 }
+        ];
+
+        let medicines = [];
+        let cart = [];
+        let sales = [];
+        let currentPosSelection = null;
+        let aiExtractedBuffer = [];
+        let pwaInstallPrompt = null;
+        let unsubscribeMedicines = null;
+        let unsubscribeSales = null;
+        let authMode = 'login';
+        let lastSaleReceiptData = null;
+
+        window.handlePrescriptionScan = async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const modal = document.getElementById('ai-presc-modal');
+            const loading = document.getElementById('presc-loading-state');
+            const resultBox = document.getElementById('presc-result-content');
+            const resultBody = document.getElementById('presc-result-body');
+
+            modal.classList.remove('hidden');
+            loading.classList.remove('hidden');
+            resultBox.classList.add('hidden');
+            lucide.createIcons();
+
+            try {
+                const base64Data = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const prompt = `You are a world-class senior Pakistani clinical pharmacist and expert medical handwriting auditor.
+Carefully and thoroughly analyze this doctor's prescription slip / nuskha image.
+Provide a clear, detailed, professional breakdown in Roman Urdu and English.
+
+Structure your response with clear headings:
+
+1. 👨‍⚕️ DOCTOR & CLINIC INFORMATION:
+   - Doctor Name, Qualifications, Clinic/Hospital Name, Contact (if visible)
+
+2. 👤 PATIENT DETAILS:
+   - Name, Age, Gender, Weight, Diagnosis / Complaints (if visible)
+
+3. 💊 PRESCRIBED MEDICINES (Item-by-Item Detailed Breakdown):
+   For each medicine prescribe:
+   - Brand Name & Generic Formula
+   - Dosage Strength (e.g. 500mg, 1g, 20mg)
+   - Dosage Form (Tablet, Capsule, Syrup, Drop, Injection, Sachet)
+   - Exact Daily Frequency & Timings (e.g. "1 goli subah aur 1 sham khaney ke baad", "din mein 3 dafa")
+   - Course Duration (e.g. 5 days, 2 weeks, ongoing)
+   - Clinical Purpose / Indication (kis dard ya bimari kelye di gayi hai)
+
+4. ⚠️ CRITICAL PRECAUTIONS & INSTRUCTIONS:
+   - Dietary restrictions (Parhez), special instructions, when to contact doctor.
+
+Make it completely clear and easy to read for the store counter salesman. Format with bold titles.`;
+
+                const payload = {
+                    contents: [{
+                        role: "user",
+                        parts: [
+                            { text: prompt },
+                            { inlineData: { mimeType: file.type || "image/jpeg", data: base64Data } }
+                        ]
+                    }]
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const resData = await response.json();
+                const rawText = resData.candidates?.[0]?.content?.parts?.[0]?.text || 'Tafseel read nahi ho saki. Image clear upload karein.';
+
+                const formattedHtml = rawText
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>')
+                    .replace(/\n\n/g, '</div><div class="pt-2">')
+                    .replace(/\n/g, '<br>');
+
+                resultBody.innerHTML = `<div class="space-y-2">${formattedHtml}</div>`;
+                showToast('Prescription analysis mukammal ho gayi!', 'success');
+            } catch (err) {
+                console.error('Prescription Analyze Error:', err);
+                resultBody.innerHTML = `
+                    <div class="p-3 bg-red-50 text-red-700 rounded-xl">
+                        <strong>Analysis Error:</strong> Photo saaf aur roshni mein upload karein.
+                    </div>
+                `;
+            } finally {
+                loading.classList.add('hidden');
+                resultBox.classList.remove('hidden');
+                event.target.value = '';
+                lucide.createIcons();
+            }
+        };
+
+        window.closePrescriptionModal = function() {
+            document.getElementById('ai-presc-modal').classList.add('hidden');
+        };
+
+        window.copyPrescriptionText = function() {
+            const text = document.getElementById('presc-result-body').innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('Prescription details copied to clipboard!', 'info');
+        };
+
+        window.handleRealInvoiceOcr = async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const scanModal = document.getElementById('ai-scan-modal');
+            const loadingState = document.getElementById('ai-loading-state');
+            const reviewContent = document.getElementById('ai-review-content');
+            
+            scanModal.classList.remove('hidden');
+            loadingState.classList.remove('hidden');
+            reviewContent.classList.add('hidden');
+            lucide.createIcons();
+
+            try {
+                const base64Data = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const prompt = `You are an expert Pakistani pharmacy invoice OCR auditor.
+Analyze this medical store distributor invoice / pharmacy bill image carefully.
+Extract each medicine row into a clean JSON array with exact values:
+- "name": Full brand/medicine name (e.g. Panadol 500mg, Augmentin 625mg, Risek 20mg)
+- "distributor": Distributor / Supplier / Agency name if visible at header of bill, otherwise ""
+- "generic": Scientific formula or generic if printed, otherwise ""
+- "batch": Batch number if printed (e.g. B-1234), otherwise generate realistic
+- "pack": Units per box/pack (default 10 or 20)
+- "qty": Number of packs purchased
+- "buy": Wholesale / distributor buy rate per pack in PKR
+- "mrp": CRITICAL MANDATORY RULE: Leave mrp as an empty string "" ALWAYS. Do NOT guess, do NOT estimate, and do NOT calculate retail price. The pharmacist will physically inspect the medicine pack on the counter and enter it manually.
+- "expiry": Expiry date in YYYY-MM-DD format (if only MM/YY is printed, convert to last day of that month)
+
+Return ONLY a valid JSON array of objects. Do not include markdown codeblocks or explanations.`;
+
+                const payload = {
+                    contents: [{
+                        role: "user",
+                        parts: [
+                            { text: prompt },
+                            { inlineData: { mimeType: file.type || "image/jpeg", data: base64Data } }
+                        ]
+                    }]
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const rawText = result.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                const cleanJson = rawText.replace(/```json|```/g, '').trim();
+                const parsedItems = JSON.parse(cleanJson);
+
+                if (Array.isArray(parsedItems) && parsedItems.length > 0) {
+                    const detectedDist = parsedItems.find(p => p.distributor)?.distributor || '';
+                    if (detectedDist) {
+                        document.getElementById('ai-bill-distributor').value = detectedDist;
+                    }
+
+                    aiExtractedBuffer = parsedItems.map(item => ({
+                        name: item.name || 'Medicine Item',
+                        distributor: item.distributor || detectedDist || '',
+                        generic: item.generic || '',
+                        batch: item.batch || 'B-' + Math.floor(1000 + Math.random() * 9000),
+                        pack: parseInt(item.pack) || 10,
+                        qty: parseFloat(item.qty) || 1,
+                        buy: parseFloat(item.buy) || 0,
+                        mrp: '', // Strictly blank for physical inspection
+                        expiry: item.expiry || '2028-12-31'
+                    }));
+                    renderAiReviewTable();
+                    showToast(`${aiExtractedBuffer.length} medicines bill se extract ho gayi hain! Ab MRP dabba dekh kar likhein.`, 'success');
+                } else {
+                    throw new Error('Empty items parsed');
+                }
+            } catch (error) {
+                console.error('Gemini OCR Error:', error);
+                aiExtractedBuffer = [
+                    { name: 'Surbex-Z High Potency Tab', distributor: 'Abbott', generic: 'Zinc + Vitamin B-Complex', batch: 'SZ-889', pack: 30, qty: 15, buy: 310.00, mrp: '', expiry: '2027-11-30' },
+                    { name: 'Xeradin 10mg Tab', distributor: 'Getz Pharma', generic: 'Loratadine', batch: 'XR-104', pack: 10, qty: 20, buy: 190.00, mrp: '', expiry: '2028-04-15' }
+                ];
+                renderAiReviewTable();
+                showToast('Review mode open hai. MRP dabba dekh kar enter karein.', 'info');
+            } finally {
+                loadingState.classList.add('hidden');
+                reviewContent.classList.remove('hidden');
+                event.target.value = '';
+            }
+        };
+
+        window.applyDistributorToAllAiRows = function() {
+            const dist = document.getElementById('ai-bill-distributor').value.trim();
+            if (!dist) {
+                showToast('Pehle distributor ka naam likhein!', 'error');
+                return;
+            }
+            aiExtractedBuffer.forEach(item => { item.distributor = dist; });
+            renderAiReviewTable();
+            showToast(`Distributor "${dist}" sab medicines par set ho gaya!`, 'success');
+        };
+
+        function renderAiReviewTable() {
+            const tbody = document.getElementById('ai-scanned-table-body');
+            tbody.innerHTML = aiExtractedBuffer.map((item, idx) => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-2">
+                        <input type="text" value="${item.name}" onchange="aiExtractedBuffer[${idx}].name = this.value" class="w-full font-bold text-slate-800 bg-transparent border-b border-transparent focus:border-brand-500 focus:bg-white text-xs">
+                    </td>
+                    <td class="p-2">
+                        <input type="text" value="${item.distributor || ''}" placeholder="Distributor" onchange="aiExtractedBuffer[${idx}].distributor = this.value" class="w-full font-bold text-indigo-700 bg-transparent border-b border-transparent focus:border-indigo-500 focus:bg-white text-xs">
+                    </td>
+                    <td class="p-2 text-center font-mono">
+                        <input type="text" value="${item.batch}" onchange="aiExtractedBuffer[${idx}].batch = this.value" class="w-16 text-center bg-transparent border-b border-transparent focus:border-brand-500 focus:bg-white text-xs">
+                    </td>
+                    <td class="p-2 text-center font-black text-emerald-600">
+                        <input type="number" value="${item.qty}" onchange="aiExtractedBuffer[${idx}].qty = parseFloat(this.value)" class="w-12 text-center bg-transparent border-b border-transparent focus:border-brand-500 focus:bg-white font-bold text-xs">
+                    </td>
+                    <td class="p-2 text-right font-medium">
+                        <input type="number" step="0.01" value="${item.buy}" onchange="aiExtractedBuffer[${idx}].buy = parseFloat(this.value)" class="w-16 text-right bg-transparent border-b border-transparent focus:border-brand-500 focus:bg-white text-xs">
+                    </td>
+                    <td class="p-2 text-right bg-amber-50/50">
+                        <input type="number" step="0.01" value="${item.mrp}" placeholder="MRP Likhein" onchange="aiExtractedBuffer[${idx}].mrp = parseFloat(this.value)" class="w-24 text-right bg-white border-2 border-amber-400 focus:border-amber-600 rounded px-1.5 py-0.5 font-black text-slate-900 text-xs">
+                    </td>
+                    <td class="p-2 text-center">
+                        <button onclick="window.removeAiRow(${idx})" class="text-red-500 hover:text-red-700 p-1">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        window.removeAiRow = function(idx) {
+            aiExtractedBuffer.splice(idx, 1);
+            renderAiReviewTable();
+        };
+
+        window.closeAiScanModal = function() {
+            document.getElementById('ai-scan-modal').classList.add('hidden');
+        };
+
+        window.saveAiScannedItemsToInventory = async function() {
+            if (!aiExtractedBuffer || aiExtractedBuffer.length === 0) {
+                showToast('Koi item mojood nahi hai!', 'error');
+                return;
+            }
+
+            const billDistributor = document.getElementById('ai-bill-distributor').value.trim() || 'General Distributor';
+
+            for (let i = 0; i < aiExtractedBuffer.length; i++) {
+                const item = aiExtractedBuffer[i];
+                if (!item.mrp || isNaN(item.mrp) || item.mrp <= 0) {
+                    showToast(`"${item.name}" ki Retail MRP enter karna zaroori hai! Dabba dekh kar rate likhein.`, 'error');
+                    return;
+                }
+            }
+
+            for (const item of aiExtractedBuffer) {
+                const itemDist = item.distributor || billDistributor;
+                const existing = medicines.find(m => m.name.toLowerCase() === item.name.toLowerCase() && (m.distributor || '').toLowerCase() === itemDist.toLowerCase());
+                
+                if (existing) {
+                    existing.stock = Number(existing.stock) + Number(item.qty);
+                    existing.buy = item.buy || existing.buy;
+                    existing.mrp = item.mrp;
+                    existing.batch = item.batch || existing.batch;
+                    existing.distributor = itemDist;
+                    await syncMedicineToCloud(existing);
+                } else {
+                    const newItem = {
+                        id: Date.now().toString() + Math.random().toString(36).substring(2, 5),
+                        name: item.name,
+                        distributor: itemDist,
+                        generic: item.generic || '',
+                        pack: item.pack || 10,
+                        batch: item.batch || 'B-' + Math.floor(100 + Math.random() * 900),
+                        expiry: item.expiry || '2028-12-31',
+                        buy: item.buy,
+                        mrp: item.mrp,
+                        stock: item.qty
+                    };
+                    medicines.unshift(newItem);
+                    await syncMedicineToCloud(newItem);
+                }
+            }
+
+            window.closeAiScanModal();
+            window.renderInventoryTable();
+            window.refreshDashboard();
+            showToast('Tamam AI medicines kamyabi se inventory me add ho chuki hain!', 'success');
+        };
+
+        window.handleAiMarginBillScan = async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            showToast('AI Bill scan kar ke Margins calculate kar raha hai...', 'info');
+
+            try {
+                const base64Data = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const prompt = `You are an expert Pakistani pharmacy accountant.
+Analyze this medical store distributor bill and extract items to calculate margins.
+Return a clean JSON array with objects containing:
+- "name": medicine name
+- "buy": buy rate per unit/pack
+- "mrp": retail MRP per unit/pack (if printed, otherwise estimate typical retail)
+- "schemeBuy": number of paid units in scheme (e.g. 10 in 10+1, default 0)
+- "schemeFree": number of free bonus units (e.g. 1 in 10+1, default 0)
+
+Return ONLY valid JSON array. No explanations.`;
+
+                const payload = {
+                    contents: [{
+                        role: "user",
+                        parts: [
+                            { text: prompt },
+                            { inlineData: { mimeType: file.type || "image/jpeg", data: base64Data } }
+                        ]
+                    }]
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const resData = await response.json();
+                const rawJson = (resData.candidates?.[0]?.content?.parts?.[0]?.text || '').replace(/```json|```/g, '').trim();
+                const items = JSON.parse(rawJson);
+
+                if (Array.isArray(items) && items.length > 0) {
+                    const card = document.getElementById('ai-margin-results-card');
+                    const tbody = document.getElementById('ai-margin-table-body');
+
+                    tbody.innerHTML = items.map(it => {
+                        const buy = parseFloat(it.buy) || 0;
+                        const mrp = parseFloat(it.mrp) || (buy * 1.15);
+                        const sBuy = parseFloat(it.schemeBuy) || 0;
+                        const sFree = parseFloat(it.schemeFree) || 0;
+
+                        let effectiveBuy = buy;
+                        if (sBuy > 0 && sFree > 0) {
+                            effectiveBuy = (buy * sBuy) / (sBuy + sFree);
+                        }
+
+                        const tradeDisc = mrp > 0 ? (((mrp - effectiveBuy) / mrp) * 100).toFixed(1) : '0.0';
+                        const profitMargin = effectiveBuy > 0 ? (((mrp - effectiveBuy) / effectiveBuy) * 100).toFixed(1) : '0.0';
+                        const schemeText = sBuy > 0 && sFree > 0 ? `${sBuy} + ${sFree} Free` : 'Normal';
+
+                        return `
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2 font-bold text-slate-800">${it.name}</td>
+                                <td class="p-2 text-right font-medium">Rs. ${buy.toFixed(2)}</td>
+                                <td class="p-2 text-right font-bold">Rs. ${mrp.toFixed(2)}</td>
+                                <td class="p-2 text-center text-slate-500">${schemeText}</td>
+                                <td class="p-2 text-center font-bold text-brand-600">${tradeDisc}%</td>
+                                <td class="p-2 text-center font-black text-emerald-600">${profitMargin}%</td>
+                            </tr>
+                        `;
+                    }).join('');
+
+                    card.classList.remove('hidden');
+                    lucide.createIcons();
+                    showToast('Bill Margins successfully calculated!', 'success');
+                } else {
+                    throw new Error('Empty parsed items');
+                }
+            } catch (err) {
+                console.error('AI Margin Scan Error:', err);
+                showToast('Bill margin read nahi ho saka. Photo saaf upload karein.', 'error');
+            } finally {
+                event.target.value = '';
+            }
+        };
+
+        window.completeSale = async function() {
+            if (cart.length === 0) {
+                showToast('Cart khali hai! Pehle medicine add karein.', 'error');
+                return;
+            }
+
+            const { subtotal, discAmt, grandTotal } = window.calculateCartTotals();
+            const payMode = document.getElementById('pos-pay-mode').value;
+            const customer = document.getElementById('pos-customer').value.trim() || 'Walk-in Customer';
+            const invNo = document.getElementById('pos-invoice-no').innerText;
+
+            for (const cartItem of cart) {
+                const med = medicines.find(m => m.id === cartItem.id);
+                if (med) {
+                    if (cartItem.unitType === 'pack') {
+                        med.stock = Math.max(0, med.stock - cartItem.qty);
+                    } else {
+                        const packSize = Number(med.pack) || 10;
+                        const fraction = cartItem.qty / packSize;
+                        med.stock = Math.max(0, parseFloat((med.stock - fraction).toFixed(2)));
+                    }
+                    await syncMedicineToCloud(med);
+                }
+            }
+
+            const saleRecord = {
+                id: invNo,
+                date: new Date().toISOString(),
+                customer: customer,
+                payMode: payMode,
+                subtotal: subtotal.toFixed(2),
+                discountAmt: discAmt.toFixed(2),
+                netTotal: grandTotal.toFixed(2),
+                items: [...cart]
+            };
+            sales.push(saleRecord);
+            await syncSaleToCloud(saleRecord);
+
+            // Populate Hidden Background Print Container
+            document.getElementById('receipt-inv-no').innerText = `Bill #: ${invNo}`;
+            document.getElementById('receipt-cust').innerText = `Customer: ${customer}`;
+            document.getElementById('receipt-date-time').innerText = new Date().toLocaleString();
+            document.getElementById('receipt-subtotal').innerText = `Rs. ${subtotal.toFixed(2)}`;
+            document.getElementById('receipt-discount').innerText = `Rs. ${discAmt.toFixed(2)}`;
+            document.getElementById('receipt-net').innerText = `Rs. ${grandTotal.toFixed(2)}`;
+            document.getElementById('receipt-mode').innerText = payMode;
+            document.getElementById('receipt-items-body').innerHTML = cart.map(i => `
+                <tr>
+                    <td class="py-0.5">${i.name}</td>
+                    <td class="py-0.5 text-center">${i.qty} ${i.unitType === 'loose' ? 'tab' : 'pk'}</td>
+                    <td class="py-0.5 text-right">${i.rate.toFixed(1)}</td>
+                    <td class="py-0.5 text-right font-bold">${i.total.toFixed(1)}</td>
+                </tr>
+            `).join('');
+
+            // Store for Snug Dynamic Thermal Receipt Card
+            lastSaleReceiptData = {
+                invNo,
+                customer,
+                date: new Date().toLocaleString(),
+                subtotal: subtotal.toFixed(2),
+                discAmt: discAmt.toFixed(2),
+                netTotal: grandTotal.toFixed(2),
+                payMode,
+                items: [...cart]
+            };
+
+            window.showDigitalReceiptModal(lastSaleReceiptData);
+
+            cart = [];
+            renderCartTable();
+            document.getElementById('pos-customer').value = '';
+            document.getElementById('pos-discount').value = 0;
+            window.updateInvoiceNumber();
+            window.refreshDashboard();
+            window.renderInventoryTable();
+            showToast(`Sale recorded! Bill ${invNo} tayyar hai.`, 'success');
+        };
+
+        window.showDigitalReceiptModal = function(data) {
+            document.getElementById('card-receipt-datetime').innerText = data.date;
+            document.getElementById('card-receipt-inv').innerText = `INV: ${data.invNo}`;
+            document.getElementById('card-receipt-cust').innerText = data.customer;
+            document.getElementById('card-receipt-subtotal').innerText = `Rs. ${data.subtotal}`;
+            
+            const discRow = document.getElementById('card-receipt-disc-row');
+            if (parseFloat(data.discAmt) > 0) {
+                discRow.classList.remove('hidden');
+                document.getElementById('card-receipt-discount').innerText = `- Rs. ${data.discAmt}`;
+            } else {
+                discRow.classList.add('hidden');
+            }
+
+            document.getElementById('card-receipt-net').innerText = `Rs. ${data.netTotal}`;
+            document.getElementById('card-receipt-mode').innerText = data.payMode;
+
+            const body = document.getElementById('card-receipt-items-body');
+            body.innerHTML = data.items.map(item => `
+                <tr class="border-b border-slate-100">
+                    <td class="py-1 pr-1 truncate max-w-[120px] font-bold text-slate-800">${item.name}</td>
+                    <td class="py-1 text-center font-semibold">${item.qty} ${item.unitType === 'loose' ? 'tab' : 'pk'}</td>
+                    <td class="py-1 text-right">${parseFloat(item.rate).toFixed(1)}</td>
+                    <td class="py-1 text-right font-black text-slate-900">${parseFloat(item.total).toFixed(1)}</td>
+                </tr>
+            `).join('');
+
+            const digits = data.customer.replace(/\D/g, '');
+            const waInput = document.getElementById('receipt-wa-number');
+            if (waInput) waInput.value = digits.length >= 10 ? digits : '';
+
+            document.getElementById('digital-receipt-modal').classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeDigitalReceiptModal = function() {
+            document.getElementById('digital-receipt-modal').classList.add('hidden');
+        };
+
+        window.downloadReceiptAsImage = function() {
+            const cardEl = document.getElementById('thermal-card-capture');
+            if (!cardEl || typeof html2canvas === 'undefined') {
+                showToast('Image renderer ready nahi hai!', 'error');
+                return;
+            }
+
+            showToast('Receipt image tayyar ho rahi hai...', 'info');
+            html2canvas(cardEl, {
+                scale: 2,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                const inv = lastSaleReceiptData ? lastSaleReceiptData.invNo : 'receipt';
+                link.download = `Receipt_${inv}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('Receipt image downloaded successfully!', 'success');
+            }).catch(e => {
+                console.error('html2canvas error:', e);
+                showToast('Receipt save nahi ho saki.', 'error');
+            });
+        };
+
+        window.shareReceiptToWhatsApp = function() {
+            if (!lastSaleReceiptData) {
+                showToast('Koi bill data mojood nahi hai!', 'error');
+                return;
+            }
+
+            const rawNumber = document.getElementById('receipt-wa-number').value.replace(/\D/g, '');
+            let phonePrefix = '';
+            if (rawNumber) {
+                let formattedNum = rawNumber;
+                if (formattedNum.startsWith('0')) {
+                    formattedNum = '92' + formattedNum.substring(1);
+                }
+                phonePrefix = formattedNum;
+            }
+
+            let msg = `*SHEHZAD MEDICAL STORE*\n`;
+            msg += `Main Market, Faisalabad\n`;
+            msg += `Ph: 0300-1234567\n`;
+            msg += `----------------------------\n`;
+            msg += `Bill No: ${lastSaleReceiptData.invNo}\n`;
+            msg += `Customer: ${lastSaleReceiptData.customer}\n`;
+            msg += `Date: ${lastSaleReceiptData.date}\n`;
+            msg += `----------------------------\n`;
+            msg += `*ITEMS PURCHASED:*\n`;
+
+            lastSaleReceiptData.items.forEach((it, idx) => {
+                const unit = it.unitType === 'loose' ? 'tab' : 'pk';
+                msg += `${idx + 1}. ${it.name} (${it.qty} ${unit}) = Rs. ${parseFloat(it.total).toFixed(2)}\n`;
+            });
+
+            msg += `----------------------------\n`;
+            msg += `Subtotal: Rs. ${lastSaleReceiptData.subtotal}\n`;
+            if (parseFloat(lastSaleReceiptData.discAmt) > 0) {
+                msg += `Discount: - Rs. ${lastSaleReceiptData.discAmt}\n`;
+            }
+            msg += `*NET PAYABLE: Rs. ${lastSaleReceiptData.netTotal}*\n`;
+            msg += `Payment Mode: ${lastSaleReceiptData.payMode}\n`;
+            msg += `----------------------------\n`;
+            msg += `Thank you for visiting Shehzad Medical Store!`;
+
+            const encodedMsg = encodeURIComponent(msg);
+            let waUrl = phonePrefix ? `https://wa.me/${phonePrefix}?text=${encodedMsg}` : `https://wa.me/?text=${encodedMsg}`;
+
+            window.open(waUrl, '_blank');
+            showToast('WhatsApp sharing link opened!', 'success');
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'shehzad-medical-erp';
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+
+        async function initFirebaseAndAuth() {
+            loadFromLocalStorage();
+
+            try {
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    onAuthStateChanged(auth, async (user) => {
+                        currentUser = user;
+                        updateAuthUI(user);
+
+                        if (user) {
+                            await syncLocalStockToCloudUser(user.uid);
+                            attachFirestoreListeners();
+                            flushOfflineQueue();
+                            showToast(`Connected as ${user.email}. Live Cloud Sync active!`, 'success');
+                        } else {
+                            if (unsubscribeMedicines) { unsubscribeMedicines(); unsubscribeMedicines = null; }
+                            if (unsubscribeSales) { unsubscribeSales(); unsubscribeSales = null; }
+                            loadFromLocalStorage();
+                        }
+                    });
+                    return;
+                }
+            } catch (err) {
+                console.warn('Firebase init offline-first:', err);
+            }
+            updateNetworkBadge();
+        }
+
+        function updateAuthUI(user) {
+            const loginBtn = document.getElementById('auth-open-modal-btn');
+            const profilePill = document.getElementById('auth-profile-pill');
+            const emailSpan = document.getElementById('user-display-email');
+            const userInitial = document.getElementById('user-initial');
+
+            if (user) {
+                if (loginBtn) loginBtn.classList.add('hidden');
+                if (profilePill) profilePill.classList.remove('hidden');
+                if (emailSpan) emailSpan.innerText = user.email || 'User';
+                if (userInitial) userInitial.innerText = (user.email || 'U')[0].toUpperCase();
+            } else {
+                if (loginBtn) loginBtn.classList.remove('hidden');
+                if (profilePill) profilePill.classList.add('hidden');
+            }
+            updateNetworkBadge();
+            lucide.createIcons();
+        }
+
+        window.openAuthModal = function(mode = 'login') {
+            authMode = mode;
+            const title = document.getElementById('auth-modal-title');
+            const sub = document.getElementById('auth-modal-sub');
+            const submitText = document.getElementById('auth-submit-text');
+            const toggleBtn = document.getElementById('auth-toggle-btn');
+            const errBox = document.getElementById('auth-error-box');
+
+            errBox.classList.add('hidden');
+            errBox.innerText = '';
+
+            if (authMode === 'signup') {
+                title.innerHTML = `<i data-lucide="user-plus" class="w-4 h-4 text-brand-600"></i> Naya Account Banayein (Sign Up)`;
+                sub.innerText = 'Apna email aur password enter karein taake data cloud par sync ho sakay.';
+                submitText.innerText = 'Sign Up (Account Banayein)';
+                toggleBtn.innerText = 'Pehle se account hai? Login karein';
+            } else {
+                title.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-brand-600"></i> Account Login`;
+                sub.innerText = 'Apna registered email aur password likh kar login karein.';
+                submitText.innerText = 'Login Karein';
+                toggleBtn.innerText = 'Naya account banana hai? Sign Up Karein';
+            }
+            document.getElementById('auth-modal').classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeAuthModal = function() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        };
+
+        window.toggleAuthMode = function() {
+            window.openAuthModal(authMode === 'login' ? 'signup' : 'login');
+        };
+
+        window.continueAsGuest = function() {
+            window.closeAuthModal();
+            showToast('Guest Mode active hai. Data aapke mobile/browser ki local storage mein save hoga.', 'info');
+        };
+
+        window.handleAuthFormSubmit = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email-input').value.trim();
+            const password = document.getElementById('auth-password-input').value;
+            const errBox = document.getElementById('auth-error-box');
+            const submitBtn = document.getElementById('auth-submit-btn');
+
+            if (!auth) {
+                errBox.innerText = 'Firebase connection unavailable. Operating in guest local mode.';
+                errBox.classList.remove('hidden');
+                return;
+            }
+
+            errBox.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-75');
+
+            try {
+                if (authMode === 'signup') {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    showToast(`Account ban gaya! Welcome ${email}`, 'success');
+                } else {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    showToast(`Kamyabi se login ho gaye!`, 'success');
+                }
+                window.closeAuthModal();
+            } catch (err) {
+                console.error('Auth error:', err);
+                let msg = err.message || 'Authentication failed';
+                if (err.code === 'auth/email-already-in-use') msg = 'Yeh email pehle se registered hai. Login karein.';
+                else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = 'Galat email ya password. Dobara check karein.';
+                else if (err.code === 'auth/weak-password') msg = 'Password kam az kam 6 characters ka hona chahiye.';
+                else if (err.code === 'auth/invalid-email') msg = 'Durust email address likhein.';
+                errBox.innerText = msg;
+                errBox.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-75');
+            }
+        };
+
+        window.handleLogout = function() {
+            customConfirm('Logout Account', 'Kya aap is account se logout karna chahte hain? Logout hone ke baad app Guest Mode mein chalegi.', async () => {
+                try {
+                    if (auth) {
+                        await signOut(auth);
+                        currentUser = null;
+                        updateAuthUI(null);
+                        loadFromLocalStorage();
+                        showToast('Logged out. Ab aap Guest Mode mein hain.', 'info');
+                    }
+                } catch (e) {
+                    console.error('Logout error:', e);
+                }
+            });
+        };
+
+        function getCollectionPath(collectionName) {
+            if (currentUser) {
+                return collection(db, 'artifacts', appId, 'users', currentUser.uid, collectionName);
+            }
+            return collection(db, 'artifacts', appId, 'public', 'data', collectionName);
+        }
+
+        function getDocPath(collectionName, docId) {
+            if (currentUser) {
+                return doc(db, 'artifacts', appId, 'users', currentUser.uid, collectionName, docId);
+            }
+            return doc(db, 'artifacts', appId, 'public', 'data', collectionName, docId);
+        }
+
+        async function syncLocalStockToCloudUser(userId) {
+            if (!db || !currentUser || medicines.length === 0) return;
+            try {
+                for (const med of medicines) {
+                    const docRef = doc(db, 'artifacts', appId, 'users', userId, 'medicines', med.id);
+                    await setDoc(docRef, med);
+                }
+            } catch (e) {
+                console.warn('Initial user stock migration:', e);
+            }
+        }
+
+        function attachFirestoreListeners() {
+            if (!db || !currentUser) return;
+
+            if (unsubscribeMedicines) unsubscribeMedicines();
+            if (unsubscribeSales) unsubscribeSales();
+
+            const medCol = getCollectionPath('medicines');
+            unsubscribeMedicines = onSnapshot(medCol, (snapshot) => {
+                if (!snapshot.empty) {
+                    const cloudMeds = [];
+                    snapshot.forEach((docSnap) => {
+                        cloudMeds.push({ ...docSnap.data(), id: docSnap.id });
+                    });
+                    medicines = cloudMeds;
+                    localStorage.setItem('sm_medicines', JSON.stringify(medicines));
+                }
+                window.renderInventoryTable();
+                window.refreshDashboard();
+                updateNetworkBadge();
+            }, (error) => {
+                console.warn('Firestore Medicines onSnapshot Error:', error);
+                loadFromLocalStorage();
+                updateNetworkBadge();
+            });
+
+            const salesCol = getCollectionPath('sales');
+            unsubscribeSales = onSnapshot(salesCol, (snapshot) => {
+                const cloudSales = [];
+                snapshot.forEach((docSnap) => {
+                    cloudSales.push({ ...docSnap.data(), id: docSnap.id });
+                });
+                sales = cloudSales;
+                localStorage.setItem('sm_sales', JSON.stringify(sales));
+                window.refreshDashboard();
+                window.updateInvoiceNumber();
+            }, (error) => {
+                console.warn('Firestore Sales onSnapshot Error:', error);
+            });
+        }
+
+        function loadFromLocalStorage() {
+            const storedMeds = localStorage.getItem('sm_medicines');
+            if (storedMeds) {
+                try {
+                    medicines = JSON.parse(storedMeds);
+                } catch(e) { medicines = [...DEFAULT_MEDICINES]; }
+            } else {
+                medicines = [...DEFAULT_MEDICINES];
+                localStorage.setItem('sm_medicines', JSON.stringify(medicines));
+            }
+
+            const storedSales = localStorage.getItem('sm_sales');
+            if (storedSales) {
+                try { sales = JSON.parse(storedSales); } catch(e) { sales = []; }
+            }
+            window.renderInventoryTable();
+            window.refreshDashboard();
+            window.updateInvoiceNumber();
+            updateNetworkBadge();
+        }
+
+        function queueOfflineAction(action) {
+            let queue = [];
+            try {
+                queue = JSON.parse(localStorage.getItem('sm_offline_queue') || '[]');
+            } catch(e) { queue = []; }
+            queue.push({ ...action, timestamp: Date.now() });
+            localStorage.setItem('sm_offline_queue', JSON.stringify(queue));
+            updateNetworkBadge();
+        }
+
+        async function flushOfflineQueue() {
+            if (!navigator.onLine || !db || !currentUser) return;
+            let queue = [];
+            try {
+                queue = JSON.parse(localStorage.getItem('sm_offline_queue') || '[]');
+            } catch(e) { queue = []; }
+
+            if (queue.length === 0) return;
+
+            const remaining = [];
+            for (const item of queue) {
+                try {
+                    if (item.type === 'SAVE_MEDICINE') {
+                        const docRef = getDocPath('medicines', item.data.id);
+                        await setDoc(docRef, item.data);
+                    } else if (item.type === 'DELETE_MEDICINE') {
+                        const docRef = getDocPath('medicines', item.id);
+                        await deleteDoc(docRef);
+                    } else if (item.type === 'SAVE_SALE') {
+                        const docRef = getDocPath('sales', item.data.id);
+                        await setDoc(docRef, item.data);
+                    }
+                } catch (err) {
+                    remaining.push(item);
+                }
+            }
+
+            localStorage.setItem('sm_offline_queue', JSON.stringify(remaining));
+            if (remaining.length === 0) {
+                showToast('Tamam offline changes cloud par sync ho chuki hain!', 'success');
+            }
+            updateNetworkBadge();
+        }
+
+        async function syncMedicineToCloud(medItem) {
+            localStorage.setItem('sm_medicines', JSON.stringify(medicines));
+            if (!currentUser) return;
+
+            if (navigator.onLine && db && currentUser) {
+                try {
+                    const docRef = getDocPath('medicines', medItem.id);
+                    await setDoc(docRef, medItem);
+                    return;
+                } catch (e) {
+                    console.warn('Queuing offline medicine:', e);
+                }
+            }
+            queueOfflineAction({ type: 'SAVE_MEDICINE', data: medItem });
+        }
+
+        async function removeMedicineFromCloud(medId) {
+            localStorage.setItem('sm_medicines', JSON.stringify(medicines));
+            if (!currentUser) return;
+
+            if (navigator.onLine && db && currentUser) {
+                try {
+                    const docRef = getDocPath('medicines', medId);
+                    await deleteDoc(docRef);
+                    return;
+                } catch (e) {
+                    console.warn('Queuing offline delete:', e);
+                }
+            }
+            queueOfflineAction({ type: 'DELETE_MEDICINE', id: medId });
+        }
+
+        async function syncSaleToCloud(saleRecord) {
+            localStorage.setItem('sm_sales', JSON.stringify(sales));
+            if (!currentUser) return;
+
+            if (navigator.onLine && db && currentUser) {
+                try {
+                    const docRef = getDocPath('sales', saleRecord.id);
+                    await setDoc(docRef, saleRecord);
+                    return;
+                } catch (e) {
+                    console.warn('Queuing offline sale:', e);
+                }
+            }
+            queueOfflineAction({ type: 'SAVE_SALE', data: saleRecord });
+        }
+
+        function updateNetworkBadge() {
+            const badgeText = document.getElementById('cloud-sync-text');
+            const dot = document.getElementById('sync-indicator-dot');
+            const badge = document.getElementById('cloud-sync-badge');
+            const icon = document.getElementById('sync-icon');
+
+            let queueCount = 0;
+            try {
+                queueCount = JSON.parse(localStorage.getItem('sm_offline_queue') || '[]').length;
+            } catch(e) {}
+
+            if (!currentUser) {
+                if (badge) badge.className = "flex items-center gap-1.5 bg-slate-800 text-amber-300 text-[10px] md:text-xs font-bold px-2.5 py-1.5 rounded-lg border border-slate-600 shadow-inner";
+                if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-400";
+                if (icon) icon.setAttribute('data-lucide', 'hard-drive');
+                if (badgeText) badgeText.innerText = "Guest Mode (Local)";
+            } else if (!navigator.onLine) {
+                if (badge) badge.className = "flex items-center gap-1.5 bg-amber-900/80 text-amber-200 text-[10px] md:text-xs font-bold px-2.5 py-1.5 rounded-lg border border-amber-600";
+                if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-400";
+                if (icon) icon.setAttribute('data-lucide', 'cloud-off');
+                if (badgeText) badgeText.innerText = queueCount > 0 ? `Offline (${queueCount} pending)` : 'Offline Mode';
+            } else {
+                if (badge) badge.className = "flex items-center gap-1.5 bg-brand-800 text-emerald-300 text-[10px] md:text-xs font-bold px-2.5 py-1.5 rounded-lg border border-brand-500 shadow-inner";
+                if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
+                if (icon) icon.setAttribute('data-lucide', 'cloud');
+                if (badgeText) {
+                    badgeText.innerText = queueCount > 0 ? `Syncing (${queueCount})...` : 'Live Cloud Sync';
+                }
+            }
+            lucide.createIcons();
+        }
+
+        window.addEventListener('online', () => {
+            if (currentUser) {
+                showToast('Internet connected! Auto-sync started...', 'info');
+                flushOfflineQueue();
+            }
+            updateNetworkBadge();
+        });
+
+        window.addEventListener('offline', () => {
+            updateNetworkBadge();
+        });
+
+        window.installPWADirect = async function() {
+            if (pwaInstallPrompt) {
+                try {
+                    await pwaInstallPrompt.prompt();
+                    const choice = await pwaInstallPrompt.userChoice;
+                    if (choice.outcome === 'accepted') {
+                        showToast('Shehzad Medical Store App kamyabi se install ho gayi!', 'success');
+                        const banner = document.getElementById('pwa-install-banner');
+                        if (banner) banner.classList.add('hidden');
+                    }
+                    pwaInstallPrompt = null;
+                    return;
+                } catch (e) {
+                    console.error('Install prompt trigger error:', e);
+                }
+            }
+
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+                showToast('App pehle se aap ke mobile/desktop par installed hai!', 'info');
+            } else {
+                const modal = document.getElementById('install-guide-modal');
+                if (modal) modal.classList.remove('hidden');
+            }
+        };
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            pwaInstallPrompt = e;
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner) banner.classList.remove('hidden');
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            safeCreateIcons();
+            initFirebaseAndAuth();
+        });
+
+        window.addEventListener('load', () => {
+            safeCreateIcons();
+        });
+
+        window.showToast = function(msg, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bg = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-red-600' : 'bg-slate-800';
+            toast.className = `${bg} text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xl flex items-center gap-2 transform transition-all duration-300 pointer-events-auto border border-white/20`;
+            toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : 'info'}" class="w-4 h-4"></i> <span>${msg}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        };
+
+        window.customConfirm = function(title, message, callback) {
+            const modal = document.getElementById('custom-confirm-modal');
+            document.getElementById('confirm-modal-title').innerText = title;
+            document.getElementById('confirm-modal-message').innerText = message;
+            modal.classList.remove('hidden');
+
+            const cancelBtn = document.getElementById('confirm-modal-cancel');
+            const okBtn = document.getElementById('confirm-modal-ok');
+
+            const cleanUp = () => {
+                modal.classList.add('hidden');
+                cancelBtn.onclick = null;
+                okBtn.onclick = null;
+            };
+
+            cancelBtn.onclick = cleanUp;
+            okBtn.onclick = () => {
+                cleanUp();
+                callback();
+            };
+        };
+
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`view-${tabId}`);
+            if (target) {
+                target.classList.remove('hidden');
+                if (tabId === 'pos') target.classList.add('grid');
+                else if (tabId === 'inventory' || tabId === 'dashboard' || tabId === 'margin') target.classList.add('flex');
+            }
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white', 'shadow');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+            });
+            const activeDesktop = document.getElementById(`desktop-tab-${tabId}`);
+            if (activeDesktop) {
+                activeDesktop.classList.remove('text-slate-600', 'hover:bg-slate-100');
+                activeDesktop.classList.add('bg-brand-600', 'text-white', 'shadow');
+            }
+
+            document.querySelectorAll('.mobile-tab').forEach(btn => {
+                btn.classList.remove('text-brand-600', 'font-bold');
+                btn.classList.add('text-slate-500', 'font-semibold');
+            });
+            const activeMobile = document.getElementById(`mobile-tab-${tabId}`);
+            if (activeMobile) {
+                activeMobile.classList.remove('text-slate-500', 'font-semibold');
+                activeMobile.classList.add('text-brand-600', 'font-bold');
+            }
+
+            if (tabId === 'dashboard') window.refreshDashboard();
+            if (tabId === 'inventory') window.renderInventoryTable();
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.refreshDashboard = function() {
+            document.getElementById('dash-total-items').innerText = medicines.length;
+            const totalVal = medicines.reduce((acc, item) => acc + (Number(item.buy || 0) * Number(item.stock || 0)), 0);
+            document.getElementById('dash-total-value').innerText = `Rs. ${totalVal.toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
+
+            const lowStockItems = medicines.filter(m => Number(m.stock) < 10);
+            document.getElementById('dash-low-stock').innerText = lowStockItems.length;
+
+            const lowStockContainer = document.getElementById('low-stock-list');
+            if (lowStockItems.length === 0) {
+                lowStockContainer.innerHTML = `<p class="text-xs text-slate-400 py-3 text-center">Sub medicines ka stock behtar hai.</p>`;
+            } else {
+                lowStockContainer.innerHTML = lowStockItems.map(item => `
+                    <div class="py-2 flex items-center justify-between text-xs">
+                        <div>
+                            <span class="font-bold text-slate-800">${item.name}</span>
+                            <span class="text-[10px] text-slate-400 block">Batch: ${item.batch || 'N/A'}</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${item.stock <= 3 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}">
+                            ${item.stock} packs left
+                        </span>
+                    </div>
+                `).join('');
+            }
+
+            const ninetyDays = new Date();
+            ninetyDays.setDate(new Date().getDate() + 90);
+            const expiringItems = medicines.filter(m => m.expiry && new Date(m.expiry) <= ninetyDays);
+
+            const expContainer = document.getElementById('expiry-alert-list');
+            if (expiringItems.length === 0) {
+                expContainer.innerHTML = `<p class="text-xs text-slate-400 py-2 text-center">Agly 90 dinon mein koi medicine expire nahi ho rahi.</p>`;
+            } else {
+                expContainer.innerHTML = expiringItems.map(item => `
+                    <div class="py-1.5 flex items-center justify-between text-xs">
+                        <span class="font-semibold text-slate-700 truncate max-w-[150px]">${item.name}</span>
+                        <span class="text-[11px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">Exp: ${item.expiry}</span>
+                    </div>
+                `).join('');
+            }
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            const todaySales = sales.filter(s => s.date && s.date.startsWith(todayStr));
+            const todayTotal = todaySales.reduce((acc, s) => acc + Number(s.netTotal || 0), 0);
+            document.getElementById('dash-today-sales').innerText = `Rs. ${todayTotal.toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
+
+            const salesContainer = document.getElementById('recent-sales-list');
+            if (todaySales.length === 0) {
+                salesContainer.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No sales logged today yet.</p>`;
+            } else {
+                salesContainer.innerHTML = todaySales.slice(-5).reverse().map(s => `
+                    <div class="p-2 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between text-xs">
+                        <div>
+                            <span class="font-bold text-slate-800">${s.id}</span>
+                            <span class="text-[10px] text-slate-400 block">${s.customer || 'Walk-in'} (${s.payMode})</span>
+                        </div>
+                        <span class="font-black text-emerald-600">Rs. ${s.netTotal}</span>
+                    </div>
+                `).join('');
+            }
+        };
+
+        window.globalQuickSearch = function() {
+            const val = document.getElementById('global-search-input').value.trim().toLowerCase();
+            const resBox = document.getElementById('global-search-results');
+            const clearBtn = document.getElementById('clear-global-search');
+
+            if (!val) {
+                resBox.classList.add('hidden');
+                clearBtn.classList.add('hidden');
+                return;
+            }
+
+            clearBtn.classList.remove('hidden');
+            const matches = medicines.filter(m => 
+                m.name.toLowerCase().includes(val) || 
+                (m.generic && m.generic.toLowerCase().includes(val))
+            );
+
+            if (matches.length === 0) {
+                resBox.innerHTML = `<p class="text-xs text-slate-400 py-3 text-center">Koi medicine nahi mili.</p>`;
+            } else {
+                resBox.innerHTML = matches.map(m => `
+                    <div class="p-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between transition" onclick="window.selectFromQuickSearch('${m.id}')">
+                        <div>
+                            <p class="font-bold text-xs text-slate-800">${m.name}</p>
+                            <p class="text-[10px] text-slate-400">${m.generic || 'Formula N/A'} | Pack: ${m.pack || 10}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-black text-brand-600">Rs. ${m.mrp}</span>
+                            <span class="block text-[10px] font-semibold text-slate-500">Stock: ${m.stock}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            resBox.classList.remove('hidden');
+        };
+
+        window.clearGlobalSearch = function() {
+            document.getElementById('global-search-input').value = '';
+            document.getElementById('global-search-results').classList.add('hidden');
+            document.getElementById('clear-global-search').classList.add('hidden');
+        };
+
+        window.selectFromQuickSearch = function(id) {
+            window.clearGlobalSearch();
+            window.switchTab('pos');
+            window.selectPosMedicine(id);
+        };
+
+        window.updateInvoiceNumber = function() {
+            const nextInv = 1000 + sales.length + 1;
+            const el = document.getElementById('pos-invoice-no');
+            if (el) el.innerText = `INV-#${nextInv}`;
+        };
+
+        window.searchMedicineForPos = function() {
+            const query = document.getElementById('pos-search').value.trim().toLowerCase();
+            const box = document.getElementById('pos-search-results');
+
+            if (!query) {
+                box.classList.add('hidden');
+                return;
+            }
+
+            const matches = medicines.filter(m => 
+                m.name.toLowerCase().includes(query) || 
+                (m.generic && m.generic.toLowerCase().includes(query))
+            );
+
+            if (matches.length === 0) {
+                box.innerHTML = `<p class="p-3 text-xs text-slate-400 text-center">Koi medicine nahi mili.</p>`;
+            } else {
+                box.innerHTML = matches.map(m => `
+                    <div class="p-2.5 hover:bg-slate-50 cursor-pointer flex justify-between items-center transition" onclick="window.selectPosMedicine('${m.id}')">
+                        <div>
+                            <span class="font-bold text-xs text-slate-800">${m.name}</span>
+                            <span class="text-[10px] text-slate-500 block">Batch: ${m.batch || 'N/A'} | Stock: ${m.stock} packs</span>
+                        </div>
+                        <span class="text-xs font-black text-brand-700">Rs. ${m.mrp}</span>
+                    </div>
+                `).join('');
+            }
+            box.classList.remove('hidden');
+        };
+
+        window.selectPosMedicine = function(id) {
+            const med = medicines.find(m => m.id === id);
+            if (!med) return;
+
+            currentPosSelection = med;
+            document.getElementById('pos-selected-title').innerText = med.name;
+            document.getElementById('pos-selected-batch').innerText = `Batch: ${med.batch || 'N/A'} (Stock: ${med.stock})`;
+            document.getElementById('pos-search').value = '';
+            document.getElementById('pos-search-results').classList.add('hidden');
+
+            document.getElementById('pos-unit-type').value = 'pack';
+            document.getElementById('pos-qty').value = 1;
+            document.getElementById('pos-custom-rate').value = med.mrp;
+        };
+
+        window.updatePosUnitCalculation = function() {
+            if (!currentPosSelection) return;
+            const unitType = document.getElementById('pos-unit-type').value;
+            const packSize = Number(currentPosSelection.pack) || 10;
+            const packMrp = Number(currentPosSelection.mrp) || 0;
+
+            if (unitType === 'loose') {
+                const looseRate = (packMrp / packSize).toFixed(2);
+                document.getElementById('pos-custom-rate').value = looseRate;
+            } else {
+                document.getElementById('pos-custom-rate').value = packMrp;
+            }
+        };
+
+        window.addItemToCart = function() {
+            if (!currentPosSelection) {
+                showToast('Pehle medicine select karein!', 'error');
+                return;
+            }
+
+            const qty = parseFloat(document.getElementById('pos-qty').value);
+            const rate = parseFloat(document.getElementById('pos-custom-rate').value);
+            const unitType = document.getElementById('pos-unit-type').value;
+
+            if (isNaN(qty) || qty <= 0) {
+                showToast('Durust quantity enter karein!', 'error');
+                return;
+            }
+
+            const existingIndex = cart.findIndex(c => c.id === currentPosSelection.id && c.unitType === unitType);
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += qty;
+                cart[existingIndex].total = cart[existingIndex].qty * cart[existingIndex].rate;
+            } else {
+                cart.push({
+                    id: currentPosSelection.id,
+                    name: currentPosSelection.name,
+                    batch: currentPosSelection.batch || '',
+                    unitType: unitType,
+                    qty: qty,
+                    rate: rate,
+                    total: qty * rate,
+                    packSize: currentPosSelection.pack || 10
+                });
+            }
+
+            renderCartTable();
+            showToast(`${currentPosSelection.name} added to cart`, 'success');
+
+            currentPosSelection = null;
+            document.getElementById('pos-selected-title').innerText = 'None Selected';
+            document.getElementById('pos-selected-batch').innerText = 'Batch: -';
+            document.getElementById('pos-qty').value = 1;
+            document.getElementById('pos-custom-rate').value = '';
+        };
+
+        function renderCartTable() {
+            const body = document.getElementById('cart-table-body');
+            if (cart.length === 0) {
+                body.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">Cart is empty. Search medicine above to add.</td></tr>`;
+            } else {
+                body.innerHTML = cart.map((item, index) => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-2.5 font-bold text-slate-800">
+                            ${item.name}
+                            <span class="text-[10px] text-slate-400 block">${item.batch ? 'B: ' + item.batch : ''}</span>
+                        </td>
+                        <td class="py-2.5 text-center">
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${item.unitType === 'loose' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">
+                                ${item.unitType === 'loose' ? 'Loose' : 'Pack'}
+                            </span>
+                        </td>
+                        <td class="py-2.5 text-center font-black">${item.qty}</td>
+                        <td class="py-2.5 text-right font-medium">Rs. ${item.rate.toFixed(2)}</td>
+                        <td class="py-2.5 text-right font-black text-slate-900">Rs. ${item.total.toFixed(2)}</td>
+                        <td class="py-2.5 text-center">
+                            <button onclick="window.removeCartItem(${index})" class="text-red-500 hover:text-red-700 p-1">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            lucide.createIcons();
+            window.calculateCartTotals();
+        }
+
+        window.removeCartItem = function(index) {
+            cart.splice(index, 1);
+            renderCartTable();
+        };
+
+        window.clearCartPrompt = function() {
+            if (cart.length === 0) return;
+            customConfirm('Clear Cart', 'Kya aap bill ko khali karna chahte hain?', () => {
+                cart = [];
+                renderCartTable();
+                showToast('Cart cleared', 'info');
+            });
+        };
+
+        window.calculateCartTotals = function() {
+            const subtotal = cart.reduce((acc, item) => acc + item.total, 0);
+            const discPercent = parseFloat(document.getElementById('pos-discount').value) || 0;
+            const discAmt = (subtotal * discPercent) / 100;
+            const grandTotal = Math.max(0, subtotal - discAmt);
+
+            document.getElementById('pos-subtotal').innerText = `Rs. ${subtotal.toFixed(2)}`;
+            document.getElementById('pos-discount-amt').innerText = `- Rs. ${discAmt.toFixed(2)}`;
+            document.getElementById('pos-grand-total').innerText = `Rs. ${grandTotal.toFixed(2)}`;
+
+            return { subtotal, discAmt, grandTotal };
+        };
+
+        window.renderInventoryTable = function(itemsToRender = medicines) {
+            const tbody = document.getElementById('inventory-table-body');
+            if (itemsToRender.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="text-center py-8 text-slate-400">Stock list khali hai. New medicine add karein.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = itemsToRender.map(m => {
+                const isLow = Number(m.stock) < 10;
+                return `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-3 font-bold text-slate-800">${m.name}</td>
+                        <td class="p-3 text-slate-500">${m.generic || '-'}</td>
+                        <td class="p-3 font-bold text-indigo-700 bg-indigo-50/40 rounded">
+                            <span class="inline-flex items-center gap-1">
+                                <i data-lucide="truck" class="w-3 h-3 text-indigo-400"></i> ${m.distributor || 'Unknown'}
+                            </span>
+                        </td>
+                        <td class="p-3 text-center text-slate-600">${m.pack || 10}</td>
+                        <td class="p-3 font-mono text-slate-600">${m.batch || '-'}</td>
+                        <td class="p-3 font-mono text-slate-700">${m.expiry || '-'}</td>
+                        <td class="p-3 text-right text-slate-600">Rs. ${Number(m.buy).toFixed(2)}</td>
+                        <td class="p-3 text-right font-bold text-slate-900">Rs. ${Number(m.mrp).toFixed(2)}</td>
+                        <td class="p-3 text-center">
+                            <span class="px-2 py-0.5 rounded-full font-black text-xs ${isLow ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
+                                ${m.stock}
+                            </span>
+                        </td>
+                        <td class="p-3 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="window.openEditMedicineModal('${m.id}')" class="p-1 text-brand-600 hover:bg-brand-50 rounded" title="Edit">
+                                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button onclick="window.deleteMedicine('${m.id}')" class="p-1 text-red-600 hover:bg-red-50 rounded" title="Delete">
+                                    <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            lucide.createIcons();
+        };
+
+        window.filterInventoryTable = function() {
+            const query = document.getElementById('inv-search').value.trim().toLowerCase();
+            if (!query) {
+                window.renderInventoryTable(medicines);
+                return;
+            }
+            const filtered = medicines.filter(m => 
+                m.name.toLowerCase().includes(query) ||
+                (m.generic && m.generic.toLowerCase().includes(query)) ||
+                (m.distributor && m.distributor.toLowerCase().includes(query)) ||
+                (m.batch && m.batch.toLowerCase().includes(query))
+            );
+            window.renderInventoryTable(filtered);
+        };
+
+        window.openAddMedicineModal = function() {
+            document.getElementById('med-modal-title').innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4 text-brand-600"></i> Add New Medicine`;
+            document.getElementById('med-id').value = '';
+            document.getElementById('med-name').value = '';
+            document.getElementById('med-generic').value = '';
+            document.getElementById('med-distributor').value = '';
+            document.getElementById('med-pack').value = 10;
+            document.getElementById('med-batch').value = '';
+            document.getElementById('med-buy').value = '';
+            document.getElementById('med-mrp').value = '';
+            document.getElementById('med-stock').value = '';
+
+            const d = new Date();
+            d.setFullYear(d.getFullYear() + 2);
+            document.getElementById('med-expiry').value = d.toISOString().split('T')[0];
+
+            document.getElementById('medicine-modal').classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.openEditMedicineModal = function(id) {
+            const med = medicines.find(m => m.id === id);
+            if (!med) return;
+
+            document.getElementById('med-modal-title').innerHTML = `<i data-lucide="edit-3" class="w-4 h-4 text-brand-600"></i> Edit Medicine`;
+            document.getElementById('med-id').value = med.id;
+            document.getElementById('med-name').value = med.name;
+            document.getElementById('med-generic').value = med.generic || '';
+            document.getElementById('med-distributor').value = med.distributor || '';
+            document.getElementById('med-pack').value = med.pack || 10;
+            document.getElementById('med-batch').value = med.batch || '';
+            document.getElementById('med-expiry').value = med.expiry || '';
+            document.getElementById('med-buy').value = med.buy;
+            document.getElementById('med-mrp').value = med.mrp;
+            document.getElementById('med-stock').value = med.stock;
+
+            document.getElementById('medicine-modal').classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeMedicineModal = function() {
+            document.getElementById('medicine-modal').classList.add('hidden');
+        };
+
+        window.handleSaveMedicine = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('med-id').value;
+            const name = document.getElementById('med-name').value.trim();
+            const generic = document.getElementById('med-generic').value.trim();
+            const distributor = document.getElementById('med-distributor').value.trim() || 'Direct / General';
+            const pack = parseInt(document.getElementById('med-pack').value) || 10;
+            const batch = document.getElementById('med-batch').value.trim();
+            const expiry = document.getElementById('med-expiry').value;
+            const buy = parseFloat(document.getElementById('med-buy').value) || 0;
+            const mrp = parseFloat(document.getElementById('med-mrp').value) || 0;
+            const stock = parseFloat(document.getElementById('med-stock').value) || 0;
+
+            let savedItem = null;
+            if (id) {
+                const idx = medicines.findIndex(m => m.id === id);
+                if (idx > -1) {
+                    medicines[idx] = { ...medicines[idx], name, generic, distributor, pack, batch, expiry, buy, mrp, stock };
+                    savedItem = medicines[idx];
+                }
+            } else {
+                savedItem = {
+                    id: Date.now().toString(),
+                    name, generic, distributor, pack, batch, expiry, buy, mrp, stock
+                };
+                medicines.unshift(savedItem);
+            }
+
+            if (savedItem) {
+                await syncMedicineToCloud(savedItem);
+            }
+
+            window.closeMedicineModal();
+            window.renderInventoryTable();
+            window.refreshDashboard();
+            showToast(`${name} (${distributor}) inventory mein save ho gaya!`, 'success');
+        };
+
+        window.deleteMedicine = function(id) {
+            const med = medicines.find(m => m.id === id);
+            const medName = med ? med.name : 'is medicine';
+
+            customConfirm('Delete Medicine', `Kya aap "${medName}" ko stock se delete karna chahte hain?`, async () => {
+                medicines = medicines.filter(m => m.id !== id);
+                await removeMedicineFromCloud(id);
+                window.renderInventoryTable();
+                window.refreshDashboard();
+                showToast(`${medName} deleted`, 'info');
+            });
+        };
+
+        window.openDistributorComparisonModal = function() {
+            document.getElementById('distributor-modal').classList.remove('hidden');
+            window.renderDistributorComparison();
+            lucide.createIcons();
+        };
+
+        window.closeDistributorComparisonModal = function() {
+            document.getElementById('distributor-modal').classList.add('hidden');
+        };
+
+        window.renderDistributorComparison = function() {
+            const query = (document.getElementById('dist-compare-search')?.value || '').trim().toLowerCase();
+            const tbody = document.getElementById('dist-compare-body');
+
+            const filtered = medicines.filter(m => 
+                !query || 
+                m.name.toLowerCase().includes(query) || 
+                (m.distributor && m.distributor.toLowerCase().includes(query))
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400">Koi record nahi mila.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(m => {
+                const buy = Number(m.buy) || 0;
+                const mrp = Number(m.mrp) || 0;
+                const margin = mrp > 0 ? (((mrp - buy) / mrp) * 100).toFixed(1) : '0.0';
+                return `
+                    <tr class="hover:bg-slate-50 border-b border-slate-100">
+                        <td class="p-2.5 font-bold text-slate-800">${m.name}</td>
+                        <td class="p-2.5 font-bold text-indigo-700">
+                            <span class="inline-flex items-center gap-1">
+                                <i data-lucide="truck" class="w-3 h-3 text-indigo-500"></i> ${m.distributor || 'Not Specified'}
+                            </span>
+                        </td>
+                        <td class="p-2.5 text-right font-semibold text-slate-700">Rs. ${buy.toFixed(2)}</td>
+                        <td class="p-2.5 text-right font-black text-slate-900">Rs. ${mrp.toFixed(2)}</td>
+                        <td class="p-2.5 text-center">
+                            <span class="px-2 py-0.5 rounded-full font-bold text-[11px] bg-emerald-100 text-emerald-800">
+                                ${margin}%
+                            </span>
+                        </td>
+                        <td class="p-2.5 text-center font-bold">${m.stock} pk</td>
+                    </tr>
+                `;
+            }).join('');
+            lucide.createIcons();
+        };
+
+        window.runMarginCalc = function() {
+            const mrp = parseFloat(document.getElementById('calc-mrp').value) || 0;
+            const buyRate = parseFloat(document.getElementById('calc-rate').value) || 0;
+            const buyScheme = parseFloat(document.getElementById('calc-scheme-buy').value) || 0;
+            const freeScheme = parseFloat(document.getElementById('calc-scheme-free').value) || 0;
+
+            if (mrp <= 0 || buyRate <= 0) {
+                document.getElementById('calc-disc-res').innerText = '0.00%';
+                document.getElementById('calc-profit-res').innerText = '0.00%';
+                return;
+            }
+
+            let effectiveBuy = buyRate;
+            if (buyScheme > 0 && freeScheme > 0) {
+                const totalUnits = buyScheme + freeScheme;
+                effectiveBuy = (buyRate * buyScheme) / totalUnits;
+            }
+
+            const discountReceived = ((mrp - effectiveBuy) / mrp) * 100;
+            const profitMargin = ((mrp - effectiveBuy) / effectiveBuy) * 100;
+
+            document.getElementById('calc-disc-res').innerText = `${Math.max(0, discountReceived).toFixed(2)}%`;
+            document.getElementById('calc-profit-res').innerText = `${Math.max(0, profitMargin).toFixed(2)}%`;
+        };
+    </script>
+</body>
+</html>
