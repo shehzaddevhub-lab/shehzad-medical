@@ -51,11 +51,14 @@
                 padding: 4mm !important;
                 box-shadow: none !important;
                 border: none !important;
+                background: #ffffff !important;
             }
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .mobile-safe-bottom { padding-bottom: 96px; }
+        .mobile-safe-bottom { 
+            padding-bottom: 130px !important; 
+        }
         @keyframes scanLaser {
             0% { top: 0%; opacity: 0.8; }
             50% { top: 96%; opacity: 1; }
@@ -63,6 +66,15 @@
         }
         .scanning-laser-line {
             animation: scanLaser 2s infinite ease-in-out;
+        }
+        /* Realistic Thermal Paper Tint and Perforation */
+        .thermal-paper {
+            background-color: #fbfbf6;
+            background-image: radial-gradient(#eceae2 0.75px, transparent 0.75px);
+            background-size: 8px 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), inset 0 0 40px rgba(0,0,0,0.015);
+            border-top: 3px dashed #d6d3c7;
+            border-bottom: 3px dashed #d6d3c7;
         }
     </style>
 </head>
@@ -90,19 +102,22 @@
         </div>
     </div>
 
-    <!-- PWA Install Banner (Hides automatically if already installed / accepted) -->
-    <div id="pwa-install-banner" class="hidden bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 px-3 md:px-4 py-2 shadow-sm flex items-center justify-between z-40 sticky top-0 border-b border-amber-600">
-        <div class="flex items-center gap-2 text-xs md:text-sm font-bold truncate">
-            <div class="w-6 h-6 rounded-lg bg-blue-700 flex items-center justify-center p-1 shrink-0 shadow-sm">
+    <!-- Smart 1-Click PWA Install Popup (Disappears completely once app is installed) -->
+    <div id="pwa-install-banner" class="hidden fixed bottom-20 md:bottom-6 right-3 sm:right-6 z-40 bg-slate-900/95 text-white border border-slate-700 p-3 sm:p-3.5 rounded-2xl shadow-2xl backdrop-blur-md max-w-xs w-full flex items-center justify-between gap-3 animate-fade-in">
+        <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center p-1.5 shrink-0 shadow-md border border-white/20">
                 <svg viewBox="0 0 100 100" class="w-full h-full"><path d="M38 18h24v20h20v24H62v20H38V62H18V38h20z" fill="#fff"/><path d="M44 26h12v18h18v12H56v18H44V56H26V44h18z" fill="#dc2626"/></svg>
             </div>
-            <span class="truncate">Shehzad Medical Store App Install Karein</span>
+            <div class="min-w-0">
+                <h4 class="font-bold text-xs text-white truncate">Shehzad Medical Store</h4>
+                <p class="text-[10px] text-brand-200 truncate">1-Click Fast App Install</p>
+            </div>
         </div>
-        <div class="flex items-center gap-2 shrink-0">
-            <button onclick="window.installPWADirect()" class="bg-slate-950 text-white hover:bg-slate-800 font-bold text-[11px] md:text-xs px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1.5 active:scale-95">
-                <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i> Install Now
+        <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="window.installPWADirect()" class="bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-[11px] px-3 py-1.5 rounded-xl shadow transition flex items-center gap-1 active:scale-95">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i> Install
             </button>
-            <button onclick="window.dismissPwaBannerPermanently()" class="text-slate-800 hover:text-black p-1">
+            <button onclick="window.dismissPwaBannerPermanently()" class="text-slate-400 hover:text-white p-1" title="Dismiss">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
@@ -136,34 +151,19 @@
                 <div id="global-search-results" class="hidden absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl max-h-80 overflow-y-auto z-50 divide-y divide-slate-100 p-2 text-slate-800"></div>
             </div>
 
-            <!-- Top Actions: Store Settings, Sync Badge, Distinct Login/Signup & Profile -->
-            <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-                <!-- Store Settings Button -->
-                <button onclick="window.openStoreSettingsModal()" class="p-1.5 bg-brand-800 hover:bg-brand-900 border border-brand-500 rounded-lg text-white" title="Medical Store Settings & Receipt Header">
-                    <i data-lucide="settings" class="w-4 h-4"></i>
-                </button>
-
-                <!-- Sync Status Badge -->
-                <div id="cloud-sync-badge" class="flex items-center gap-1 bg-slate-800/90 text-amber-300 text-[10px] font-bold px-2 py-1 rounded-lg border border-slate-600 shadow-inner" title="Sync Status">
-                    <span id="sync-indicator-dot" class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                    <i id="sync-icon" data-lucide="hard-drive" class="w-3 h-3"></i>
-                    <span id="cloud-sync-text" class="hidden sm:inline">Guest</span>
-                </div>
-
-                <!-- Auth Buttons: Distinct Login & Signup buttons for Guest -->
-                <div id="auth-logged-out-buttons" class="flex items-center gap-1">
-                    <button onclick="window.openAuthModal('login')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-2 sm:px-2.5 py-1 rounded-lg font-bold text-[11px] sm:text-xs transition active:scale-95">
-                        Login
-                    </button>
-                    <button onclick="window.openAuthModal('signup')" class="bg-amber-400 hover:bg-amber-500 text-slate-950 font-black px-2 sm:px-2.5 py-1 rounded-lg shadow text-[11px] sm:text-xs transition active:scale-95">
-                        Sign Up
+            <!-- Top Actions: Single Login/Signup Button & Far-Right Profile Icon -->
+            <div class="flex items-center space-x-2 shrink-0">
+                <!-- Single Unified Login / Signup Button -->
+                <div id="auth-logged-out-buttons">
+                    <button onclick="window.openAuthModal('login')" class="bg-amber-400 hover:bg-amber-500 text-slate-950 font-black px-3 py-1.5 rounded-xl shadow text-xs transition active:scale-95 flex items-center gap-1.5">
+                        <i data-lucide="log-in" class="w-3.5 h-3.5 text-slate-900"></i>
+                        <span>Login / Sign Up</span>
                     </button>
                 </div>
 
-                <!-- Profile Badge & Avatar -->
-                <button id="auth-profile-pill" onclick="window.openProfileModal()" class="flex items-center gap-1.5 bg-brand-800 hover:bg-brand-900 px-2 py-1 rounded-xl border border-brand-500 transition" title="Profile Details">
-                    <div id="user-initial" class="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-[10px] border border-white">G</div>
-                    <span id="user-display-email" class="hidden sm:inline text-[11px] font-bold text-white max-w-[80px] truncate">Guest</span>
+                <!-- Profile Avatar Icon at Far Right Corner -->
+                <button id="auth-profile-pill" onclick="window.openProfileModal()" class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-900 border-2 border-brand-400/80 hover:border-amber-400 transition shadow-inner" title="User Profile">
+                    <div id="user-initial" class="font-black text-xs text-white">G</div>
                 </button>
             </div>
         </div>
@@ -653,16 +653,22 @@
                     <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1">
                         <i data-lucide="printer" class="w-4 h-4 text-brand-600"></i> Customer Receipt
                     </h3>
-                    <p class="text-[10px] text-slate-500">Compact thermal slip ready</p>
+                    <p class="text-[10px] text-slate-500">Thermal preview & print settings</p>
                 </div>
-                <button onclick="window.closeDigitalReceiptModal()" class="text-slate-400 hover:text-slate-600 p-1">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
+                <div class="flex items-center gap-1.5">
+                    <!-- Receipt Store Header Settings Button (Moved here from front page) -->
+                    <button onclick="window.openStoreSettingsModal()" class="p-1 text-slate-500 hover:text-brand-600 hover:bg-slate-100 rounded-lg text-[11px] flex items-center gap-1 font-bold" title="Edit Store Name / Address / Phone">
+                        <i data-lucide="settings" class="w-3.5 h-3.5"></i> Edit Header
+                    </button>
+                    <button onclick="window.closeDigitalReceiptModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
             </div>
 
-            <!-- Dynamic Snug Thermal Slip Container (Auto Fits Items Height with Zero Excess Space) -->
-            <div id="thermal-card-wrapper" class="flex justify-center p-1 bg-slate-100 rounded-xl">
-                <div id="thermal-card-capture" class="w-[280px] bg-white border border-slate-300 p-3 rounded-lg shadow-sm font-mono text-[11px] text-slate-900 leading-tight">
+            <!-- Dynamic Snug Thermal Slip Container with Realistic Thermal Paper Styling -->
+            <div id="thermal-card-wrapper" class="flex justify-center p-2 bg-slate-100 rounded-xl">
+                <div id="thermal-card-capture" class="w-[280px] thermal-paper border border-slate-300 p-3 rounded shadow font-mono text-[11px] text-slate-900 leading-tight">
                     <!-- Receipt Header -->
                     <div class="text-center border-b border-dashed border-slate-400 pb-2 mb-2">
                         <h2 class="font-black text-xs sm:text-sm tracking-tight uppercase">SHEHZAD MEDICAL STORE</h2>
@@ -686,7 +692,7 @@
                                 <th class="pb-1 text-right">Total</th>
                             </tr>
                         </thead>
-                        <tbody id="card-receipt-items-body" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="card-receipt-items-body" class="divide-y divide-slate-200"></tbody>
                     </table>
 
                     <!-- Receipt Totals -->
@@ -1964,7 +1970,6 @@ Return ONLY valid JSON array. No explanations.`;
         function updateAuthUI(user) {
             const loggedOutBtns = document.getElementById('auth-logged-out-buttons');
             const profilePill = document.getElementById('auth-profile-pill');
-            const emailSpan = document.getElementById('user-display-email');
             const userInitial = document.getElementById('user-initial');
             const profModalName = document.getElementById('profile-modal-name');
             const profModalEmail = document.getElementById('profile-modal-email');
@@ -1975,7 +1980,6 @@ Return ONLY valid JSON array. No explanations.`;
 
             if (user) {
                 if (loggedOutBtns) loggedOutBtns.classList.add('hidden');
-                if (emailSpan) emailSpan.innerText = user.email || 'User';
                 const initial = (user.email || 'U')[0].toUpperCase();
                 if (userInitial) userInitial.innerText = initial;
                 if (profModalAvatar) profModalAvatar.innerText = initial;
@@ -1985,9 +1989,12 @@ Return ONLY valid JSON array. No explanations.`;
                 if (profModalStatus) profModalStatus.innerText = 'Online Live Cloud Synced';
                 if (profModalLoginBtn) profModalLoginBtn.classList.add('hidden');
                 if (profModalLogoutBtn) profModalLogoutBtn.classList.remove('hidden');
+                if (profilePill) {
+                    profilePill.classList.remove('border-brand-400/80');
+                    profilePill.classList.add('border-emerald-400', 'bg-emerald-800');
+                }
             } else {
                 if (loggedOutBtns) loggedOutBtns.classList.remove('hidden');
-                if (emailSpan) emailSpan.innerText = 'Guest';
                 if (userInitial) userInitial.innerText = 'G';
                 if (profModalAvatar) profModalAvatar.innerText = 'G';
 
@@ -1996,123 +2003,95 @@ Return ONLY valid JSON array. No explanations.`;
                 if (profModalStatus) profModalStatus.innerText = 'Local device storage only';
                 if (profModalLoginBtn) profModalLoginBtn.classList.remove('hidden');
                 if (profModalLogoutBtn) profModalLogoutBtn.classList.add('hidden');
+                if (profilePill) {
+                    profilePill.classList.remove('border-emerald-400', 'bg-emerald-800');
+                    profilePill.classList.add('border-brand-400/80', 'bg-brand-900');
+                }
             }
-            updateNetworkBadge();
             lucide.createIcons();
         }
 
-        window.openProfileModal = function() {
-            window.updateStoreHeadersInUI();
-            document.getElementById('profile-modal').classList.remove('hidden');
-            lucide.createIcons();
+        function checkPwaInstallState() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            const banner = document.getElementById('pwa-install-banner');
+            const isDismissed = localStorage.getItem('sm_pwa_installed') === 'true';
+            
+            if (isStandalone || isDismissed) {
+                if (banner) banner.classList.add('hidden');
+                return true;
+            }
+            return false;
+        }
+
+        window.dismissPwaBannerPermanently = function() {
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner) banner.classList.add('hidden');
+            localStorage.setItem('sm_pwa_installed', 'true');
         };
 
-        window.openAuthModal = function(mode = 'login') {
-            authMode = mode;
-            const title = document.getElementById('auth-modal-title');
-            const sub = document.getElementById('auth-modal-sub');
-            const submitText = document.getElementById('auth-submit-text');
-            const toggleBtn = document.getElementById('auth-toggle-btn');
-            const errBox = document.getElementById('auth-error-box');
-            const signupFields = document.getElementById('auth-signup-fields');
+        window.installPWADirect = async function() {
+            if (pwaInstallPrompt) {
+                try {
+                    await pwaInstallPrompt.prompt();
+                    const choice = await pwaInstallPrompt.userChoice;
+                    if (choice.outcome === 'accepted') {
+                        showToast('Shehzad Medical Store App kamyabi se install ho gayi!', 'success');
+                        localStorage.setItem('sm_pwa_installed', 'true');
+                        const banner = document.getElementById('pwa-install-banner');
+                        if (banner) banner.classList.add('hidden');
+                    }
+                    pwaInstallPrompt = null;
+                    return;
+                } catch (e) {
+                    console.error('Install prompt trigger error:', e);
+                }
+            }
 
-            errBox.classList.add('hidden');
-            errBox.innerText = '';
-
-            if (authMode === 'signup') {
-                title.innerHTML = `<i data-lucide="user-plus" class="w-4 h-4 text-brand-600"></i> Naya Account Banayein (Sign Up)`;
-                sub.innerText = 'Apna email, password, store name aur WhatsApp likhein taake cloud sync ho sakay.';
-                submitText.innerText = 'Sign Up (Create Store Account)';
-                toggleBtn.innerText = 'Pehle se account hai? Login karein';
-                if (signupFields) signupFields.classList.remove('hidden');
+            if (checkPwaInstallState()) {
+                showToast('App pehle se install hai!', 'info');
             } else {
-                title.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-brand-600"></i> Account Login`;
-                sub.innerText = 'Apna registered email aur password likh kar login karein.';
-                submitText.innerText = 'Login Karein';
-                toggleBtn.innerText = 'Naya account banana hai? Sign Up Karein';
-                if (signupFields) signupFields.classList.add('hidden');
+                showToast('Browser menu mein ja kar Add to Homescreen karein.', 'info');
             }
-            document.getElementById('auth-modal').classList.remove('hidden');
-            lucide.createIcons();
         };
 
-        window.closeAuthModal = function() {
-            document.getElementById('auth-modal').classList.add('hidden');
-        };
-
-        window.toggleAuthMode = function() {
-            window.openAuthModal(authMode === 'login' ? 'signup' : 'login');
-        };
-
-        window.continueAsGuest = function() {
-            window.closeAuthModal();
-            showToast('Guest Mode active hai. Data aapke mobile/browser ki local storage mein save hoga.', 'info');
-        };
-
-        window.handleAuthFormSubmit = async function(e) {
+        window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            const email = document.getElementById('auth-email-input').value.trim();
-            const password = document.getElementById('auth-password-input').value;
-            const errBox = document.getElementById('auth-error-box');
-            const submitBtn = document.getElementById('auth-submit-btn');
-
-            if (authMode === 'signup') {
-                const storeName = document.getElementById('auth-store-name').value.trim();
-                const waPhone = document.getElementById('auth-whatsapp-input').value.trim();
-                if (storeName) storeSettings.name = storeName;
-                if (waPhone) storeSettings.phone = waPhone;
-                localStorage.setItem('sm_store_settings', JSON.stringify(storeSettings));
-                window.updateStoreHeadersInUI();
+            pwaInstallPrompt = e;
+            const isInstalled = checkPwaInstallState();
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner && !isInstalled) {
+                banner.classList.remove('hidden');
             }
+        });
 
-            if (!auth) {
-                errBox.innerText = 'Firebase connection unavailable. Operating in guest local mode.';
-                errBox.classList.remove('hidden');
+        window.addEventListener('appinstalled', () => {
+            localStorage.setItem('sm_pwa_installed', 'true');
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner) banner.classList.add('hidden');
+            showToast('Shehzad Medical Store App successfully installed!', 'success');
+        });
+
+        window.downloadReceiptAsImage = function() {
+            const cardEl = document.getElementById('thermal-card-capture');
+            if (!cardEl || typeof html2canvas === 'undefined') {
+                showToast('Image renderer ready nahi hai!', 'error');
                 return;
             }
 
-            errBox.classList.add('hidden');
-            submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-75');
-
-            try {
-                if (authMode === 'signup') {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    showToast(`Store account ban gaya! Welcome ${email}`, 'success');
-                } else {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    showToast(`Kamyabi se login ho gaye!`, 'success');
-                }
-                window.closeAuthModal();
-            } catch (err) {
-                console.error('Auth error:', err);
-                let msg = err.message || 'Authentication failed';
-                if (err.code === 'auth/email-already-in-use') msg = 'Yeh email pehle se registered hai. Login karein.';
-                else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = 'Galat email ya password. Dobara check karein.';
-                else if (err.code === 'auth/weak-password') msg = 'Password kam az kam 6 characters ka hona chahiye.';
-                else if (err.code === 'auth/invalid-email') msg = 'Durust email address likhein.';
-                errBox.innerText = msg;
-                errBox.classList.remove('hidden');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-75');
-            }
-        };
-
-        window.handleLogout = function() {
-            customConfirm('Logout Account', 'Kya aap is account se logout karna chahte hain? Logout hone ke baad app Guest Mode mein chalegi.', async () => {
-                try {
-                    document.getElementById('profile-modal').classList.add('hidden');
-                    if (auth) {
-                        await signOut(auth);
-                        currentUser = null;
-                        updateAuthUI(null);
-                        loadFromLocalStorage();
-                        showToast('Logged out. Ab aap Guest Mode mein hain.', 'info');
-                    }
-                } catch (e) {
-                    console.error('Logout error:', e);
-                }
+            showToast('Receipt image tayyar ho rahi hai...', 'info');
+            html2canvas(cardEl, {
+                scale: 2,
+                backgroundColor: '#fbfbf6'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                const inv = lastSaleReceiptData ? lastSaleReceiptData.invNo : 'receipt';
+                link.download = `Receipt_${inv}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('Receipt image downloaded successfully!', 'success');
+            }).catch(e => {
+                console.error('html2canvas error:', e);
+                showToast('Receipt save nahi ho saki.', 'error');
             });
         };
 
