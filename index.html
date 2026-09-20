@@ -75,13 +75,44 @@
             background-size: 10px 10px;
         }
 
-        /* Safe Bottom Padding for Mobile Navigation Bar */
+        /* High-Tech AI Optical Laser Scanner Animation */
+        @keyframes aiLaserScan {
+            0%, 100% {
+                top: 8%;
+                opacity: 0.9;
+            }
+            50% {
+                top: 86%;
+                opacity: 1;
+            }
+        }
+        @keyframes aiPulseRing {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 0.3; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .ai-laser-bar {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent 0%, #38bdf8 20%, #3b82f6 50%, #38bdf8 80%, transparent 100%);
+            box-shadow: 0 0 16px #3b82f6, 0 0 6px #60a5fa;
+            animation: aiLaserScan 2s ease-in-out infinite;
+        }
+        .ai-scanner-grid {
+            background-image: linear-gradient(rgba(59, 130, 246, 0.09) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(59, 130, 246, 0.09) 1px, transparent 1px);
+            background-size: 14px 14px;
+        }
+
+        /* Safe Bottom Padding for Mobile Navigation Bar (Guarantees No Cut-Offs) */
         .mobile-safe-bottom {
-            padding-bottom: 130px;
+            padding-bottom: 160px !important;
         }
         @media (min-width: 768px) {
             .mobile-safe-bottom {
-                padding-bottom: 40px;
+                padding-bottom: 48px !important;
             }
         }
     </style>
@@ -183,7 +214,7 @@
                         <div>
                             <h2 class="font-black text-sm sm:text-base tracking-wide flex items-center gap-2">
                                 Doctor Prescription (Nuskha) AI Reader
-                                <span class="text-[10px] font-semibold bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full">Gemini 3 Flash</span>
+                                <span class="text-[10px] font-semibold bg-amber-400 text-slate-900 px-2.5 py-0.5 rounded-full tracking-wider uppercase">Smart AI Vision</span>
                             </h2>
                             <p class="text-xs text-brand-100">Doctor ki handwriting, dawaiyan aur khaney ke auqat (dose timing) auto-read karein.</p>
                         </div>
@@ -399,54 +430,55 @@
                         <input type="text" id="pos-customer" placeholder="Walk-in Customer" class="w-full px-2.5 py-1.5 border border-slate-200 rounded-xl text-xs font-semibold">
                     </div>
                     <button onclick="window.completeSale()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl shadow-lg transition flex items-center justify-center gap-1.5 text-xs sm:text-sm">
-                        <i data-lucide="check-circle" class="w-4 h-4"></i> Complete Bill & Open Slip
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                        <span>Complete Sale & Slip</span>
                     </button>
                 </div>
             </div>
         </section>
 
-        <section id="view-inventory" class="tab-content hidden flex flex-col gap-3">
+        <!-- VIEW: INVENTORY / STOCK MANAGEMENT -->
+        <section id="view-inventory" class="tab-content hidden flex flex-col gap-4">
             <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3 justify-between items-center">
+                <!-- Search Bar -->
                 <div class="relative w-full sm:w-80">
-                    <input type="text" id="inv-search" onkeyup="window.filterInventoryTable()" placeholder="Stock search by name, formula, batch..." class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500">
+                    <input type="text" id="inv-search" onkeyup="window.filterInventoryTable()" placeholder="Search medicine, formula, batch..." class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-brand-500 font-medium">
                     <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
                 </div>
-                
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <!-- Wholesale Distributor Bill Scanner -->
-                    <label class="cursor-pointer flex-1 sm:flex-initial bg-amber-400 hover:bg-amber-500 text-slate-950 px-3 py-2 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 shadow transition">
-                        <i data-lucide="scan-line" class="w-4 h-4"></i>
-                        <span>AI Scan Bill (Stock In)</span>
-                        <input type="file" id="inventory-bill-input" class="hidden" accept="image/*" onchange="window.handleRealInvoiceOcr(event)">
-                    </label>
 
-                    <button onclick="window.openDistributorComparisonModal()" class="flex-1 sm:flex-initial bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                        <i data-lucide="git-compare" class="w-3.5 h-3.5"></i> Compare Rates
+                <!-- Action Controls -->
+                <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto no-scrollbar">
+                    <button onclick="window.openDistributorComparisonModal()" class="shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
+                        <i data-lucide="git-compare" class="w-3.5 h-3.5 text-indigo-600"></i> Compare Rates
                     </button>
-
-                    <button onclick="window.openAddMedicineModal()" class="flex-1 sm:flex-initial bg-brand-600 hover:bg-brand-700 text-white px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition shadow">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Medicine
+                    <label class="shrink-0 cursor-pointer bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs px-3 py-2 rounded-xl shadow transition flex items-center gap-1.5">
+                        <i data-lucide="scan-line" class="w-3.5 h-3.5"></i>
+                        <span>AI Scan Bill (Stock In)</span>
+                        <input type="file" class="hidden" accept="image/*" onchange="window.handleRealInvoiceOcr(event)">
+                    </label>
+                    <button onclick="window.openAddMedicineModal()" class="shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow">
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Medicine
                     </button>
                 </div>
             </div>
 
-            <!-- Inventory Stock Table -->
+            <!-- Inventory Stock Table Container -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs">
-                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase">
+                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-bold">
                         <tr>
-                            <th class="p-3">Medicine Name</th>
+                            <th class="p-3">Item Name</th>
                             <th class="p-3">Distributor</th>
                             <th class="p-3">Pack</th>
                             <th class="p-3">Batch</th>
                             <th class="p-3">Expiry</th>
                             <th class="p-3 text-right">Buy Rate</th>
-                            <th class="p-3 text-right">MRP (Sale)</th>
+                            <th class="p-3 text-right">Retail MRP</th>
                             <th class="p-3 text-center">Stock</th>
                             <th class="p-3 text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="inventory-table-body" class="divide-y divide-slate-100 font-medium">
+                    <tbody id="inventory-table-body" class="divide-y divide-slate-100">
                         <tr>
                             <td colspan="9" class="text-center py-8 text-slate-400">Stock database load ho raha hai...</td>
                         </tr>
@@ -455,14 +487,14 @@
             </div>
         </section>
 
-        <section id="view-margin" class="tab-content hidden max-w-2xl mx-auto w-full flex flex-col gap-4">
+        <section id="view-margin" class="tab-content hidden max-w-3xl mx-auto w-full flex flex-col gap-4">
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
                     <div>
                         <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
                             <i data-lucide="percent" class="w-4 h-4 text-brand-600"></i> Trade Margin & Scheme Calculator
                         </h3>
-                        <p class="text-xs text-slate-500">Distributor discount, bonus schemes (10+1) aur net munafa calculate karein.</p>
+                        <p class="text-xs text-slate-500">Distributor discount, bonus schemes (10+1) aur net profit percentage calculate karein.</p>
                     </div>
                     <label class="cursor-pointer bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1">
                         <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Bill
@@ -500,6 +532,62 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Scanned Bill Margin & Profit Percentage Audit Container -->
+            <div id="margin-scanned-container" class="hidden bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b pb-2">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-2">
+                            <i data-lucide="scan-line" class="w-4 h-4 text-emerald-600"></i> Wholesale Bill Profit & Margin Audit
+                        </h3>
+                        <p class="text-[11px] text-slate-500">Box dekh kar MRP enter karein. Har item ka Discount % aur Net Profit % khud calculate hoga.</p>
+                    </div>
+                    <button onclick="document.getElementById('margin-scanned-container').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 p-1">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Laser Scanner Animation for Margin OCR -->
+                <div id="margin-scan-loading" class="py-8 px-4 flex flex-col items-center justify-center gap-4 text-center">
+                    <div class="relative w-48 h-36 bg-slate-950 rounded-2xl border-2 border-emerald-500/80 shadow-2xl overflow-hidden flex items-center justify-center ai-scanner-grid">
+                        <div class="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-emerald-400"></div>
+                        <div class="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-emerald-400"></div>
+                        <div class="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-emerald-400"></div>
+                        <div class="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-emerald-400"></div>
+                        <div class="flex flex-col items-center gap-1 opacity-70 animate-pulse">
+                            <i data-lucide="calculator" class="w-9 h-9 text-emerald-400"></i>
+                            <span class="text-[9px] font-mono tracking-widest text-emerald-300 uppercase">AUDITING MARGINS</span>
+                        </div>
+                        <div class="ai-laser-bar"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-black text-slate-800 tracking-wide flex items-center justify-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
+                            AI Profit & Percentage Auditor Active
+                        </h4>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Bill se items, kharid rates aur bonus schemes extract ho rahi hain...</p>
+                    </div>
+                </div>
+
+                <!-- Scanned Margin Items Table -->
+                <div id="margin-scan-content" class="hidden space-y-3">
+                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-50 border-b text-slate-600 font-bold">
+                                <tr>
+                                    <th class="p-2.5">Medicine Name</th>
+                                    <th class="p-2.5 text-right">Buy Rate (Kharid)</th>
+                                    <th class="p-2.5 text-center">Scheme / Packs</th>
+                                    <th class="p-2.5 text-right text-amber-900 bg-amber-50">Retail MRP (Box)</th>
+                                    <th class="p-2.5 text-right">Trade Discount %</th>
+                                    <th class="p-2.5 text-right text-emerald-800 bg-emerald-50">Net Profit %</th>
+                                </tr>
+                            </thead>
+                            <tbody id="margin-scanned-table-body" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="view-network" class="tab-content hidden flex flex-col gap-3">
@@ -525,9 +613,12 @@
             </div>
         </section>
 
+        <!-- Explicit Mobile Space Reserver to Prevent Any Clipping Behind Bottom Nav -->
+        <div class="h-16 md:hidden w-full shrink-0" aria-hidden="true"></div>
+
     </main>
 
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-2 py-1.5 z-30 flex items-center justify-around shadow-2xl">
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-2 z-40 flex items-center justify-around shadow-2xl">
         <button onclick="window.switchTab('dashboard')" id="mob-tab-dashboard" class="flex flex-col items-center p-1.5 text-brand-600 font-bold">
             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
             <span class="text-[10px]">Dashboard</span>
@@ -667,11 +758,33 @@
                 </button>
             </div>
 
-            <!-- Loading Spinner -->
-            <div id="presc-loading" class="py-10 flex flex-col items-center justify-center gap-2 text-center">
-                <div class="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-xs font-bold text-slate-700">Gemini AI nuskha parh raha hai...</p>
-                <p class="text-[10px] text-slate-400">Handwriting aur dawai ke schedule ka tajzia kiya ja raha hai.</p>
+            <!-- High-Tech AI Optical Laser Scanner Loading Visual -->
+            <div id="presc-loading" class="py-8 px-4 flex flex-col items-center justify-center gap-4 text-center">
+                <!-- Optical Laser Scanner Box -->
+                <div class="relative w-48 h-40 bg-slate-950 rounded-2xl border-2 border-brand-500/80 shadow-2xl overflow-hidden flex items-center justify-center ai-scanner-grid">
+                    <!-- Corner Target Brackets -->
+                    <div class="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-amber-400"></div>
+                    <div class="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-amber-400"></div>
+                    <div class="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-amber-400"></div>
+                    <div class="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-amber-400"></div>
+                    
+                    <!-- Center Document Visual with Pulsing Glow -->
+                    <div class="flex flex-col items-center gap-1 opacity-70 animate-pulse">
+                        <i data-lucide="file-text" class="w-10 h-10 text-brand-400"></i>
+                        <span class="text-[9px] font-mono tracking-widest text-brand-300 uppercase">ANALYZING NUSKHA</span>
+                    </div>
+
+                    <!-- Glowing Horizontal Laser Scan Bar -->
+                    <div class="ai-laser-bar"></div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black text-slate-800 tracking-wide flex items-center justify-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-brand-600 animate-ping"></span>
+                        Smart AI Prescription Scanner Active
+                    </h4>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Doctor ki handwriting aur dawai ke schedule ka tajzia kiya ja raha hai...</p>
+                </div>
             </div>
 
             <!-- Prescription Details Container -->
@@ -716,7 +829,7 @@
                         <i data-lucide="sparkles" class="w-4 h-4"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Wholesale Bill OCR Review</h3>
+                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Wholesale Bill AI Review</h3>
                         <p class="text-[10px] text-slate-500">Box dekh kar retail MRP manually enter karein.</p>
                     </div>
                 </div>
@@ -725,11 +838,33 @@
                 </button>
             </div>
 
-            <!-- OCR Spinner -->
-            <div id="ai-scan-loading" class="py-12 flex flex-col items-center justify-center gap-2 text-center">
-                <div class="w-10 h-10 border-4 border-brand-600 border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-xs font-bold text-slate-700">Gemini AI bill ki items extract kar raha hai...</p>
-                <p class="text-[10px] text-slate-400">Medicine name, batch, pack aur buy rate scan ho raha hai.</p>
+            <!-- Optical Laser Scanner for Bill OCR -->
+            <div id="ai-scan-loading" class="py-8 px-4 flex flex-col items-center justify-center gap-4 text-center">
+                <!-- Optical Laser Scanner Box -->
+                <div class="relative w-48 h-40 bg-slate-950 rounded-2xl border-2 border-emerald-500/80 shadow-2xl overflow-hidden flex items-center justify-center ai-scanner-grid">
+                    <!-- Corner Target Brackets -->
+                    <div class="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-emerald-400"></div>
+                    <div class="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-emerald-400"></div>
+                    <div class="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-emerald-400"></div>
+                    <div class="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-emerald-400"></div>
+                    
+                    <!-- Center Document Visual -->
+                    <div class="flex flex-col items-center gap-1 opacity-70 animate-pulse">
+                        <i data-lucide="receipt" class="w-10 h-10 text-emerald-400"></i>
+                        <span class="text-[9px] font-mono tracking-widest text-emerald-300 uppercase">SCANNING INVOICE</span>
+                    </div>
+
+                    <!-- Glowing Horizontal Laser Scan Bar -->
+                    <div class="ai-laser-bar"></div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black text-slate-800 tracking-wide flex items-center justify-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
+                        Smart AI Invoice Extraction Active
+                    </h4>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Medicine name, batch, pack aur buy rate scan ho raha hai...</p>
+                </div>
             </div>
 
             <!-- Review Table Content -->
@@ -1782,6 +1917,7 @@ Return ONLY a valid JSON array of objects. No markdown.`;
 
         function renderInventoryTable() {
             const tbody = document.getElementById('inventory-table-body');
+            if (!tbody) return;
             const searchVal = document.getElementById('inv-search')?.value.toLowerCase().trim() || '';
 
             let filtered = medicines;
@@ -1926,7 +2062,7 @@ Return ONLY a valid JSON array of objects. No markdown.`;
                                         <span class="font-bold text-slate-700">${r.distributor}</span>
                                         <span class="text-[10px] text-slate-400 block">Buy: Rs. ${r.buyRate.toFixed(2)}</span>
                                     </div>
-                                    <span class="text-xs font-black text-emerald-600">${r.margin}% Munafa</span>
+                                    <span class="text-xs font-black text-emerald-600">${r.margin}% Profit</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -1961,15 +2097,44 @@ Return ONLY a valid JSON array of objects. No markdown.`;
             document.getElementById('calc-profit-res').innerText = Math.max(0, netProfitMarginPercent).toFixed(2) + '%';
         };
 
+        // AI Wholesale Bill Profit & Percentage Auditor
+        window.marginScannedItems = [];
+
         window.handleAiMarginBillScan = async function(event) {
             const file = event.target.files?.[0];
             if (!file) return;
-            showToast('AI wholesale bill read kar raha hai...', 'info');
+
+            const container = document.getElementById('margin-scanned-container');
+            const loading = document.getElementById('margin-scan-loading');
+            const content = document.getElementById('margin-scan-content');
+
+            if (!container || !loading || !content) {
+                console.error('Margin scanner DOM elements missing');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            loading.classList.remove('hidden');
+            content.classList.add('hidden');
+            safeCreateIcons();
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `Read this invoice photo and extract first medicine line item MRP and Buy Rate.
-Return JSON: { "mrp": number, "buyRate": number }. No markdown.`;
+                const prompt = `You are an expert Pakistani pharmacy wholesale bill & trade margin auditor.
+Scan this distributor invoice and extract all medicine line items to audit trade discounts and profit percentages.
+For each medicine line item extract:
+- name (string: brand name and dosage strength e.g. "Panadol 500mg" or "Augmentin 625mg")
+- buyRate (number: wholesale invoice rate per pack/unit)
+- qty (number: invoiced quantity purchased, default 1)
+- freeQty (number: bonus/scheme packs received free e.g. 1 in a 10+1 scheme, default 0)
+
+STRICT RULE: Do NOT populate or guess MRP. Pharmacist will enter MRP manually from physical packaging.
+Return ONLY a valid JSON array of objects:
+[
+  { "name": "...", "buyRate": 180, "qty": 10, "freeQty": 1 }
+]
+No markdown fences.`;
+
                 const apiKey = "";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
@@ -1985,19 +2150,102 @@ Return JSON: { "mrp": number, "buyRate": number }. No markdown.`;
                         }]
                     })
                 });
+
                 const result = await response.json();
                 const rawText = result.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                const cleaned = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
-                const parsed = JSON.parse(cleaned);
+                const items = extractJsonArray(rawText);
 
-                if (parsed.mrp) document.getElementById('calc-mrp').value = parsed.mrp;
-                if (parsed.buyRate) document.getElementById('calc-rate').value = parsed.buyRate;
-                window.runMarginCalc();
-                showToast('Bill se rate calculator mein shamil ho gaya!', 'success');
+                if (!items || !Array.isArray(items) || items.length === 0) {
+                    throw new Error('Bill se items read nahi ho sakein. Tasweer saaf lein aur dobara try karein.');
+                }
+
+                window.marginScannedItems = items.map((item, idx) => ({
+                    id: idx,
+                    name: item.name || 'Medicine ' + (idx + 1),
+                    buyRate: Number(item.buyRate) || 0,
+                    qty: Number(item.qty) || 1,
+                    freeQty: Number(item.freeQty) || 0,
+                    mrp: '' // Strictly empty for manual retail verification
+                }));
+
+                renderMarginScannedTable();
+                loading.classList.add('hidden');
+                content.classList.remove('hidden');
+                safeCreateIcons();
+                showToast('Bill ke tamam items scan ho gaye! Box se MRP enter karein.', 'success');
+
             } catch(e) {
-                showToast('Rate scan nahi ho saka. Manually enter karein.', 'error');
+                console.error('Margin bill scan error:', e);
+                if (container) container.classList.add('hidden');
+                showToast(e.message || 'Bill scan nahi ho saka.', 'error');
             } finally {
                 event.target.value = '';
+            }
+        };
+
+        function renderMarginScannedTable() {
+            const tbody = document.getElementById('margin-scanned-table-body');
+            if (!tbody) return;
+
+            if (window.marginScannedItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400">Koi item nahi mila.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = window.marginScannedItems.map((item, idx) => {
+                const schemeText = item.freeQty > 0 ? `${item.qty} + ${item.freeQty} Free` : 'No Scheme';
+                return `
+                    <tr class="border-b border-slate-100 hover:bg-slate-50">
+                        <td class="p-2.5 font-bold text-slate-900">${item.name}</td>
+                        <td class="p-2.5 text-right font-black text-slate-700">Rs. ${item.buyRate.toFixed(2)}</td>
+                        <td class="p-2.5 text-center">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${item.freeQty > 0 ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600'}">
+                                ${schemeText}
+                            </span>
+                        </td>
+                        <td class="p-2.5 text-right bg-amber-50">
+                            <input type="number" step="0.01" placeholder="Box MRP" value="${item.mrp}" 
+                                oninput="window.updateMarginRowMrp(${idx}, this.value)" 
+                                class="w-24 px-2 py-1 border border-amber-300 rounded-lg text-xs font-black text-emerald-800 text-right bg-white focus:outline-none focus:ring-1 focus:ring-amber-500">
+                        </td>
+                        <td class="p-2.5 text-right font-bold" id="margin-disc-col-${idx}">
+                            <span class="text-slate-400 italic text-[11px]">Enter MRP</span>
+                        </td>
+                        <td class="p-2.5 text-right font-black bg-emerald-50" id="margin-profit-col-${idx}">
+                            <span class="text-slate-400 italic text-[11px]">Enter MRP</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        window.updateMarginRowMrp = function(idx, mrpVal) {
+            const item = window.marginScannedItems[idx];
+            if (!item) return;
+
+            item.mrp = mrpVal;
+            const mrp = Number(mrpVal);
+            const discCol = document.getElementById(`margin-disc-col-${idx}`);
+            const profitCol = document.getElementById(`margin-profit-col-${idx}`);
+
+            if (!mrp || mrp <= 0 || item.buyRate <= 0) {
+                if (discCol) discCol.innerHTML = `<span class="text-slate-400 italic text-[11px]">Enter MRP</span>`;
+                if (profitCol) profitCol.innerHTML = `<span class="text-slate-400 italic text-[11px]">Enter MRP</span>`;
+                return;
+            }
+
+            const totalInvoiceCost = item.buyRate * item.qty;
+            const totalUnitsGot = item.qty + item.freeQty;
+            const effectiveCostPerPack = totalUnitsGot > 0 ? (totalInvoiceCost / totalUnitsGot) : item.buyRate;
+
+            const tradeDiscountPercent = Math.max(0, ((mrp - item.buyRate) / mrp) * 100);
+            const netProfitPercent = Math.max(0, ((mrp - effectiveCostPerPack) / mrp) * 100);
+
+            if (discCol) {
+                discCol.innerHTML = `<span class="text-brand-700 font-extrabold">${tradeDiscountPercent.toFixed(2)}%</span>`;
+            }
+            if (profitCol) {
+                profitCol.innerHTML = `<span class="text-emerald-700 font-black text-xs bg-emerald-100 px-2 py-0.5 rounded-full">${netProfitPercent.toFixed(2)}% Profit</span>`;
             }
         };
 
