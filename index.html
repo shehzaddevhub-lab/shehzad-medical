@@ -10,9 +10,10 @@
     <meta name="description" content="Shehzad Medical Store - High-Speed Pharmacy ERP, Smart AI Bill Scanner & POS">
     <title id="html-page-title">Shehzad Medical Store - Pharmacy ERP & POS</title>
 
-    <!-- Embedded High-Resolution Medical PWA Logo (Guaranteed 100% Offline & Native Install) -->
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Shehzad Medical Store","short_name":"Shehzad ERP","start_url":".","display":"standalone","background_color":"#1e40af","theme_color":"#1e40af","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 512 512%27%3E%3Crect width=%27512%27 height=%27512%27 rx=%27128%27 fill=%27%231e40af%27/%3E%3Ccircle cx=%27256%27 cy=%27256%27 r=%27190%27 fill=%27white%27 opacity=%270.15%27/%3E%3Cpath d=%27M216 116h80v100h100v80H296v100h-80V296H116v-80h100V116z%27 fill=%27%2322c55e%27 stroke=%27white%27 stroke-width=%2714%27 stroke-linejoin=%27round%27/%3E%3Ccircle cx=%27380%27 cy=%27132%27 r=%2732%27 fill=%27%23fbbf24%27/%3E%3C/svg%3E","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}]}'>
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 512 512%27%3E%3Crect width=%27512%27 height=%27512%27 rx=%27128%27 fill=%27%231e40af%27/%3E%3Cpath d=%27M216 116h80v100h100v80H296v100h-80V296H116v-80h100V116z%27 fill=%27%2322c55e%27 stroke=%27white%27 stroke-width=%2714%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+    <!-- Fallback App Icon Links -->
+    <link rel="icon" id="dynamic-favicon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231e40af'/%3E%3Ccircle cx='256' cy='256' r='190' fill='white' opacity='0.15'/%3E%3Cpath d='M216 116h80v100h100v80H296v100h-80V296H116v-80h100V116z' fill='%2322c55e' stroke='white' stroke-width='14' stroke-linejoin='round'/%3E%3Ccircle cx='380' cy='132' r='32' fill='%23fbbf24'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" id="dynamic-apple-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231e40af'/%3E%3Ccircle cx='256' cy='256' r='190' fill='white' opacity='0.15'/%3E%3Cpath d='M216 116h80v100h100v80H296v100h-80V296H116v-80h100V116z' fill='%2322c55e' stroke='white' stroke-width='14' stroke-linejoin='round'/%3E%3Ccircle cx='380' cy='132' r='32' fill='%23fbbf24'/%3E%3C/svg%3E">
+    <link rel="manifest" id="dynamic-manifest-link">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -36,7 +37,7 @@
         }
     </script>
 
-    <!-- Lucide Icons -->
+    <!-- Lucide Icons CDN -->
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
 
     <!-- html2canvas for High-Res Thermal Slip Image Download -->
@@ -48,7 +49,7 @@
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js" type="module"></script>
 
     <style>
-        /* Mobile Form Auto-Zoom Prevention (Guarantees Inputs Never Trigger Browser Screen Zoom) */
+        /* Mobile Form Auto-Zoom Prevention */
         @media (max-width: 768px) {
             input, select, textarea {
                 font-size: 16px !important;
@@ -56,7 +57,7 @@
             }
         }
 
-        /* Thermal Slip Print Optimization (Strict 80mm & 58mm Fit) */
+        /* Thermal Slip Print Optimization */
         @media print {
             body * { visibility: hidden !important; }
             #thermal-card-capture, #thermal-card-capture * { visibility: visible !important; }
@@ -85,7 +86,7 @@
             background-size: 8px 8px;
         }
 
-        /* High-Tech Optical Laser Scanning Animation */
+        /* Optical Laser Scanning Animation */
         @keyframes aiLaserScan {
             0%, 100% { top: 6%; opacity: 0.9; }
             50% { top: 88%; opacity: 1; }
@@ -105,7 +106,7 @@
             background-size: 15px 15px;
         }
 
-        /* Safe Mobile Bottom Space (No content hidden behind bottom tabs) */
+        /* Safe Mobile Bottom Space */
         .mobile-safe-bottom {
             padding-bottom: 175px !important;
         }
@@ -149,7 +150,7 @@
             <!-- Desktop 1-Click Universal Rate & Network Search -->
             <div class="relative flex-1 max-w-xs md:max-w-md mx-2 hidden sm:block">
                 <div class="relative">
-                    <input type="text" id="global-search-input" onkeyup="window.globalQuickSearch()" placeholder="1-Click Rate Check (Press F3 to search)..." class="w-full pl-8 pr-16 py-1.5 text-xs bg-brand-900/90 text-white placeholder-brand-200 border border-brand-600 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                    <input type="text" id="global-search-input" onkeyup="window.globalQuickSearch()" placeholder="1-Click Rate Check (Press F3)..." class="w-full pl-8 pr-16 py-1.5 text-xs bg-brand-900/90 text-white placeholder-brand-200 border border-brand-600 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-400">
                     <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-2 text-brand-300"></i>
                     <span class="absolute right-7 top-1.5 text-[9px] text-brand-300 font-mono kbd-badge hidden md:inline">F3</span>
                     <button id="clear-global-search" onclick="window.clearGlobalSearch()" class="hidden absolute right-2.5 top-2 text-brand-200 hover:text-white">
@@ -159,10 +160,10 @@
                 <div id="global-search-results" class="hidden absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl max-h-80 overflow-y-auto z-50 divide-y divide-slate-100 p-2 text-slate-800"></div>
             </div>
 
-            <!-- Header Right Controls: Direct Install, Cloud Sync, Login, Profile -->
+            <!-- Header Right Controls: 1-Click Direct Install, Cloud Sync, Login, Profile -->
             <div class="flex items-center space-x-2 shrink-0">
-                <!-- Direct 1-Click Install Button (Always visible on header until installed) -->
-                <button id="nav-install-btn" onclick="window.executeNativeAppInstall()" class="bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs px-2.5 py-1.5 rounded-xl shadow transition flex items-center gap-1.5" title="Mobile ya PC par install karein">
+                <!-- Direct 1-Click Install Button -->
+                <button id="nav-install-btn" onclick="window.executeNativeAppInstall()" class="bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs px-2.5 py-1.5 rounded-xl shadow-md transition flex items-center gap-1.5 active:scale-95" title="Direct Mobile ya PC par install karein">
                     <i data-lucide="download" class="w-3.5 h-3.5 text-slate-950"></i>
                     <span class="hidden sm:inline">Install App</span>
                 </button>
@@ -199,6 +200,7 @@
         </div>
     </header>
 
+    <!-- Desktop Keyboard Hotkeys Bar -->
     <div class="hidden md:flex bg-slate-900 text-slate-300 px-4 py-1 text-[11px] items-center justify-between border-b border-slate-800">
         <div class="flex items-center gap-4">
             <span class="text-slate-400 font-semibold flex items-center gap-1">⚡ Counter Hotkeys:</span>
@@ -213,7 +215,6 @@
         <div class="text-[10px] text-slate-400">Fast Keyboard Driven POS Active</div>
     </div>
 
-    <!-- Main Dynamic Content Workspace -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-3.5 mobile-safe-bottom flex flex-col gap-4">
 
         <!-- Navigation Tabs (Desktop & Tablet) -->
@@ -421,7 +422,7 @@
                 </div>
             </div>
 
-            <!-- Right: Bill Summary, Customer Info & Complete Sale Trigger -->
+            <!-- Right: POS Bill Summary -->
             <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between gap-4">
                 <div>
                     <h4 class="font-black text-slate-800 text-sm sm:text-base mb-3 border-b pb-2 flex items-center gap-1.5">
@@ -647,7 +648,7 @@
             </div>
         </section>
 
-        <!-- Explicit Mobile Space Reserver to Prevent Any Clipping Behind Bottom Nav -->
+        <!-- Explicit Mobile Space Reserver to Prevent Clipping -->
         <div class="h-16 md:hidden w-full shrink-0" aria-hidden="true"></div>
 
     </main>
@@ -686,7 +687,7 @@
                 </button>
             </div>
 
-            <!-- Authentic Snug Thermal Slip Container (Auto-Adjusts Strictly to Items) -->
+            <!-- Authentic Snug Thermal Slip Container -->
             <div id="thermal-card-capture" class="thermal-paper-bg p-3.5 rounded-xl border border-dashed border-slate-300 font-mono text-slate-900 text-xs shadow-inner">
                 <!-- Header (Auto-Populated from Store Profile) -->
                 <div class="text-center border-b border-dashed border-slate-400 pb-2 mb-2">
@@ -702,7 +703,7 @@
                     </div>
                 </div>
 
-                <!-- Items Listing (Strictly Compact) -->
+                <!-- Items Listing -->
                 <table class="w-full text-[10px] border-b border-dashed border-slate-400 pb-2 mb-2">
                     <thead>
                         <tr class="text-left font-bold border-b border-slate-300">
@@ -757,7 +758,6 @@
         </div>
     </div>
 
-    <!-- AI Prescription Breakdown Modal -->
     <div id="ai-presc-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-2">
@@ -834,7 +834,6 @@
         </div>
     </div>
 
-    <!-- AI Wholesale Invoice Stock-In Review Modal -->
     <div id="ai-scan-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-3xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[92vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-2">
@@ -977,7 +976,7 @@
         </div>
     </div>
 
-    <!-- Distributor Rates Comparison Modal -->
+    <!-- Distributor Rate Comparison Modal -->
     <div id="distributor-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-2">
@@ -993,7 +992,6 @@
         </div>
     </div>
 
-    <!-- Sale Invoice Management & Re-Print Modal -->
     <div id="sale-edit-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-md w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
             <div class="flex items-center justify-between border-b pb-2">
@@ -1034,6 +1032,7 @@
         </div>
     </div>
 
+    <!-- Unified Auth Modal -->
     <div id="auth-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-sm w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
             <div class="flex items-center justify-between border-b pb-2">
@@ -1130,7 +1129,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, collection, onSnapshot, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Core Application State
@@ -1158,6 +1157,200 @@
             }
         } catch (e) {
             console.warn('Firebase init:', e);
+        }
+
+        // ==========================================
+        // DYNAMIC HIGH-RES PWA MANIFEST & ICON ENGINE
+        // Guarantees 100% 1-Click Installation On GitHub Pages
+        // ==========================================
+        function setupDynamicPwaManifest() {
+            try {
+                const currentOrigin = window.location.origin;
+                const currentPath = window.location.pathname;
+                const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) || '/';
+                const startUrl = window.location.href.split('#')[0];
+                const scopeUrl = currentOrigin + basePath;
+
+                // Draw high-resolution sharp PNG icons via offscreen canvas
+                function generateMedicalPngIcon(size) {
+                    const c = document.createElement('canvas');
+                    c.width = size;
+                    c.height = size;
+                    const ctx = c.getContext('2d');
+                    
+                    // Background royal blue rounded tile
+                    const r = size * 0.22;
+                    ctx.fillStyle = '#1e40af';
+                    ctx.beginPath();
+                    ctx.roundRect(0, 0, size, size, r);
+                    ctx.fill();
+
+                    // Subtle inner glow
+                    ctx.beginPath();
+                    ctx.arc(size / 2, size / 2, size * 0.38, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+                    ctx.fill();
+
+                    // Emerald green medical cross with white outline
+                    const armW = size * 0.22;
+                    const armL = size * 0.62;
+                    const offsetL = (size - armL) / 2;
+                    const offsetW = (size - armW) / 2;
+
+                    ctx.fillStyle = '#22c55e';
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = size * 0.028;
+                    ctx.lineJoin = 'round';
+
+                    // Vertical bar
+                    ctx.beginPath();
+                    ctx.roundRect(offsetW, offsetL, armW, armL, size * 0.04);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Horizontal bar
+                    ctx.beginPath();
+                    ctx.roundRect(offsetL, offsetW, armL, armW, size * 0.04);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Gold pill / star accent
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.beginPath();
+                    ctx.arc(size * 0.76, size * 0.24, size * 0.07, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    return c.toDataURL('image/png');
+                }
+
+                const icon192 = generateMedicalPngIcon(192);
+                const icon512 = generateMedicalPngIcon(512);
+
+                // Update apple touch icon & favicon
+                const appleIcon = document.getElementById('dynamic-apple-icon');
+                if (appleIcon) appleIcon.href = icon192;
+                const favicon = document.getElementById('dynamic-favicon');
+                if (favicon) favicon.href = icon192;
+
+                // Build spec-compliant manifest with required 192px and 512px icons
+                const manifestObj = {
+                    name: "Shehzad Medical Store",
+                    short_name: "Shehzad ERP",
+                    description: "Shehzad Medical Store - High-Speed Pharmacy ERP, Smart AI Bill Scanner & POS",
+                    id: startUrl,
+                    start_url: startUrl,
+                    scope: scopeUrl,
+                    display: "standalone",
+                    orientation: "portrait-primary",
+                    background_color: "#1e40af",
+                    theme_color: "#1e40af",
+                    icons: [
+                        {
+                            src: icon192,
+                            sizes: "192x192",
+                            type: "image/png",
+                            purpose: "any"
+                        },
+                        {
+                            src: icon192,
+                            sizes: "192x192",
+                            type: "image/png",
+                            purpose: "maskable"
+                        },
+                        {
+                            src: icon512,
+                            sizes: "512x512",
+                            type: "image/png",
+                            purpose: "any"
+                        },
+                        {
+                            src: icon512,
+                            sizes: "512x512",
+                            type: "image/png",
+                            purpose: "maskable"
+                        }
+                    ]
+                };
+
+                const manifestBlob = new Blob([JSON.stringify(manifestObj, null, 2)], { type: 'application/manifest+json' });
+                const manifestBlobUrl = URL.createObjectURL(manifestBlob);
+
+                const manifestLink = document.getElementById('dynamic-manifest-link');
+                if (manifestLink) {
+                    manifestLink.href = manifestBlobUrl;
+                }
+            } catch(e) {
+                console.warn('PWA Manifest setup error:', e);
+            }
+        }
+        setupDynamicPwaManifest();
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent default browser mini-infobar so our dedicated Install button controls the action
+            e.preventDefault();
+            deferredPrompt = e;
+            updateInstallUiState();
+        });
+
+        window.executeNativeAppInstall = async function() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            if (isStandalone) {
+                showToast('App pehle se aap ke device par installed hai!', 'info');
+                updateInstallUiState();
+                return;
+            }
+
+            if (deferredPrompt) {
+                try {
+                    deferredPrompt.prompt();
+                    const choiceResult = await deferredPrompt.userChoice;
+                    if (choiceResult && choiceResult.outcome === 'accepted') {
+                        showToast('App install ho rahi hai!', 'success');
+                        const navBtn = document.getElementById('nav-install-btn');
+                        if (navBtn) navBtn.classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                } catch(err) {
+                    console.warn('Install execution error:', err);
+                }
+            } else {
+                // If clicked before Chrome evaluates manifest, wait briefly or guide
+                showToast('Install prompt check ho raha hai...', 'info');
+                setTimeout(() => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                    } else {
+                        showToast('Device par 1-click install ready ho raha hai, refresh kar ke dobara click karein.', 'info');
+                    }
+                }, 1000);
+            }
+        };
+
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            updateInstallUiState();
+            showToast('Shehzad Medical Store App kamyabi se install ho gayi!', 'success');
+        });
+
+        function updateInstallUiState() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            const navBtn = document.getElementById('nav-install-btn');
+            if (!navBtn) return;
+
+            if (isStandalone) {
+                navBtn.classList.add('hidden');
+            } else {
+                navBtn.classList.remove('hidden');
+            }
+        }
+
+        // Safe ServiceWorker Registration for GitHub Pages
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {
+                    // Modern Chrome & Edge install PWAs directly from our dynamic manifest
+                });
+            });
         }
 
         function showToast(message, type = 'success') {
@@ -1253,7 +1446,7 @@
                             // Contrast & Lightness normalization with safe RGB clamping
                             const imgData = ctx.getImageData(0, 0, width, height);
                             const d = imgData.data;
-                            const contrast = 22; // Safe contrast boost
+                            const contrast = 22;
                             const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
                             
                             for (let i = 0; i < d.length; i += 4) {
@@ -1266,7 +1459,6 @@
                             const base64Clean = canvas.toDataURL('image/jpeg', 0.88).split(',')[1];
                             resolve(base64Clean);
                         } catch (err) {
-                            // Direct raw fallback if canvas fails
                             const raw = event.target.result.split(',')[1];
                             resolve(raw);
                         }
@@ -1303,9 +1495,8 @@
                         if (text) return text;
                     }
                 } catch (e) {
-                    // Suppress and retry
+                    // Exponential retry
                 }
-                // Exponential delay: 1s, 2s, 4s...
                 await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
             }
             throw new Error('AI Vision Scanner connect nahi ho saka. Tasweer saaf roshni mein dobara lein.');
@@ -1390,46 +1581,34 @@
             safeCreateIcons();
         };
 
+        // Desktop Pharmacist Keyboard Hotkeys
         window.addEventListener('keydown', (e) => {
-            // F1: Switch to POS Counter
             if (e.key === 'F1') {
                 e.preventDefault();
                 window.switchTab('pos');
-            }
-            // F2: Switch to Stock Inventory
-            else if (e.key === 'F2') {
+            } else if (e.key === 'F2') {
                 e.preventDefault();
                 window.switchTab('inventory');
-            }
-            // F3: Quick Rate Search
-            else if (e.key === 'F3') {
+            } else if (e.key === 'F3') {
                 e.preventDefault();
                 const globalInput = document.getElementById('global-search-input');
                 if (globalInput) {
                     globalInput.focus();
                     globalInput.select();
                 }
-            }
-            // F4: Switch to Dashboard
-            else if (e.key === 'F4') {
+            } else if (e.key === 'F4') {
                 e.preventDefault();
                 window.switchTab('dashboard');
-            }
-            // F6: Switch to Margin Calculator
-            else if (e.key === 'F6') {
+            } else if (e.key === 'F6') {
                 e.preventDefault();
                 window.switchTab('margin');
-            }
-            // F9 or Ctrl+Enter: Quick Complete Bill
-            else if (e.key === 'F9' || (e.ctrlKey && e.key === 'Enter')) {
+            } else if (e.key === 'F9' || (e.ctrlKey && e.key === 'Enter')) {
                 e.preventDefault();
                 const posSection = document.getElementById('view-pos');
                 if (posSection && !posSection.classList.contains('hidden')) {
                     window.completeSale();
                 }
-            }
-            // Escape: Close modals, clear active search
-            else if (e.key === 'Escape') {
+            } else if (e.key === 'Escape') {
                 window.clearGlobalSearch();
                 window.clearMobileSearch();
                 const openModals = [
@@ -1475,7 +1654,7 @@
             if (matches.length === 0) {
                 results.innerHTML = `<p class="p-3 text-xs text-slate-400 text-center">Koi medicine nahi mili.</p>`;
             } else {
-                results.innerHTML = matches.map((m, idx) => `
+                results.innerHTML = matches.map((m) => `
                     <div tabindex="0" onclick="window.selectMedicineForPos('${m.id}')" onkeydown="if(event.key==='Enter') window.selectMedicineForPos('${m.id}')" class="pos-result-row p-2.5 hover:bg-brand-50 focus:bg-brand-50 outline-none cursor-pointer flex justify-between items-center text-xs transition">
                         <div>
                             <strong class="text-slate-800 text-xs">${m.name}</strong>
@@ -1497,7 +1676,6 @@
             document.getElementById('pos-search-results').classList.add('hidden');
             document.getElementById('pos-search').value = '';
             
-            // Focus Qty input for rapid keyboard flow
             const qtyInput = document.getElementById('pos-qty');
             if (qtyInput) {
                 qtyInput.value = '1';
@@ -1557,8 +1735,6 @@
             renderCartTable();
             window.calculateCartTotals();
             showToast('Item cart mein shamil ho gaya!', 'success');
-            
-            // Return cursor to search for next medicine
             document.getElementById('pos-search')?.focus();
         };
 
@@ -1902,7 +2078,7 @@ Return ONLY a valid JSON array of objects.`;
                     packSize: Number(item.packSize) || 20,
                     qty: Number(item.qty) || 1,
                     buyRate: Number(item.buyRate) || 100,
-                    mrp: '', // Strictly empty for manual verification from box
+                    mrp: '', // Strictly empty for manual box check
                     distributor: detectedDistributor || 'Distributor'
                 }));
 
@@ -2646,7 +2822,7 @@ Return ONLY a valid JSON array of objects.`;
 
             try {
                 if (authMode === 'signup') {
-                    const cred = await createUserWithEmailAndPassword(auth, email, password);
+                    await createUserWithEmailAndPassword(auth, email, password);
                     const storeName = document.getElementById('auth-store-name').value.trim();
                     const phone = document.getElementById('auth-store-phone').value.trim();
                     const address = document.getElementById('auth-store-address').value.trim();
@@ -2714,75 +2890,7 @@ Return ONLY a valid JSON array of objects.`;
             window.closeProfileModal();
         };
 
-        function updateInstallUiState() {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            const navBtn = document.getElementById('nav-install-btn');
-
-            if (isStandalone) {
-                if (navBtn) navBtn.classList.add('hidden');
-            } else {
-                if (navBtn) navBtn.classList.remove('hidden');
-            }
-        }
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            updateInstallUiState();
-        });
-
-        window.executeNativeAppInstall = async function() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    const navBtn = document.getElementById('nav-install-btn');
-                    if (navBtn) navBtn.classList.add('hidden');
-                    showToast('App install ho rahi hai!', 'success');
-                }
-                deferredPrompt = null;
-            } else {
-                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-                if (isStandalone) {
-                    showToast('App pehle se aap ke device par installed hai!', 'info');
-                    return;
-                }
-                showToast('Browser menu se "Add to Home Screen" karein.', 'info');
-            }
-        };
-
-        window.addEventListener('appinstalled', () => {
-            const navBtn = document.getElementById('nav-install-btn');
-            if (navBtn) navBtn.classList.add('hidden');
-            showToast('Shehzad Medical App kamyabi se install ho gayi!', 'success');
-        });
-
-        function registerOfflineServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                try {
-                    const swCode = `
-                        const CACHE_NAME = 'shehzad-erp-v4';
-                        self.addEventListener('install', (e) => {
-                            self.skipWaiting();
-                        });
-                        self.addEventListener('activate', (e) => {
-                            e.waitUntil(clients.claim());
-                        });
-                        self.addEventListener('fetch', (e) => {
-                            if (e.request.method !== 'GET') return;
-                            e.respondWith(
-                                fetch(e.request).catch(() => caches.match(e.request))
-                            );
-                        });
-                    `;
-                    const blob = new Blob([swCode], { type: 'application/javascript' });
-                    navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
-                } catch(e) {}
-            }
-        }
-
         function initApp() {
-            registerOfflineServiceWorker();
             updateInstallUiState();
 
             // Load local persistent cache
