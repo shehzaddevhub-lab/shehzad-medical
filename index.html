@@ -7,10 +7,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="Shehzad Medical Store - High-Speed Pharmacy ERP, Smart AI Bill Scanner & POS">
-    <title id="html-page-title">Shehzad Medical Store - Pharmacy ERP & POS</title>
+    <meta name="description" content="Digital Pharma - Smart Pharmacy ERP, High-Speed POS & AI Medical Scanner">
+    <title id="html-page-title">Digital Pharma - Smart Pharmacy ERP & POS</title>
 
-    <!-- Fallback App Icon Links -->
+    <!-- App Icon Links -->
     <link rel="icon" id="dynamic-favicon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231e40af'/%3E%3Ccircle cx='256' cy='256' r='190' fill='white' opacity='0.15'/%3E%3Cpath d='M216 116h80v100h100v80H296v100h-80V296H116v-80h100V116z' fill='%2322c55e' stroke='white' stroke-width='14' stroke-linejoin='round'/%3E%3Ccircle cx='380' cy='132' r='32' fill='%23fbbf24'/%3E%3C/svg%3E">
     <link rel="apple-touch-icon" id="dynamic-apple-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231e40af'/%3E%3Ccircle cx='256' cy='256' r='190' fill='white' opacity='0.15'/%3E%3Cpath d='M216 116h80v100h100v80H296v100h-80V296H116v-80h100V116z' fill='%2322c55e' stroke='white' stroke-width='14' stroke-linejoin='round'/%3E%3Ccircle cx='380' cy='132' r='32' fill='%23fbbf24'/%3E%3C/svg%3E">
     <link rel="manifest" id="dynamic-manifest-link">
@@ -57,7 +57,7 @@
             }
         }
 
-        /* Thermal Slip Print Optimization */
+        /* Standard 80mm High-Contrast Thermal Slip Print Optimization */
         @media print {
             body * { visibility: hidden !important; }
             #thermal-card-capture, #thermal-card-capture * { visibility: visible !important; }
@@ -65,25 +65,27 @@
                 position: absolute !important;
                 left: 0 !important;
                 top: 0 !important;
-                width: 78mm !important;
-                max-width: 78mm !important;
+                width: 76mm !important;
+                max-width: 76mm !important;
                 margin: 0 !important;
-                padding: 6px !important;
+                padding: 4mm !important;
                 box-shadow: none !important;
                 border: none !important;
                 background-color: #ffffff !important;
                 color: #000000 !important;
+                font-family: 'Courier New', Courier, monospace !important;
             }
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Realistic Warm Thermal Receipt Tone */
+        /* Authentic Realistic Pharmacy Thermal Paper Styling */
         .thermal-paper-bg {
-            background-color: #fbfbf5;
-            background-image: radial-gradient(#ebe8dc 0.8px, transparent 0.8px);
-            background-size: 8px 8px;
+            background-color: #fbfbf6;
+            background-image: radial-gradient(#ece8da 0.7px, transparent 0.7px);
+            background-size: 7px 7px;
+            font-family: 'Courier New', Courier, ui-monospace, monospace;
         }
 
         /* Optical Laser Scanning Animation */
@@ -108,7 +110,7 @@
 
         /* Safe Mobile Bottom Space */
         .mobile-safe-bottom {
-            padding-bottom: 175px !important;
+            padding-bottom: 160px !important;
         }
         @media (min-width: 768px) {
             .mobile-safe-bottom {
@@ -116,15 +118,21 @@
             }
         }
 
-        /* Hotkey Badge Styling for Desktop */
-        .kbd-badge {
-            background: rgba(255,255,255,0.22);
-            border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 4px;
-            padding: 1px 5px;
-            font-size: 10px;
-            font-family: monospace;
-            font-weight: 700;
+        /* Barcode Line Styling */
+        .barcode-strip {
+            background: repeating-linear-gradient(
+                90deg,
+                #111 0px,
+                #111 2px,
+                transparent 2px,
+                transparent 4px,
+                #111 4px,
+                #111 7px,
+                transparent 7px,
+                transparent 9px,
+                #111 9px,
+                #111 11px
+            );
         }
     </style>
 </head>
@@ -134,7 +142,7 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-15 sm:h-16 flex items-center justify-between gap-2">
             
             <!-- Store Branding & Logo -->
-            <div class="flex items-center space-x-2.5 shrink-0 cursor-pointer" onclick="window.switchTab('dashboard')" title="Dashboard par jayein (F4)">
+            <div class="flex items-center space-x-2.5 shrink-0 cursor-pointer" onclick="window.switchTab('dashboard')" title="Go to Dashboard">
                 <div class="w-10 h-10 rounded-xl bg-white text-brand-700 flex items-center justify-center shadow-md shrink-0">
                     <svg class="w-6 h-6 stroke-current text-brand-700" fill="none" viewBox="0 0 24 24" stroke-width="2.3">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -142,17 +150,16 @@
                     </svg>
                 </div>
                 <div class="min-w-0">
-                    <h1 id="top-store-name" class="font-black text-sm sm:text-base leading-tight tracking-wide truncate">Shehzad Medical Store</h1>
-                    <p id="top-store-sub" class="text-[10px] text-brand-200">Pharmacy ERP & Smart POS</p>
+                    <h1 id="top-store-name" class="font-black text-sm sm:text-base leading-tight tracking-wide truncate">Digital Pharma</h1>
+                    <p id="top-store-sub" class="text-[10px] text-brand-200">Smart Pharmacy ERP & POS</p>
                 </div>
             </div>
 
             <!-- Desktop 1-Click Universal Rate & Network Search -->
             <div class="relative flex-1 max-w-xs md:max-w-md mx-2 hidden sm:block">
                 <div class="relative">
-                    <input type="text" id="global-search-input" onkeyup="window.globalQuickSearch()" placeholder="1-Click Rate Check (Press F3)..." class="w-full pl-8 pr-16 py-1.5 text-xs bg-brand-900/90 text-white placeholder-brand-200 border border-brand-600 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                    <input type="text" id="global-search-input" onkeyup="window.globalQuickSearch()" placeholder="Rate & Stock Quick Lookup..." class="w-full pl-8 pr-10 py-1.5 text-xs bg-brand-900/90 text-white placeholder-brand-200 border border-brand-600 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-400">
                     <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-2 text-brand-300"></i>
-                    <span class="absolute right-7 top-1.5 text-[9px] text-brand-300 font-mono kbd-badge hidden md:inline">F3</span>
                     <button id="clear-global-search" onclick="window.clearGlobalSearch()" class="hidden absolute right-2.5 top-2 text-brand-200 hover:text-white">
                         <i data-lucide="x" class="w-3.5 h-3.5"></i>
                     </button>
@@ -160,7 +167,7 @@
                 <div id="global-search-results" class="hidden absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl max-h-80 overflow-y-auto z-50 divide-y divide-slate-100 p-2 text-slate-800"></div>
             </div>
 
-            <!-- Header Right Controls: 1-Click Direct Install, Cloud Sync, Login, Profile -->
+            <!-- Header Right Controls -->
             <div class="flex items-center space-x-2 shrink-0">
                 <!-- Direct 1-Click Install Button -->
                 <button id="nav-install-btn" onclick="window.executeNativeAppInstall()" class="bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs px-2.5 py-1.5 rounded-xl shadow-md transition flex items-center gap-1.5 active:scale-95" title="Direct Mobile ya PC par install karein">
@@ -168,21 +175,15 @@
                     <span class="hidden sm:inline">Install App</span>
                 </button>
 
-                <!-- Cloud Sync Status Indicator -->
-                <div id="cloud-sync-badge" class="hidden items-center gap-1.5 px-2.5 py-1 bg-brand-900/90 border border-brand-600 rounded-full text-[11px] font-semibold text-brand-100">
-                    <span id="sync-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span id="sync-text">Cloud</span>
-                </div>
-
-                <!-- Unified Login / Sign-Up Button -->
-                <button id="auth-open-modal-btn" onclick="window.openAuthModal()" class="text-xs bg-white text-brand-800 hover:bg-brand-50 px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 shadow">
-                    <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
-                    <span id="auth-main-btn-text">Login</span>
-                </button>
-
-                <!-- User Profile & Store Settings Avatar -->
-                <button id="auth-profile-pill" onclick="window.openProfileModal()" class="w-8 h-8 rounded-full bg-brand-900 hover:bg-brand-950 border-2 border-brand-400 flex items-center justify-center text-white font-black text-xs transition shadow" title="Store Profile & Details">
-                    <span id="profile-avatar-char">G</span>
+                <!-- Unified Account & Profile Hub Button -->
+                <button id="account-hub-btn" onclick="window.openAccountHubModal()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-brand-600 px-2 py-1 rounded-full transition shadow text-left">
+                    <div class="flex flex-col hidden sm:block">
+                        <span id="hub-header-name" class="block leading-none text-xs font-bold text-white">Digital Pharma</span>
+                        <span id="hub-header-status" class="block leading-tight text-[9px] text-amber-300 font-medium">Guest / Local</span>
+                    </div>
+                    <div class="w-7 h-7 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center font-black text-xs shrink-0">
+                        <span id="profile-avatar-char">D</span>
+                    </div>
                 </button>
             </div>
         </div>
@@ -190,7 +191,7 @@
         <!-- Mobile Dedicated Rate & Stock Lookup Bar -->
         <div class="sm:hidden px-3 pb-2.5 pt-1 border-t border-brand-700 bg-brand-900/50">
             <div class="relative">
-                <input type="text" id="mobile-search-input" onkeyup="window.mobileQuickSearch()" placeholder="1-Click Rate Check (Type medicine name)..." class="w-full pl-8 pr-7 py-2 text-sm bg-brand-950 text-white placeholder-brand-200 border border-brand-600 rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-400">
+                <input type="text" id="mobile-search-input" onkeyup="window.mobileQuickSearch()" placeholder="Rate check (medicine name likhein)..." class="w-full pl-8 pr-7 py-2 text-sm bg-brand-950 text-white placeholder-brand-200 border border-brand-600 rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-400">
                 <i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-2.5 text-brand-300"></i>
                 <button id="clear-mobile-search" onclick="window.clearMobileSearch()" class="hidden absolute right-2.5 top-2.5 text-brand-200 hover:text-white">
                     <i data-lucide="x" class="w-4 h-4"></i>
@@ -200,65 +201,44 @@
         </div>
     </header>
 
-    <!-- Desktop Keyboard Hotkeys Bar -->
-    <div class="hidden md:flex bg-slate-900 text-slate-300 px-4 py-1 text-[11px] items-center justify-between border-b border-slate-800">
-        <div class="flex items-center gap-4">
-            <span class="text-slate-400 font-semibold flex items-center gap-1">⚡ Counter Hotkeys:</span>
-            <span><kbd class="kbd-badge text-amber-300">F1</kbd> POS Bill</span>
-            <span><kbd class="kbd-badge text-amber-300">F2</kbd> Stock Inventory</span>
-            <span><kbd class="kbd-badge text-amber-300">F3</kbd> Rate Check</span>
-            <span><kbd class="kbd-badge text-amber-300">F4</kbd> Dashboard</span>
-            <span><kbd class="kbd-badge text-amber-300">F6</kbd> Margin Calc</span>
-            <span><kbd class="kbd-badge text-emerald-300">F9</kbd> Quick Complete Bill</span>
-            <span><kbd class="kbd-badge text-red-300">Esc</kbd> Close / Clear</span>
-        </div>
-        <div class="text-[10px] text-slate-400">Fast Keyboard Driven POS Active</div>
-    </div>
-
     <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-3.5 mobile-safe-bottom flex flex-col gap-4">
 
         <!-- Navigation Tabs (Desktop & Tablet) -->
         <nav class="hidden md:flex space-x-2 bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200">
             <button onclick="window.switchTab('dashboard')" id="tab-dashboard" class="tab-btn active-tab flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition bg-brand-700 text-white shadow">
-                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard (F4)
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
             </button>
             <button onclick="window.switchTab('pos')" id="tab-pos" class="tab-btn flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition text-slate-600 hover:bg-slate-100">
-                <i data-lucide="shopping-cart" class="w-4 h-4"></i> Sale POS (F1)
+                <i data-lucide="shopping-cart" class="w-4 h-4"></i> Sale POS Counter
             </button>
             <button onclick="window.switchTab('inventory')" id="tab-inventory" class="tab-btn flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition text-slate-600 hover:bg-slate-100">
-                <i data-lucide="pill" class="w-4 h-4"></i> Stock Inventory (F2)
+                <i data-lucide="pill" class="w-4 h-4"></i> Stock Inventory
             </button>
             <button onclick="window.switchTab('margin')" id="tab-margin" class="tab-btn flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition text-slate-600 hover:bg-slate-100">
-                <i data-lucide="calculator" class="w-4 h-4"></i> Margin Calculator (F6)
+                <i data-lucide="calculator" class="w-4 h-4"></i> Margin Calculator
             </button>
             <button onclick="window.switchTab('network')" id="tab-network" class="tab-btn flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition text-slate-600 hover:bg-slate-100">
-                <i data-lucide="network" class="w-4 h-4"></i> Pharmacies Network
+                <i data-lucide="network" class="w-4 h-4"></i> Connected Pharmacies
             </button>
         </nav>
 
         <section id="view-dashboard" class="tab-content flex flex-col gap-4">
             
-            <!-- Prescription AI Vision Banner (Dashboard Exclusive) -->
-            <div class="bg-gradient-to-r from-brand-900 via-brand-800 to-indigo-950 text-white rounded-2xl shadow-md border border-brand-700/60 p-4 transition-all">
-                <div class="flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2.5 bg-amber-400/20 text-amber-300 rounded-xl border border-amber-400/30 shrink-0">
-                            <i data-lucide="sparkles" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h2 class="font-black text-sm sm:text-base tracking-wide flex items-center gap-2">
-                                Doctor Prescription (Nuskha) AI Reader
-                                <span class="text-[10px] font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full uppercase">Smart Vision</span>
-                            </h2>
-                            <p class="text-xs text-brand-100">Doctor ki handwriting, dawaiyan aur dose schedule (subah sham) auto-read karein.</p>
-                        </div>
+            <!-- Sleek Compact Prescription AI Banner -->
+            <div class="bg-gradient-to-r from-brand-900 to-indigo-900 text-white rounded-xl shadow-sm p-3 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-1.5 bg-amber-400/20 text-amber-300 rounded-lg shrink-0 border border-amber-400/30">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
                     </div>
-                    <label class="cursor-pointer bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1.5 shrink-0">
-                        <i data-lucide="scan" class="w-4 h-4"></i>
-                        <span>Scan Nuskha</span>
-                        <input type="file" id="dashboard-presc-input" class="hidden" accept="image/*" onchange="window.handlePrescriptionScan(event)">
-                    </label>
+                    <h2 class="font-bold text-sm tracking-wide flex items-center gap-2">
+                        Prescription AI Reader
+                        <span class="text-[9px] font-bold bg-amber-400 text-slate-900 px-1.5 py-0.5 rounded uppercase hidden sm:inline-block">Smart Vision</span>
+                    </h2>
                 </div>
+                <label class="cursor-pointer bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
+                    <i data-lucide="scan" class="w-3.5 h-3.5"></i> Scan Nuskha
+                    <input type="file" id="dashboard-presc-input" class="hidden" accept="image/*" onchange="window.handlePrescriptionScan(event)">
+                </label>
             </div>
 
             <!-- Dashboard Metric Cards -->
@@ -313,7 +293,7 @@
                             <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
                                 <i data-lucide="alert-circle" class="w-4 h-4 text-amber-500"></i> Low Stock Medicines (&lt; 10 units)
                             </h3>
-                            <button onclick="window.switchTab('inventory')" class="text-xs text-brand-600 font-bold hover:underline">View Stock (F2)</button>
+                            <button onclick="window.switchTab('inventory')" class="text-xs text-brand-600 font-bold hover:underline">View Stock</button>
                         </div>
                         <div id="low-stock-list" class="divide-y divide-slate-100 max-h-44 overflow-y-auto">
                             <p class="text-xs text-slate-400 py-3 text-center">Checking stock status...</p>
@@ -355,24 +335,24 @@
                         <h3 class="font-black text-slate-800 text-sm sm:text-base flex items-center gap-2">
                             <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-600"></i> Customer Bill Counter
                         </h3>
-                        <span class="text-[10px] bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full hidden sm:inline">Enter to Add • F9 to Bill</span>
+                        <span class="text-[10px] bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full hidden sm:inline">Use Arrow keys & Enter for speed</span>
                     </div>
                     <button onclick="window.clearCartPrompt()" class="text-[11px] text-red-600 hover:text-red-700 font-bold flex items-center gap-1">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear Cart
                     </button>
                 </div>
 
-                <!-- Instant POS Search Bar -->
+                <!-- Instant POS Search Bar with Keyboard Navigation -->
                 <div class="relative">
-                    <label class="block text-xs font-bold text-slate-600 mb-1">Dawai Search Karein:</label>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Dawai Search Karein (Type medicine name):</label>
                     <div class="relative">
-                        <input type="text" id="pos-search" placeholder="Type brand name or formula..." onkeyup="window.handlePosSearchKey(event)" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 font-medium text-xs sm:text-sm">
+                        <input type="text" id="pos-search" placeholder="Search brand name or formula..." onkeydown="window.handlePosSearchKey(event)" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 font-medium text-xs sm:text-sm">
                         <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
                     </div>
                     <div id="pos-search-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto z-20 divide-y divide-slate-100"></div>
                 </div>
 
-                <!-- Selected Item Config Bar (Strip vs Loose) -->
+                <!-- Selected Item Config Bar -->
                 <div id="pos-item-config" class="bg-slate-50 p-3 rounded-xl border border-slate-200 grid grid-cols-2 md:grid-cols-5 gap-2.5 items-end">
                     <div>
                         <span class="block text-[10px] font-bold text-slate-500">Selected Item:</span>
@@ -391,11 +371,11 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500">Qty:</label>
-                        <input type="number" id="pos-qty" min="1" value="1" onkeydown="if(event.key==='Enter') window.addItemToCart()" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-center">
+                        <input type="number" id="pos-qty" min="1" value="1" onkeydown="if(event.key==='Enter'){ event.preventDefault(); window.addItemToCart(); }" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-center">
                     </div>
                     <div>
                         <button onclick="window.addItemToCart()" id="pos-add-btn" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2 px-2 rounded-lg text-xs font-black transition flex items-center justify-center gap-1 shadow">
-                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add (Enter)
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add to Bill (Enter)
                         </button>
                     </div>
                 </div>
@@ -467,13 +447,27 @@
                     </div>
                     <button onclick="window.completeSale()" id="pos-complete-btn" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl shadow-lg transition flex items-center justify-center gap-1.5 text-xs sm:text-sm">
                         <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-                        <span>Complete Sale & Slip (F9)</span>
+                        <span>Complete Sale & Print Slip</span>
                     </button>
                 </div>
             </div>
         </section>
 
         <section id="view-inventory" class="tab-content hidden flex flex-col gap-4">
+            <!-- Compact Bill Scanner Banner -->
+            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white rounded-xl shadow-sm p-3 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-1.5 bg-white/10 rounded-lg shrink-0">
+                        <i data-lucide="scan-line" class="w-4 h-4 text-emerald-300"></i>
+                    </div>
+                    <h2 class="font-bold text-sm tracking-wide">Wholesale Bill AI Scanner (Stock In)</h2>
+                </div>
+                <label class="cursor-pointer bg-white text-emerald-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
+                    <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Bill
+                    <input type="file" class="hidden" accept="image/*" onchange="window.handleRealInvoiceOcr(event)">
+                </label>
+            </div>
+
             <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3 justify-between items-center">
                 <!-- Search Bar -->
                 <div class="relative w-full sm:w-80">
@@ -486,11 +480,6 @@
                     <button onclick="window.openDistributorComparisonModal()" class="shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
                         <i data-lucide="git-compare" class="w-3.5 h-3.5 text-indigo-600"></i> Compare Rates
                     </button>
-                    <label class="shrink-0 cursor-pointer bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs px-3 py-2 rounded-xl shadow transition flex items-center gap-1.5">
-                        <i data-lucide="scan-line" class="w-3.5 h-3.5"></i>
-                        <span>AI Scan Bill (Stock In)</span>
-                        <input type="file" class="hidden" accept="image/*" onchange="window.handleRealInvoiceOcr(event)">
-                    </label>
                     <button onclick="window.openAddMedicineModal()" class="shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow">
                         <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Medicine
                     </button>
@@ -523,18 +512,26 @@
         </section>
 
         <section id="view-margin" class="tab-content hidden max-w-3xl mx-auto w-full flex flex-col gap-4">
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
-                    <div>
-                        <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
-                            <i data-lucide="percent" class="w-4 h-4 text-brand-600"></i> Trade Margin & Scheme Calculator
-                        </h3>
-                        <p class="text-xs text-slate-500">Distributor discount, bonus schemes (10+1) aur net profit percentage calculate karein.</p>
+            <!-- Compact Margin AI Scanner Banner -->
+            <div class="bg-gradient-to-r from-amber-600 to-orange-700 text-white rounded-xl shadow-sm p-3 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-1.5 bg-white/10 rounded-lg shrink-0">
+                        <i data-lucide="percent" class="w-4 h-4 text-amber-200"></i>
                     </div>
-                    <label class="cursor-pointer bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1">
-                        <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Bill
-                        <input type="file" class="hidden" accept="image/*" onchange="window.handleAiMarginBillScan(event)">
-                    </label>
+                    <h2 class="font-bold text-sm tracking-wide">Trade Margin & Profit % AI Auditor</h2>
+                </div>
+                <label class="cursor-pointer bg-white text-amber-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
+                    <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Bill
+                    <input type="file" class="hidden" accept="image/*" onchange="window.handleAiMarginBillScan(event)">
+                </label>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div class="border-b border-slate-100 pb-3">
+                    <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-4 h-4 text-brand-600"></i> Manual Trade Calculator
+                    </h3>
+                    <p class="text-xs text-slate-500">Distributor discount, bonus schemes (10+1) aur net profit percentage calculate karein.</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -676,83 +673,179 @@
         </button>
     </nav>
 
-    <div id="digital-receipt-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-2xl flex flex-col gap-3 max-h-[92vh] overflow-y-auto">
+    <!-- Unified Account, Auth & Store Profile Hub Modal -->
+    <div id="account-hub-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-4 max-h-[92vh] overflow-y-auto">
+            
+            <div class="flex items-center justify-between border-b pb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-black flex items-center justify-center text-lg shadow-sm border border-brand-200">
+                        <span id="hub-avatar-char">D</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm">Account & Profile Hub</h3>
+                        <p class="text-[10px] flex items-center gap-1">
+                            <span id="hub-status-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                            <span id="hub-status-text" class="text-slate-600 font-semibold">Guest Mode (Local Offline)</span>
+                        </p>
+                    </div>
+                </div>
+                <button onclick="window.closeAccountHubModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Store Identity Settings -->
+            <div class="space-y-2.5 text-xs">
+                <div class="flex justify-between items-center mb-1">
+                    <h4 class="font-bold text-brand-700 text-[11px] uppercase tracking-wider">Store Profile Settings</h4>
+                    <span id="hub-auth-pill" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Guest</span>
+                </div>
+                
+                <div>
+                    <label class="block font-bold text-slate-600 mb-0.5">Pharmacy / Store Name:</label>
+                    <input type="text" id="hub-store-name" placeholder="Digital Pharma" class="w-full px-2.5 py-1.5 border rounded-xl font-bold">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 mb-0.5">WhatsApp / Phone Number:</label>
+                    <input type="tel" id="hub-store-phone" placeholder="0300-1234567" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 mb-0.5">Store Address / City:</label>
+                    <input type="text" id="hub-store-address" placeholder="Main Commercial Market" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 mb-0.5">Drug Sale License (D.S.L #):</label>
+                    <input type="text" id="hub-store-license" placeholder="DSL-PB-2024" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
+                </div>
+                
+                <button onclick="window.saveAccountHubStoreProfile()" class="w-full py-2 mt-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl shadow-sm border border-slate-300 transition">
+                    Save Profile Changes
+                </button>
+            </div>
+
+            <hr class="border-dashed border-slate-200">
+
+            <!-- Authentication Box (Login / Sign Up) -->
+            <div id="hub-unauth-box" class="space-y-3">
+                <h4 class="font-bold text-emerald-700 text-[11px] uppercase tracking-wider">Cloud Backup Sync</h4>
+                <div class="space-y-2.5 text-xs">
+                    <input type="email" id="hub-email" placeholder="Email Address" class="w-full px-2.5 py-1.5 border rounded-xl">
+                    <input type="password" id="hub-password" placeholder="Password (Min 6)" class="w-full px-2.5 py-1.5 border rounded-xl font-mono">
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="window.handleHubLogin()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black shadow">Login</button>
+                        <button onclick="window.handleHubSignUp()" class="flex-1 py-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 rounded-xl font-bold">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Authenticated Actions (Logout) -->
+            <div id="hub-auth-box" class="hidden pt-1">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold text-slate-600">Logged in as:</span>
+                    <span id="hub-user-email" class="text-[11px] font-mono text-emerald-600 bg-emerald-50 px-2 py-1 rounded">owner@email.com</span>
+                </div>
+                <button onclick="window.handleHubLogout()" class="w-full py-2 border border-red-200 text-red-600 hover:bg-red-50 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Logout & Disconnect Sync
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals (Receipt, AI Presc, AI Scan, Edit Medicine, Compare, Edit Sale) -->
+    
+    <div id="digital-receipt-modal" class="hidden fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-2xl flex flex-col gap-3 max-h-[94vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-2">
                 <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
-                    <i data-lucide="printer" class="w-4 h-4 text-brand-600"></i> Customer Thermal Slip
+                    <i data-lucide="printer" class="w-4 h-4 text-brand-600"></i> Counter Thermal Receipt (80mm)
                 </h3>
                 <button onclick="window.closeReceiptModal()" class="text-slate-400 hover:text-slate-600 p-1">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
 
-            <!-- Authentic Snug Thermal Slip Container -->
-            <div id="thermal-card-capture" class="thermal-paper-bg p-3.5 rounded-xl border border-dashed border-slate-300 font-mono text-slate-900 text-xs shadow-inner">
-                <!-- Header (Auto-Populated from Store Profile) -->
-                <div class="text-center border-b border-dashed border-slate-400 pb-2 mb-2">
-                    <h2 id="receipt-store-title" class="font-black text-sm uppercase tracking-wider">Shehzad Medical Store</h2>
-                    <p id="receipt-store-address" class="text-[10px] text-slate-600">Railway Road, Muzaffargarh</p>
-                    <p id="receipt-store-phone" class="text-[10px] text-slate-600">WhatsApp: 0300-0000000</p>
-                    <div class="mt-1 flex justify-between text-[9px] text-slate-500">
-                        <span id="receipt-invoice-no">Inv: #0001</span>
-                        <span id="receipt-date-time">14/09/2026</span>
+            <!-- Authentic Standard Pakistani Pharmacy 80mm Thermal Receipt -->
+            <div id="thermal-card-capture" class="thermal-paper-bg p-4 rounded-xl border border-slate-300 text-slate-950 text-xs shadow-sm">
+                <!-- Header (Auto-Populated from Active Profile) -->
+                <div class="text-center border-b border-dashed border-slate-800 pb-2 mb-2 leading-tight">
+                    <h2 id="receipt-store-title" class="font-black text-sm uppercase tracking-wider">Digital Pharma</h2>
+                    <p id="receipt-store-address" class="text-[10px] text-slate-700 mt-0.5">Main Commercial Market</p>
+                    <p id="receipt-store-phone" class="text-[10px] text-slate-700">Phone/WhatsApp: 0300-1234567</p>
+                    <p id="receipt-store-license" class="text-[9px] text-slate-600 font-bold mt-0.5">D.S.L #: 14-B/PB-2024</p>
+                    
+                    <div class="mt-2 pt-1 border-t border-dotted border-slate-400 flex justify-between text-[9px] text-slate-700">
+                        <span id="receipt-invoice-no" class="font-bold">INV: #INV-1001</span>
+                        <span id="receipt-date-time">25/09/2026 08:30 PM</span>
                     </div>
-                    <div class="text-left text-[9px] text-slate-600 mt-0.5">
+                    <div class="flex justify-between text-[9px] text-slate-700 mt-0.5">
                         <span>Customer: <strong id="receipt-customer-name">Walk-in</strong></span>
+                        <span>Cashier: Counter 01</span>
                     </div>
                 </div>
 
-                <!-- Items Listing -->
-                <table class="w-full text-[10px] border-b border-dashed border-slate-400 pb-2 mb-2">
+                <!-- Receipt Items Table -->
+                <table class="w-full text-[10px] border-b border-dashed border-slate-800 pb-2 mb-2">
                     <thead>
-                        <tr class="text-left font-bold border-b border-slate-300">
-                            <th class="py-1">Item</th>
+                        <tr class="text-left font-black border-b border-slate-800 uppercase">
+                            <th class="py-1">Description</th>
                             <th class="text-center py-1">Qty</th>
-                            <th class="text-right py-1">Price</th>
-                            <th class="text-right py-1">Total</th>
+                            <th class="text-right py-1">Rate</th>
+                            <th class="text-right py-1">Amount</th>
                         </tr>
                     </thead>
-                    <tbody id="receipt-items-tbody"></tbody>
+                    <tbody id="receipt-items-tbody" class="divide-y divide-dotted divide-slate-300"></tbody>
                 </table>
 
-                <!-- Totals Breakdown -->
+                <!-- Receipt Summary Breakdown -->
                 <div class="space-y-1 text-[10px]">
                     <div class="flex justify-between">
-                        <span>Subtotal:</span>
-                        <span id="receipt-subtotal-val">Rs. 0.00</span>
+                        <span>Total Items / Qty:</span>
+                        <span id="receipt-items-count" class="font-bold">0</span>
                     </div>
-                    <div class="flex justify-between text-emerald-700">
-                        <span>Discount:</span>
+                    <div class="flex justify-between">
+                        <span>Gross Subtotal:</span>
+                        <span id="receipt-subtotal-val" class="font-bold">Rs. 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-emerald-800 font-bold">
+                        <span>Special Discount:</span>
                         <span id="receipt-discount-val">- Rs. 0.00</span>
                     </div>
-                    <div class="flex justify-between font-black text-xs border-t border-dashed border-slate-400 pt-1">
-                        <span>Net Total:</span>
+                    <div class="flex justify-between font-black text-sm border-t-2 border-b-2 border-slate-900 py-1 my-1">
+                        <span>NET PAYABLE:</span>
                         <span id="receipt-net-total-val">Rs. 0.00</span>
                     </div>
-                    <div class="flex justify-between text-[9px] text-slate-500">
-                        <span>Paid Via:</span>
-                        <span id="receipt-payment-mode">Cash</span>
+                    <div class="flex justify-between text-[9px] text-slate-700">
+                        <span>Payment Method:</span>
+                        <span id="receipt-payment-mode" class="font-bold">Cash</span>
                     </div>
                 </div>
 
-                <!-- Footer Note -->
-                <div class="text-center mt-3 pt-2 border-t border-dashed border-slate-300 text-[9px] text-slate-500">
-                    <p>Dawai fridge mein aur dhoop se door rakhein.</p>
-                    <p class="font-bold">Thank You For Your Visit!</p>
+                <!-- Simulated Thermal Barcode -->
+                <div class="my-2.5 flex flex-col items-center">
+                    <div class="barcode-strip w-48 h-8 opacity-90"></div>
+                    <span id="receipt-barcode-number" class="text-[8px] font-mono tracking-widest text-slate-600 mt-0.5">*INV-1001-DP*</span>
+                </div>
+
+                <!-- Authentic Pharmacy Footnotes -->
+                <div class="text-center pt-1.5 border-t border-dashed border-slate-700 text-[8px] text-slate-600 leading-tight">
+                    <p class="font-bold text-slate-800">NOTICE / ZAROORI HIDAYAT:</p>
+                    <p>• Fridge items aur khuli patti wapis ya tabdeel nahi hogi.</p>
+                    <p>• Dawai tabdeeli kelye asal receipt 3 din ke andar lazmi hai.</p>
+                    <p class="font-black text-slate-900 mt-1 uppercase">Shukriya / Get Well Soon!</p>
                 </div>
             </div>
 
             <!-- Export Actions: Download PNG, WhatsApp Share, Thermal Print -->
             <div class="grid grid-cols-3 gap-2 pt-1">
-                <button onclick="window.downloadThermalSlipImage()" class="py-2 bg-slate-900 hover:bg-black text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow">
-                    <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i> Image (PNG)
+                <button onclick="window.downloadThermalSlipImage()" class="py-2.5 bg-slate-900 hover:bg-black text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow">
+                    <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i> Slip PNG
                 </button>
-                <button onclick="window.shareReceiptOnWhatsApp()" class="py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow">
+                <button onclick="window.shareReceiptOnWhatsApp()" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow">
                     <i data-lucide="share-2" class="w-3.5 h-3.5"></i> WhatsApp
                 </button>
-                <button onclick="window.printThermalReceipt()" class="py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow">
-                    <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print
+                <button onclick="window.printThermalReceipt()" class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print (80mm)
                 </button>
             </div>
         </div>
@@ -828,87 +921,6 @@
                     </button>
                     <button onclick="document.getElementById('ai-presc-modal').classList.add('hidden')" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs">
                         Done
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="ai-scan-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
-        <div class="bg-white rounded-2xl max-w-3xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[92vh] overflow-y-auto">
-            <div class="flex items-center justify-between border-b pb-2">
-                <div class="flex items-center gap-2">
-                    <div class="p-2 bg-amber-100 text-amber-800 rounded-xl">
-                        <i data-lucide="sparkles" class="w-4 h-4"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Wholesale Bill AI Review</h3>
-                        <p class="text-[10px] text-slate-500">Box dekh kar retail MRP manually enter karein.</p>
-                    </div>
-                </div>
-                <button onclick="window.closeAiScanModal()" class="text-slate-400 hover:text-slate-600 p-1">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            </div>
-
-            <!-- Optical Laser Scanner Animation -->
-            <div id="ai-scan-loading" class="py-8 px-4 flex flex-col items-center justify-center gap-4 text-center">
-                <div class="relative w-48 h-40 bg-slate-950 rounded-2xl border-2 border-emerald-500/80 shadow-2xl overflow-hidden flex items-center justify-center ai-scanner-grid">
-                    <div class="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-emerald-400"></div>
-                    <div class="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-emerald-400"></div>
-                    <div class="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-emerald-400"></div>
-                    <div class="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-emerald-400"></div>
-                    
-                    <div class="flex flex-col items-center gap-1 opacity-70 animate-pulse">
-                        <i data-lucide="receipt" class="w-10 h-10 text-emerald-400"></i>
-                        <span class="text-[9px] font-mono tracking-widest text-emerald-300 uppercase">SCANNING INVOICE</span>
-                    </div>
-
-                    <div class="ai-laser-bar"></div>
-                </div>
-
-                <div>
-                    <h4 class="text-xs font-black text-slate-800 tracking-wide flex items-center justify-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
-                        Smart AI Invoice Extraction Active
-                    </h4>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Medicine name, batch, pack aur buy rate scan ho raha hai...</p>
-                </div>
-            </div>
-
-            <!-- Scanned Invoice Items Review Table Content -->
-            <div id="ai-scan-content" class="hidden space-y-3">
-                <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-xl flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="truck" class="w-4 h-4 text-amber-700"></i>
-                        <span class="text-xs font-bold text-amber-900">Distributor Name:</span>
-                        <input type="text" id="ai-bill-distributor" placeholder="e.g. GSK / Local Distributor" class="px-2 py-1 bg-white border border-amber-300 rounded text-xs font-semibold">
-                    </div>
-                    <button onclick="window.applyDistributorToAllScanned()" class="text-[11px] font-bold text-amber-800 bg-amber-200/80 hover:bg-amber-300 px-2 py-1 rounded">
-                        Apply All
-                    </button>
-                </div>
-
-                <div class="overflow-x-auto border border-slate-200 rounded-xl max-h-64">
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead class="bg-slate-50 border-b text-slate-600 font-bold sticky top-0">
-                            <tr>
-                                <th class="p-2">Item Name</th>
-                                <th class="p-2">Batch</th>
-                                <th class="p-2 text-center">Qty</th>
-                                <th class="p-2 text-right">Buy Rate</th>
-                                <th class="p-2 text-right text-amber-800 bg-amber-50">MRP (Manual Box)</th>
-                                <th class="p-2 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ai-scanned-table-body" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-
-                <div class="flex gap-2 pt-1 border-t">
-                    <button onclick="window.closeAiScanModal()" class="flex-1 py-2.5 border rounded-xl text-xs font-bold text-slate-600">Cancel</button>
-                    <button onclick="window.saveAiScannedItemsToInventory()" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black shadow">
-                        Save Items to Stock
                     </button>
                 </div>
             </div>
@@ -992,6 +1004,7 @@
         </div>
     </div>
 
+    <!-- Sale Edit Modal -->
     <div id="sale-edit-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-md w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
             <div class="flex items-center justify-between border-b pb-2">
@@ -1032,98 +1045,6 @@
         </div>
     </div>
 
-    <!-- Unified Auth Modal -->
-    <div id="auth-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
-            <div class="flex items-center justify-between border-b pb-2">
-                <h3 id="auth-modal-title" class="font-bold text-slate-800 text-xs sm:text-sm">Pharmacy Account Login</h3>
-                <button onclick="window.closeAuthModal()" class="text-slate-400 hover:text-slate-600 p-1">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            </div>
-
-            <form id="auth-form" onsubmit="window.handleAuthFormSubmit(event)" class="space-y-2.5 text-xs">
-                <!-- Registration Fields -->
-                <div id="signup-extra-fields" class="hidden space-y-2">
-                    <div>
-                        <label class="block font-bold text-slate-600 mb-0.5">Medical Store / Pharmacy Name:</label>
-                        <input type="text" id="auth-store-name" placeholder="e.g. Shehzad Medical Store" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-slate-600 mb-0.5">WhatsApp / Phone Number:</label>
-                        <input type="tel" id="auth-store-phone" placeholder="0300-1234567" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-slate-600 mb-0.5">City / Store Address:</label>
-                        <input type="text" id="auth-store-address" placeholder="Railway Road, City" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-600 mb-0.5">Email Address:</label>
-                    <input type="email" id="auth-email" required placeholder="owner@pharmacy.com" class="w-full px-2.5 py-1.5 border rounded-xl">
-                </div>
-                <div>
-                    <label class="block font-bold text-slate-600 mb-0.5">Password:</label>
-                    <input type="password" id="auth-password" required minlength="6" placeholder="******" class="w-full px-2.5 py-1.5 border rounded-xl font-mono">
-                </div>
-
-                <div class="pt-2 flex flex-col gap-2">
-                    <button type="submit" id="auth-submit-btn" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-black shadow">
-                        Login Karein
-                    </button>
-                    <button type="button" onclick="window.toggleAuthMode()" id="auth-toggle-btn" class="text-[11px] text-brand-600 font-bold hover:underline text-center py-1">
-                        Naya Account Banayein (Sign Up)
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Store Profile & Identity Settings Modal -->
-    <div id="profile-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
-            <div class="flex items-center justify-between border-b pb-2">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-brand-700 text-white font-black flex items-center justify-center text-xs">
-                        <span id="prof-char">G</span>
-                    </div>
-                    <div>
-                        <h3 id="profile-modal-name" class="font-bold text-slate-800 text-xs sm:text-sm">Guest Mode</h3>
-                        <p id="profile-modal-email" class="text-[10px] text-slate-400">Data local device par save hai</p>
-                    </div>
-                </div>
-                <button onclick="window.closeProfileModal()" class="text-slate-400 hover:text-slate-600 p-1">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            </div>
-
-            <div class="space-y-2 text-xs">
-                <div>
-                    <label class="block font-bold text-slate-600 mb-0.5">Pharmacy / Store Name:</label>
-                    <input type="text" id="prof-store-name" class="w-full px-2.5 py-1.5 border rounded-xl font-bold">
-                </div>
-                <div>
-                    <label class="block font-bold text-slate-600 mb-0.5">WhatsApp / Phone Number:</label>
-                    <input type="tel" id="prof-store-phone" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
-                </div>
-                <div>
-                    <label class="block font-bold text-slate-600 mb-0.5">Store Address:</label>
-                    <input type="text" id="prof-store-address" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
-                </div>
-            </div>
-
-            <div class="flex gap-2 pt-2 border-t">
-                <button onclick="window.saveStoreProfileData()" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs shadow">
-                    Save Profile
-                </button>
-                <button id="logout-btn" onclick="window.handleLogout()" class="hidden py-2 px-3 border border-red-200 text-red-600 hover:bg-red-50 font-bold rounded-xl text-xs">
-                    Logout
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Hidden Offscreen Canvas for Safe Image Downscaling & Pre-Processing -->
     <canvas id="camscanner-canvas" class="hidden"></canvas>
 
@@ -1140,11 +1061,11 @@
         let aiExtractedBuffer = [];
         let currentEditingSaleId = null;
         let authUser = null;
-        let authMode = 'login';
         let deferredPrompt = null;
+        let activePosSearchIndex = -1;
 
         // Firebase Setup & Initialization
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'shehzad-medical-erp';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'digital-pharma-erp';
         let db = null;
         let auth = null;
 
@@ -1161,7 +1082,7 @@
 
         // ==========================================
         // DYNAMIC HIGH-RES PWA MANIFEST & ICON ENGINE
-        // Guarantees 100% 1-Click Installation On GitHub Pages
+        // Guarantees 100% 1-Click Installation
         // ==========================================
         function setupDynamicPwaManifest() {
             try {
@@ -1171,27 +1092,23 @@
                 const startUrl = window.location.href.split('#')[0];
                 const scopeUrl = currentOrigin + basePath;
 
-                // Draw high-resolution sharp PNG icons via offscreen canvas
                 function generateMedicalPngIcon(size) {
                     const c = document.createElement('canvas');
                     c.width = size;
                     c.height = size;
                     const ctx = c.getContext('2d');
                     
-                    // Background royal blue rounded tile
                     const r = size * 0.22;
                     ctx.fillStyle = '#1e40af';
                     ctx.beginPath();
                     ctx.roundRect(0, 0, size, size, r);
                     ctx.fill();
 
-                    // Subtle inner glow
                     ctx.beginPath();
                     ctx.arc(size / 2, size / 2, size * 0.38, 0, Math.PI * 2);
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
                     ctx.fill();
 
-                    // Emerald green medical cross with white outline
                     const armW = size * 0.22;
                     const armL = size * 0.62;
                     const offsetL = (size - armL) / 2;
@@ -1202,19 +1119,16 @@
                     ctx.lineWidth = size * 0.028;
                     ctx.lineJoin = 'round';
 
-                    // Vertical bar
                     ctx.beginPath();
                     ctx.roundRect(offsetW, offsetL, armW, armL, size * 0.04);
                     ctx.fill();
                     ctx.stroke();
 
-                    // Horizontal bar
                     ctx.beginPath();
                     ctx.roundRect(offsetL, offsetW, armL, armW, size * 0.04);
                     ctx.fill();
                     ctx.stroke();
 
-                    // Gold pill / star accent
                     ctx.fillStyle = '#fbbf24';
                     ctx.beginPath();
                     ctx.arc(size * 0.76, size * 0.24, size * 0.07, 0, Math.PI * 2);
@@ -1226,17 +1140,15 @@
                 const icon192 = generateMedicalPngIcon(192);
                 const icon512 = generateMedicalPngIcon(512);
 
-                // Update apple touch icon & favicon
                 const appleIcon = document.getElementById('dynamic-apple-icon');
                 if (appleIcon) appleIcon.href = icon192;
                 const favicon = document.getElementById('dynamic-favicon');
                 if (favicon) favicon.href = icon192;
 
-                // Build spec-compliant manifest with required 192px and 512px icons
                 const manifestObj = {
-                    name: "Shehzad Medical Store",
-                    short_name: "Shehzad ERP",
-                    description: "Shehzad Medical Store - High-Speed Pharmacy ERP, Smart AI Bill Scanner & POS",
+                    name: "Digital Pharma",
+                    short_name: "DigitalPharma",
+                    description: "Digital Pharma - Smart Pharmacy ERP, High-Speed POS & AI Scanner",
                     id: startUrl,
                     start_url: startUrl,
                     scope: scopeUrl,
@@ -1245,30 +1157,10 @@
                     background_color: "#1e40af",
                     theme_color: "#1e40af",
                     icons: [
-                        {
-                            src: icon192,
-                            sizes: "192x192",
-                            type: "image/png",
-                            purpose: "any"
-                        },
-                        {
-                            src: icon192,
-                            sizes: "192x192",
-                            type: "image/png",
-                            purpose: "maskable"
-                        },
-                        {
-                            src: icon512,
-                            sizes: "512x512",
-                            type: "image/png",
-                            purpose: "any"
-                        },
-                        {
-                            src: icon512,
-                            sizes: "512x512",
-                            type: "image/png",
-                            purpose: "maskable"
-                        }
+                        { src: icon192, sizes: "192x192", type: "image/png", purpose: "any" },
+                        { src: icon192, sizes: "192x192", type: "image/png", purpose: "maskable" },
+                        { src: icon512, sizes: "512x512", type: "image/png", purpose: "any" },
+                        { src: icon512, sizes: "512x512", type: "image/png", purpose: "maskable" }
                     ]
                 };
 
@@ -1286,7 +1178,6 @@
         setupDynamicPwaManifest();
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent default browser mini-infobar so our dedicated Install button controls the action
             e.preventDefault();
             deferredPrompt = e;
             updateInstallUiState();
@@ -1314,7 +1205,6 @@
                     console.warn('Install execution error:', err);
                 }
             } else {
-                // If clicked before Chrome evaluates manifest, wait briefly or guide
                 showToast('Install prompt check ho raha hai...', 'info');
                 setTimeout(() => {
                     if (deferredPrompt) {
@@ -1329,7 +1219,7 @@
         window.addEventListener('appinstalled', () => {
             deferredPrompt = null;
             updateInstallUiState();
-            showToast('Shehzad Medical Store App kamyabi se install ho gayi!', 'success');
+            showToast('Digital Pharma App kamyabi se install ho gayi!', 'success');
         });
 
         function updateInstallUiState() {
@@ -1342,15 +1232,6 @@
             } else {
                 navBtn.classList.remove('hidden');
             }
-        }
-
-        // Safe ServiceWorker Registration for GitHub Pages
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {
-                    // Modern Chrome & Edge install PWAs directly from our dynamic manifest
-                });
-            });
         }
 
         function showToast(message, type = 'success') {
@@ -1390,8 +1271,12 @@
         window.customConfirm = customConfirm;
 
         function safeCreateIcons() {
-            if (typeof lucide !== 'undefined' && lucide.createIcons) {
-                lucide.createIcons();
+            try {
+                if (typeof lucide !== 'undefined' && lucide && typeof lucide.createIcons === 'function') {
+                    lucide.createIcons();
+                }
+            } catch(e) {
+                console.warn('Lucide icon render check:', e);
             }
         }
         window.safeCreateIcons = safeCreateIcons;
@@ -1413,59 +1298,64 @@
             return null;
         }
 
-        async function enhanceImageLikeCamScanner(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onerror = () => reject(new Error('Image file parhi nahi ja saki'));
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.onerror = () => reject(new Error('Image format corrupt hai'));
-                    img.onload = () => {
-                        try {
-                            const canvas = document.getElementById('camscanner-canvas');
-                            const ctx = canvas.getContext('2d');
-                            
-                            // Safe downscale to max 1280px to prevent mobile RAM crashing
-                            let width = img.width;
-                            let height = img.height;
-                            const maxDim = 1280;
-                            if (width > maxDim || height > maxDim) {
-                                if (width > height) {
-                                    height = Math.round((height * maxDim) / width);
-                                    width = maxDim;
-                                } else {
-                                    width = Math.round((width * maxDim) / height);
-                                    height = maxDim;
-                                }
-                            }
-                            canvas.width = width;
-                            canvas.height = height;
+        function extractJsonObject(text) {
+            if (!text || typeof text !== 'string') return null;
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                try {
+                    const cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+                    const startIdx = cleaned.indexOf('{');
+                    const endIdx = cleaned.lastIndexOf('}');
+                    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+                        return JSON.parse(cleaned.substring(startIdx, endIdx + 1));
+                    }
+                } catch (err2) {}
+            }
+            return null;
+        }
 
-                            ctx.drawImage(img, 0, 0, width, height);
-                            
-                            // Contrast & Lightness normalization with safe RGB clamping
-                            const imgData = ctx.getImageData(0, 0, width, height);
-                            const d = imgData.data;
-                            const contrast = 22;
-                            const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
-                            
-                            for (let i = 0; i < d.length; i += 4) {
-                                d[i] = Math.min(255, Math.max(0, factor * (d[i] - 128) + 128));
-                                d[i+1] = Math.min(255, Math.max(0, factor * (d[i+1] - 128) + 128));
-                                d[i+2] = Math.min(255, Math.max(0, factor * (d[i+2] - 128) + 128));
-                            }
-                            ctx.putImageData(imgData, 0, 0);
-                            
-                            const base64Clean = canvas.toDataURL('image/jpeg', 0.88).split(',')[1];
-                            resolve(base64Clean);
-                        } catch (err) {
-                            const raw = event.target.result.split(',')[1];
-                            resolve(raw);
+        // Extremely Robust Mobile Camera Preprocessor
+        // Fixes orientation issues and preserves delicate handwriting strokes
+        async function enhanceImageLikeCamScanner(file) {
+            return new Promise(async (resolve) => {
+                try {
+                    // This is crucial for mobile: fixes portrait EXIF orientation automatically
+                    const imgBitmap = window.createImageBitmap ? await createImageBitmap(file, { imageOrientation: 'from-image' }) : null;
+                    
+                    if (!imgBitmap) throw new Error("Fallback to FileReader");
+
+                    const canvas = document.getElementById('camscanner-canvas') || document.createElement('canvas');
+                    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                    
+                    // 1600px is the perfect balance for OCR clarity and keeping payload small for mobile networks
+                    let width = imgBitmap.width;
+                    let height = imgBitmap.height;
+                    const maxDim = 1600;
+                    if (width > maxDim || height > maxDim) {
+                        if (width > height) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        } else {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
                         }
-                    };
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(imgBitmap, 0, 0, width, height);
+
+                    const base64Clean = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+                    resolve(base64Clean);
+                } catch (err) {
+                    console.warn("Bitmap conversion failed, falling back", err);
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+                    reader.readAsDataURL(file);
+                }
             });
         }
 
@@ -1478,7 +1368,10 @@
                         { text: prompt },
                         { inlineData: { mimeType: 'image/jpeg', data: base64Data } }
                     ]
-                }]
+                }],
+                generationConfig: {
+                    responseMimeType: "application/json"
+                }
             };
 
             for (let i = 0; i < retries; i++) {
@@ -1495,11 +1388,11 @@
                         if (text) return text;
                     }
                 } catch (e) {
-                    // Exponential retry
+                    // Retry on network glitch
                 }
                 await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
             }
-            throw new Error('AI Vision Scanner connect nahi ho saka. Tasweer saaf roshni mein dobara lein.');
+            throw new Error('AI Vision connect nahi ho saka. Tasweer roshni mein dobara lein.');
         }
 
         window.getStoreConfig = function() {
@@ -1508,31 +1401,48 @@
                 if (saved) return JSON.parse(saved);
             } catch(e) {}
             return {
-                name: 'Shehzad Medical Store',
-                phone: '0300-0000000',
-                address: 'Railway Road, Muzaffargarh'
+                name: 'Digital Pharma',
+                phone: '0300-1234567',
+                address: 'Main Commercial Market',
+                licenseNo: 'DSL-PB-2024-8901'
             };
         };
 
         window.applyStoreIdentity = function() {
             const config = window.getStoreConfig();
-            const title = config.name || 'Shehzad Medical Store';
-            document.title = title + ' - Pharmacy ERP & POS';
+            const title = config.name || 'Digital Pharma';
+            document.title = title + ' - Smart Pharmacy ERP & POS';
             
             const pageTitle = document.getElementById('html-page-title');
-            if (pageTitle) pageTitle.innerText = title + ' - Pharmacy ERP & POS';
+            if (pageTitle) pageTitle.innerText = title + ' - Smart Pharmacy ERP & POS';
             
             const topName = document.getElementById('top-store-name');
             if (topName) topName.innerText = title;
+
+            const hubName = document.getElementById('hub-header-name');
+            if (hubName) hubName.innerText = title;
             
             const rTitle = document.getElementById('receipt-store-title');
             if (rTitle) rTitle.innerText = title;
             
             const rAddr = document.getElementById('receipt-store-address');
-            if (rAddr) rAddr.innerText = config.address || '';
+            if (rAddr) rAddr.innerText = config.address || 'Main Commercial Market';
             
             const rPhone = document.getElementById('receipt-store-phone');
-            if (rPhone) rPhone.innerText = 'WhatsApp: ' + (config.phone || '');
+            if (rPhone) rPhone.innerText = 'Phone/WhatsApp: ' + (config.phone || '');
+
+            const rLicense = document.getElementById('receipt-store-license');
+            if (rLicense) rLicense.innerText = 'D.S.L #: ' + (config.licenseNo || 'DSL-PB-2024-8901');
+
+            const avatarChar = document.getElementById('profile-avatar-char');
+            if (avatarChar) {
+                avatarChar.innerText = (title.trim().charAt(0) || 'D').toUpperCase();
+            }
+
+            const hubAvatarChar = document.getElementById('hub-avatar-char');
+            if (hubAvatarChar) {
+                hubAvatarChar.innerText = (title.trim().charAt(0) || 'D').toUpperCase();
+            }
         };
 
         window.switchTab = function(tabName) {
@@ -1581,7 +1491,6 @@
             safeCreateIcons();
         };
 
-        // Desktop Pharmacist Keyboard Hotkeys
         window.addEventListener('keydown', (e) => {
             if (e.key === 'F1') {
                 e.preventDefault();
@@ -1608,13 +1517,19 @@
                 if (posSection && !posSection.classList.contains('hidden')) {
                     window.completeSale();
                 }
+            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+                const receiptModal = document.getElementById('digital-receipt-modal');
+                if (receiptModal && !receiptModal.classList.contains('hidden')) {
+                    e.preventDefault();
+                    window.printThermalReceipt();
+                }
             } else if (e.key === 'Escape') {
                 window.clearGlobalSearch();
                 window.clearMobileSearch();
                 const openModals = [
                     'digital-receipt-modal', 'ai-presc-modal', 'ai-scan-modal',
                     'medicine-modal', 'distributor-modal', 'sale-edit-modal',
-                    'auth-modal', 'profile-modal'
+                    'account-hub-modal'
                 ];
                 openModals.forEach(id => {
                     const el = document.getElementById(id);
@@ -1623,21 +1538,56 @@
             }
         });
 
+        // Fast Arrow & Enter Keyboard Control for Counter Billing
         window.handlePosSearchKey = function(event) {
+            const resultsContainer = document.getElementById('pos-search-results');
+            const resultItems = resultsContainer.querySelectorAll('.pos-result-row');
+
             if (event.key === 'ArrowDown') {
-                const firstResult = document.querySelector('#pos-search-results .pos-result-row');
-                if (firstResult) firstResult.focus();
+                event.preventDefault();
+                if (resultItems.length > 0) {
+                    activePosSearchIndex = Math.min(activePosSearchIndex + 1, resultItems.length - 1);
+                    highlightActivePosRow(resultItems);
+                }
                 return;
             }
-            if (event.key === 'Enter') {
-                const firstResult = document.querySelector('#pos-search-results .pos-result-row');
-                if (firstResult) {
-                    firstResult.click();
-                    return;
+
+            if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                if (resultItems.length > 0) {
+                    activePosSearchIndex = Math.max(activePosSearchIndex - 1, 0);
+                    highlightActivePosRow(resultItems);
                 }
+                return;
             }
-            window.searchMedicineForPos();
+
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                if (activePosSearchIndex >= 0 && activePosSearchIndex < resultItems.length) {
+                    resultItems[activePosSearchIndex].click();
+                } else if (resultItems.length > 0) {
+                    resultItems[0].click();
+                }
+                return;
+            }
+
+            // Normal typing search
+            setTimeout(() => {
+                activePosSearchIndex = -1;
+                window.searchMedicineForPos();
+            }, 10);
         };
+
+        function highlightActivePosRow(items) {
+            items.forEach((item, idx) => {
+                if (idx === activePosSearchIndex) {
+                    item.classList.add('bg-brand-100', 'ring-2', 'ring-brand-500');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('bg-brand-100', 'ring-2', 'ring-brand-500');
+                }
+            });
+        }
 
         window.searchMedicineForPos = function() {
             const input = document.getElementById('pos-search');
@@ -1655,7 +1605,7 @@
                 results.innerHTML = `<p class="p-3 text-xs text-slate-400 text-center">Koi medicine nahi mili.</p>`;
             } else {
                 results.innerHTML = matches.map((m) => `
-                    <div tabindex="0" onclick="window.selectMedicineForPos('${m.id}')" onkeydown="if(event.key==='Enter') window.selectMedicineForPos('${m.id}')" class="pos-result-row p-2.5 hover:bg-brand-50 focus:bg-brand-50 outline-none cursor-pointer flex justify-between items-center text-xs transition">
+                    <div tabindex="0" onclick="window.selectMedicineForPos('${m.id}')" class="pos-result-row p-2.5 hover:bg-brand-50 outline-none cursor-pointer flex justify-between items-center text-xs transition">
                         <div>
                             <strong class="text-slate-800 text-xs">${m.name}</strong>
                             <span class="text-[10px] text-slate-400 block">Stock: ${m.stock} packs (${m.packSize} tabs/pack) • Batch: ${m.batch || 'B-01'}</span>
@@ -1676,6 +1626,7 @@
             document.getElementById('pos-search-results').classList.add('hidden');
             document.getElementById('pos-search').value = '';
             
+            // Seamless keyboard leap to quantity input
             const qtyInput = document.getElementById('pos-qty');
             if (qtyInput) {
                 qtyInput.value = '1';
@@ -1735,7 +1686,13 @@
             renderCartTable();
             window.calculateCartTotals();
             showToast('Item cart mein shamil ho gaya!', 'success');
-            document.getElementById('pos-search')?.focus();
+            
+            // Auto focus back on search for lightning-fast cashier operation
+            const searchInput = document.getElementById('pos-search');
+            if (searchInput) {
+                searchInput.focus();
+                searchInput.value = '';
+            }
         };
 
         function renderCartTable() {
@@ -1831,7 +1788,7 @@
 
             await saveSaleToStore(saleRecord);
 
-            // Populate Snug Thermal Slip
+            // Populate Authentic 80mm Pharmacy Slip
             populateThermalReceipt(saleRecord);
 
             // Reset Cart & Empty Discount Field
@@ -1853,20 +1810,27 @@
             window.currentViewingSale = sale;
             const config = window.getStoreConfig();
 
-            document.getElementById('receipt-store-title').innerText = config.name || 'Shehzad Medical Store';
-            document.getElementById('receipt-store-address').innerText = config.address || 'Railway Road, Muzaffargarh';
-            document.getElementById('receipt-store-phone').innerText = 'WhatsApp: ' + (config.phone || '');
-            document.getElementById('receipt-invoice-no').innerText = 'Inv: #' + (sale.invoiceId || '0001');
+            document.getElementById('receipt-store-title').innerText = config.name || 'Digital Pharma';
+            document.getElementById('receipt-store-address').innerText = config.address || 'Main Commercial Market';
+            document.getElementById('receipt-store-phone').innerText = 'Phone/WhatsApp: ' + (config.phone || '');
+            document.getElementById('receipt-store-license').innerText = 'D.S.L #: ' + (config.licenseNo || 'DSL-PB-2024-8901');
+            document.getElementById('receipt-invoice-no').innerText = 'INV: #' + (sale.invoiceId || '1001');
             document.getElementById('receipt-date-time').innerText = new Date(sale.timestamp).toLocaleString();
             document.getElementById('receipt-customer-name').innerText = sale.customer || 'Walk-in';
 
+            const totalItemCount = sale.items.reduce((acc, i) => acc + (i.qty || 1), 0);
+            document.getElementById('receipt-items-count').innerText = `${sale.items.length} items (${totalItemCount} units)`;
+
             const tbody = document.getElementById('receipt-items-tbody');
             tbody.innerHTML = sale.items.map(item => `
-                <tr>
-                    <td class="py-0.5 font-bold">${item.name}</td>
-                    <td class="py-0.5 text-center">${item.qty} ${item.displayUnit}</td>
-                    <td class="py-0.5 text-right">${Number(item.price).toFixed(2)}</td>
-                    <td class="py-0.5 text-right font-black">${Number(item.total).toFixed(2)}</td>
+                <tr class="py-1">
+                    <td class="py-1 font-bold">
+                        <div>${item.name}</div>
+                        <span class="text-[8px] text-slate-600 block">${item.displayUnit}</span>
+                    </td>
+                    <td class="py-1 text-center font-black">${item.qty}</td>
+                    <td class="py-1 text-right">${Number(item.price).toFixed(2)}</td>
+                    <td class="py-1 text-right font-black">${Number(item.total).toFixed(2)}</td>
                 </tr>
             `).join('');
 
@@ -1874,6 +1838,7 @@
             document.getElementById('receipt-discount-val').innerText = '- Rs. ' + Number(sale.discountAmount).toFixed(2);
             document.getElementById('receipt-net-total-val').innerText = 'Rs. ' + Number(sale.netTotal).toFixed(2);
             document.getElementById('receipt-payment-mode').innerText = sale.paymentMode || 'Cash';
+            document.getElementById('receipt-barcode-number').innerText = `*${sale.invoiceId || 'INV-1001'}*`;
         }
 
         window.closeReceiptModal = function() {
@@ -1885,7 +1850,7 @@
             if (!card) return;
             showToast('Image generate ho rahi hai...', 'info');
 
-            html2canvas(card, { scale: 2.5, backgroundColor: '#fbfbf5' }).then(canvas => {
+            html2canvas(card, { scale: 2.5, backgroundColor: '#fbfbf6' }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `Bill_${window.currentViewingSale?.invoiceId || 'Slip'}.png`;
                 link.href = canvas.toDataURL('image/png');
@@ -1902,19 +1867,22 @@
             const s = window.currentViewingSale;
             const config = window.getStoreConfig();
 
-            let text = `*${config.name}*\n${config.address}\nWhatsApp: ${config.phone}\n\n`;
+            let text = `*${config.name.toUpperCase()}*\n`;
+            text += `${config.address}\n`;
+            text += `Phone: ${config.phone}\n`;
+            text += `D.S.L #: ${config.licenseNo || 'DSL-PB-2024-8901'}\n\n`;
             text += `*Bill Invoice:* #${s.invoiceId}\n`;
             text += `*Customer:* ${s.customer}\n`;
             text += `*Date:* ${new Date(s.timestamp).toLocaleDateString()}\n`;
-            text += `---------------------------\n`;
+            text += `--------------------------------\n`;
             s.items.forEach(i => {
                 text += `• ${i.name} (${i.qty} ${i.displayUnit}) = Rs. ${i.total.toFixed(2)}\n`;
             });
-            text += `---------------------------\n`;
-            text += `*Subtotal:* Rs. ${s.subtotal.toFixed(2)}\n`;
+            text += `--------------------------------\n`;
+            text += `*Gross Subtotal:* Rs. ${s.subtotal.toFixed(2)}\n`;
             if (s.discountAmount > 0) text += `*Discount:* -Rs. ${s.discountAmount.toFixed(2)}\n`;
-            text += `*Net Payable:* Rs. ${s.netTotal.toFixed(2)}\n`;
-            text += `*Paid Via:* ${s.paymentMode}\n\n`;
+            text += `*NET PAYABLE:* Rs. ${s.netTotal.toFixed(2)}\n`;
+            text += `*Payment:* ${s.paymentMode}\n\n`;
             text += `_Shukriya for purchasing!_`;
 
             const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
@@ -1940,37 +1908,29 @@
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `You are an expert Pakistani medical prescription reader (Doctor Nuskha OCR).
-Read this doctor's prescription handwriting thoroughly and extract all clinical details.
-Format the output as a JSON object:
-{
-  "doctor": "Doctor name and clinic if found, else empty",
-  "patient": "Patient name and age/gender if visible, else empty",
-  "advice": "General clinical advice or dietary precautions (parhez) in simple Roman Urdu or English",
-  "medicines": [
-    {
-      "name": "Medicine brand name with strength e.g. Augmentin 625mg",
-      "formula": "Generic salt e.g. Co-Amoxiclav",
-      "form": "Tablet / Syrup / Injection / Drops",
-      "timing": "Usage timing in Roman Urdu e.g. 1 goli subah aur sham khaney ke baad (1+0+1)",
-      "purpose": "What this medicine is for e.g. Bukhar / Infection / Dard"
-    }
-  ]
-}
-STRICT RULE: Do NOT invent or hallucinate medicines. Only extract what is clearly visible or legible. Return ONLY valid JSON.`;
+                const prompt = `You are an expert Pakistani & global medical prescription OCR reader.
+CRITICAL INSTRUCTION: Never say the image is unreadable, blurry, or fail to process. Always make your best logical guess from whatever text is visible. Even if captured on a smartphone with shadows, lighting variations, or rushed handwriting, examine every word carefully.
+Decipher doctor handwriting, clinic slips, printed or handwritten doctor prescriptions.
+Extract:
+- doctor (doctor name/clinic if legible)
+- patient (patient name/details if legible)
+- advice (special precautions, diet or follow up in Roman Urdu/English)
+- medicines array of objects:
+  - name: medicine brand name and potency e.g. Augmentin 625mg
+  - formula: generic salt
+  - form: Tablet / Syrup / Injection / Drops / Capsule
+  - timing: dosage instructions in Roman Urdu e.g. 1 goli subah aur sham khaney ke baad (1+0+1)
+  - purpose: therapeutic use e.g. Bukhar / Infection / Dard
+
+Do NOT hallucinate medicines that aren't on the paper. Extract all decipherable medicines.
+Return ONLY valid JSON matching this schema exactly:
+{"doctor":"","patient":"","advice":"","medicines":[{"name":"","formula":"","form":"","timing":"","purpose":""}]}`;
 
                 const rawText = await callGeminiVisionWithBackoff(prompt, base64Data);
-                let parsed = null;
-                try {
-                    parsed = JSON.parse(rawText.replace(/```json/gi, '').replace(/```/g, '').trim());
-                } catch(e) {
-                    const s = rawText.indexOf('{');
-                    const end = rawText.lastIndexOf('}');
-                    if (s !== -1 && end !== -1) parsed = JSON.parse(rawText.substring(s, end + 1));
-                }
+                const parsed = extractJsonObject(rawText);
 
                 if (!parsed || !parsed.medicines || parsed.medicines.length === 0) {
-                    throw new Error('Nuskha parha nahi ja saka. Saaf photo roshni mein dobara lein.');
+                    throw new Error('AI could not parse standard data. Saaf photo roshni mein dobara lein.');
                 }
 
                 document.getElementById('presc-doc-name').innerText = 'Doctor: ' + (parsed.doctor || 'Doctor details not found');
@@ -2044,26 +2004,26 @@ STRICT RULE: Do NOT invent or hallucinate medicines. Only extract what is clearl
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `You are an expert Pakistani pharmacy wholesale bill OCR reader.
-Scan this distributor invoice and extract all medicine line items.
-For each medicine extract:
+                const prompt = `You are an expert pharmacy wholesale bill OCR reader.
+CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Always make your best logical guess from whatever text is visible. Scan this wholesale distributor invoice (even if captured on a smartphone with shadows, dot-matrix print, or slight angle).
+Extract all medicine line items:
 - name (string: exact brand and mg strength)
-- generic (string formula if mentioned, else empty)
-- batch (string batch number, else empty)
-- expiry (string in YYYY-MM-DD format if visible, else empty)
+- generic (string: formula if mentioned, else empty)
+- batch (string: batch number, else empty)
+- expiry (string: YYYY-MM-DD if visible, else empty)
 - packSize (number of units per pack, default 20)
-- qty (number of packs purchased)
+- qty (number: packs purchased)
 - buyRate (number: wholesale invoice rate per pack)
 - distributor (string: distributor name from top header if visible, else empty)
 
-STRICT RULE: Leave 'mrp' completely blank/empty string (""). Do not guess or populate MRP. Pharmacist will enter MRP manually from physical box.
-Return ONLY a valid JSON array of objects.`;
+STRICT RULE: Leave 'mrp' completely blank/empty string (""). Do not guess MRP. Pharmacist enters MRP manually.
+Return ONLY a valid JSON array of objects exactly matching this schema.`;
 
                 const rawText = await callGeminiVisionWithBackoff(prompt, base64Data);
                 const items = extractJsonArray(rawText);
 
                 if (!items || !Array.isArray(items) || items.length === 0) {
-                    throw new Error('Bill read nahi ho saka. Tasweer roshni mein saaf lein aur dobara try karein.');
+                    throw new Error('AI could not parse standard data. Tasweer roshni mein saaf lein aur dobara try karein.');
                 }
 
                 const detectedDistributor = items.find(i => i.distributor)?.distributor || '';
@@ -2394,22 +2354,22 @@ Return ONLY a valid JSON array of objects.`;
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `You are an expert Pakistani pharmacy wholesale bill & trade margin auditor.
-Scan this distributor invoice and extract all medicine line items to audit trade discounts and profit percentages.
-For each medicine line item extract:
-- name (string: brand name and dosage strength e.g. "Panadol 500mg")
-- buyRate (number: wholesale invoice rate per pack/unit)
+                const prompt = `You are an expert pharmacy wholesale trade margin & discount auditor.
+CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Always make your best logical guess from whatever text is visible. Scan this distributor invoice (even if taken from a phone camera) and extract all line items to audit trade discounts and profit percentages.
+Extract for each line:
+- name (string: brand name and dosage strength)
+- buyRate (number: wholesale invoice rate per pack)
 - qty (number: invoiced quantity purchased, default 1)
-- freeQty (number: bonus/scheme packs received free e.g. 1 in a 10+1 scheme, default 0)
+- freeQty (number: bonus/scheme packs received free e.g. 1 in 10+1 scheme, default 0)
 
-STRICT RULE: Do NOT populate or guess MRP. Pharmacist will enter MRP manually from physical packaging.
+STRICT RULE: Do NOT populate or guess MRP. Pharmacist enters MRP manually.
 Return ONLY a valid JSON array of objects.`;
 
                 const rawText = await callGeminiVisionWithBackoff(prompt, base64Data);
                 const items = extractJsonArray(rawText);
 
                 if (!items || !Array.isArray(items) || items.length === 0) {
-                    throw new Error('Bill se items read nahi ho sakein. Tasweer saaf lein aur dobara try karein.');
+                    throw new Error('AI could not parse standard data. Tasweer saaf lein aur dobara try karein.');
                 }
 
                 window.marginScannedItems = items.map((item, idx) => ({
@@ -2581,9 +2541,9 @@ Return ONLY a valid JSON array of objects.`;
         window.refreshNetworkList = function() {
             const grid = document.getElementById('network-stores-grid');
             const mockStores = [
-                { name: 'Al-Madina Medical Hall', city: 'Muzaffargarh', phone: '03011234567', items: 840, status: 'Online' },
-                { name: 'Bismillah Medicos', city: 'Multan', phone: '03027654321', items: 1200, status: 'Active' },
-                { name: 'Rehman Pharmacy', city: 'Khanewal', phone: '03009876543', items: 650, status: 'Online' }
+                { name: 'City Care Pharmacy', city: 'Muzaffargarh', phone: '03011234567', items: 840, status: 'Online' },
+                { name: 'National Medicos', city: 'Multan', phone: '03027654321', items: 1200, status: 'Active' },
+                { name: 'Al-Razi Pharmacy', city: 'Lahore', phone: '03009876543', items: 1450, status: 'Online' }
             ];
 
             grid.innerHTML = mockStores.map(s => `
@@ -2599,7 +2559,7 @@ Return ONLY a valid JSON array of objects.`;
                         <span>Active Stock:</span>
                         <strong class="text-brand-700">${s.items}+ Medicines</strong>
                     </div>
-                    <a href="https://wa.me/92${s.phone.replace(/^0/, '')}?text=${encodeURIComponent('Assalam-o-Alaikum, Shehzad Medical Store network se rabta kiya hai.')}" target="_blank" class="w-full py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition">
+                    <a href="https://wa.me/92${s.phone.replace(/^0/, '')}?text=${encodeURIComponent('Assalam-o-Alaikum, Digital Pharma network se rabta kiya hai.')}" target="_blank" class="w-full py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition">
                         <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Contact via WhatsApp
                     </a>
                 </div>
@@ -2780,114 +2740,125 @@ Return ONLY a valid JSON array of objects.`;
             }
         }
 
-        window.openAuthModal = function() {
-            authMode = 'login';
-            document.getElementById('auth-modal-title').innerText = 'Pharmacy Account Login';
-            document.getElementById('auth-submit-btn').innerText = 'Login Karein';
-            document.getElementById('auth-toggle-btn').innerText = 'Naya Account Banayein (Sign Up)';
-            document.getElementById('signup-extra-fields').classList.add('hidden');
-            document.getElementById('auth-modal').classList.remove('hidden');
-        };
+        // ==========================================
+        // UNIFIED ACCOUNT, GUEST MODE & STORE PROFILE HUB
+        // ==========================================
+        window.openAccountHubModal = function() {
+            const config = window.getStoreConfig();
+            document.getElementById('hub-store-name').value = config.name || '';
+            document.getElementById('hub-store-phone').value = config.phone || '';
+            document.getElementById('hub-store-address').value = config.address || '';
+            document.getElementById('hub-store-license').value = config.licenseNo || '';
 
-        window.closeAuthModal = function() {
-            document.getElementById('auth-modal').classList.add('hidden');
-        };
+            const statusDot = document.getElementById('hub-status-dot');
+            const statusText = document.getElementById('hub-status-text');
+            const authPill = document.getElementById('hub-auth-pill');
+            const unauthBox = document.getElementById('hub-unauth-box');
+            const authBox = document.getElementById('hub-auth-box');
+            const userEmailSpan = document.getElementById('hub-user-email');
 
-        window.toggleAuthMode = function() {
-            if (authMode === 'login') {
-                authMode = 'signup';
-                document.getElementById('auth-modal-title').innerText = 'Naya Pharmacy Account Banayein';
-                document.getElementById('auth-submit-btn').innerText = 'Register & Save';
-                document.getElementById('auth-toggle-btn').innerText = 'Pehle se account hai? Login Karein';
-                document.getElementById('signup-extra-fields').classList.remove('hidden');
+            if (authUser) {
+                statusDot.className = 'w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse';
+                statusText.innerText = 'Online Cloud Synced';
+                statusText.className = 'text-emerald-700 font-bold';
+                authPill.innerText = 'Online';
+                authPill.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800';
+                unauthBox.classList.add('hidden');
+                authBox.classList.remove('hidden');
+                userEmailSpan.innerText = authUser.email;
             } else {
-                authMode = 'login';
-                document.getElementById('auth-modal-title').innerText = 'Pharmacy Account Login';
-                document.getElementById('auth-submit-btn').innerText = 'Login Karein';
-                document.getElementById('auth-toggle-btn').innerText = 'Naya Account Banayein (Sign Up)';
-                document.getElementById('signup-extra-fields').classList.add('hidden');
+                statusDot.className = 'w-2 h-2 rounded-full bg-amber-400 inline-block';
+                statusText.innerText = 'Guest Mode (Local Offline)';
+                statusText.className = 'text-slate-600 font-semibold';
+                authPill.innerText = 'Guest';
+                authPill.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800';
+                unauthBox.classList.remove('hidden');
+                authBox.classList.add('hidden');
             }
+
+            document.getElementById('account-hub-modal').classList.remove('hidden');
+            safeCreateIcons();
         };
 
-        window.handleAuthFormSubmit = async function(event) {
-            event.preventDefault();
-            const email = document.getElementById('auth-email').value.trim();
-            const password = document.getElementById('auth-password').value.trim();
+        window.closeAccountHubModal = function() {
+            document.getElementById('account-hub-modal').classList.add('hidden');
+        };
+
+        window.saveAccountHubStoreProfile = function() {
+            const name = document.getElementById('hub-store-name').value.trim() || 'Digital Pharma';
+            const phone = document.getElementById('hub-store-phone').value.trim();
+            const address = document.getElementById('hub-store-address').value.trim();
+            const licenseNo = document.getElementById('hub-store-license').value.trim() || 'DSL-PB-2024-8901';
+
+            const config = {
+                name: name,
+                phone: phone,
+                address: address,
+                licenseNo: licenseNo,
+                owner: authUser ? authUser.email : 'Local Store'
+            };
+            localStorage.setItem('sm_store_config', JSON.stringify(config));
+            window.applyStoreIdentity();
+            showToast('Store details save ho gayin!', 'success');
+        };
+
+        window.handleHubLogin = async function() {
+            const email = document.getElementById('hub-email').value.trim();
+            const password = document.getElementById('hub-password').value.trim();
+
+            if (!email || !password) {
+                showToast('Email aur password enter karein!', 'error');
+                return;
+            }
 
             if (!auth) {
-                showToast('Guest mode chal raha hai.', 'info');
-                window.closeAuthModal();
+                showToast('Guest mode offline chal raha hai.', 'info');
                 return;
             }
 
             try {
-                if (authMode === 'signup') {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    const storeName = document.getElementById('auth-store-name').value.trim();
-                    const phone = document.getElementById('auth-store-phone').value.trim();
-                    const address = document.getElementById('auth-store-address').value.trim();
-
-                    const config = { name: storeName || 'Shehzad Medical Store', phone: phone || '', address: address || '', owner: email };
-                    localStorage.setItem('sm_store_config', JSON.stringify(config));
-                    window.applyStoreIdentity();
-
-                    showToast('Account ban gaya aur login ho gaya!', 'success');
-                } else {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    showToast('Login kamyab raha!', 'success');
-                }
-                window.closeAuthModal();
-            } catch(err) {
-                console.error('Auth Error:', err);
-                showToast(err.message || 'Authentication fail ho gayi.', 'error');
+                await signInWithEmailAndPassword(auth, email, password);
+                showToast('Login kamyab raha!', 'success');
+                window.openAccountHubModal();
+            } catch (err) {
+                console.error('Login error:', err);
+                showToast(err.message || 'Login fail ho gaya.', 'error');
             }
         };
 
-        window.openProfileModal = function() {
-            const config = window.getStoreConfig();
-            document.getElementById('prof-store-name').value = config.name || '';
-            document.getElementById('prof-store-phone').value = config.phone || '';
-            document.getElementById('prof-store-address').value = config.address || '';
+        window.handleHubSignUp = async function() {
+            const email = document.getElementById('hub-email').value.trim();
+            const password = document.getElementById('hub-password').value.trim();
 
-            if (authUser) {
-                document.getElementById('profile-modal-name').innerText = config.name || 'Store Owner';
-                document.getElementById('profile-modal-email').innerText = authUser.email;
-                document.getElementById('prof-char').innerText = (authUser.email || 'U').charAt(0).toUpperCase();
-                document.getElementById('logout-btn').classList.remove('hidden');
-            } else {
-                document.getElementById('profile-modal-name').innerText = 'Guest Mode';
-                document.getElementById('profile-modal-email').innerText = 'Data local device par mehfooz hai';
-                document.getElementById('prof-char').innerText = 'G';
-                document.getElementById('logout-btn').classList.add('hidden');
+            if (!email || !password) {
+                showToast('Email aur password enter karein!', 'error');
+                return;
             }
-            document.getElementById('profile-modal').classList.remove('hidden');
+
+            if (!auth) {
+                showToast('Guest mode offline chal raha hai.', 'info');
+                return;
+            }
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                window.saveAccountHubStoreProfile();
+                showToast('Account ban gaya aur cloud sync active!', 'success');
+                window.openAccountHubModal();
+            } catch (err) {
+                console.error('Sign up error:', err);
+                showToast(err.message || 'Account registration fail ho gayi.', 'error');
+            }
         };
 
-        window.closeProfileModal = function() {
-            document.getElementById('profile-modal').classList.add('hidden');
-        };
-
-        window.saveStoreProfileData = function() {
-            const config = {
-                name: document.getElementById('prof-store-name').value.trim() || 'Shehzad Medical Store',
-                phone: document.getElementById('prof-store-phone').value.trim(),
-                address: document.getElementById('prof-store-address').value.trim(),
-                owner: authUser ? authUser.email : 'Guest'
-            };
-            localStorage.setItem('sm_store_config', JSON.stringify(config));
-            window.applyStoreIdentity();
-            window.closeProfileModal();
-            showToast('Store details update ho gayin!', 'success');
-        };
-
-        window.handleLogout = async function() {
+        window.handleHubLogout = async function() {
             if (auth) {
                 try {
                     await signOut(auth);
-                    showToast('Aap logout ho chuke hain.', 'info');
+                    showToast('Aap guest mode par wapis aa gaye hain.', 'info');
                 } catch(e) {}
             }
-            window.closeProfileModal();
+            window.openAccountHubModal();
         };
 
         function initApp() {
@@ -2922,19 +2893,17 @@ Return ONLY a valid JSON array of objects.`;
             if (auth) {
                 onAuthStateChanged(auth, (user) => {
                     authUser = user;
-                    const badge = document.getElementById('cloud-sync-badge');
-                    const syncText = document.getElementById('sync-text');
-                    const syncDot = document.getElementById('sync-dot');
-                    const authBtn = document.getElementById('auth-open-modal-btn');
-                    const avatarChar = document.getElementById('profile-avatar-char');
+                    const hubHeaderStatus = document.getElementById('hub-header-status');
+                    const hubAvatarChar = document.getElementById('profile-avatar-char');
 
                     if (user) {
-                        badge.classList.remove('hidden');
-                        badge.classList.add('flex');
-                        syncText.innerText = 'Online Synced';
-                        syncDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
-                        authBtn.classList.add('hidden');
-                        avatarChar.innerText = (user.email || 'U').charAt(0).toUpperCase();
+                        if (hubHeaderStatus) {
+                            hubHeaderStatus.innerText = 'Online Synced';
+                            hubHeaderStatus.className = 'block leading-tight text-[9px] text-emerald-300 font-bold';
+                        }
+                        if (hubAvatarChar) {
+                            hubAvatarChar.innerText = (user.email || 'D').charAt(0).toUpperCase();
+                        }
 
                         if (db) {
                             onSnapshot(collection(db, 'artifacts', appId, 'users', user.uid, 'medicines'), (snapshot) => {
@@ -2959,9 +2928,10 @@ Return ONLY a valid JSON array of objects.`;
                             }, (err) => console.warn('Sales sync err:', err));
                         }
                     } else {
-                        badge.classList.add('hidden');
-                        authBtn.classList.remove('hidden');
-                        avatarChar.innerText = 'G';
+                        if (hubHeaderStatus) {
+                            hubHeaderStatus.innerText = 'Guest / Local';
+                            hubHeaderStatus.className = 'block leading-tight text-[9px] text-amber-300 font-medium';
+                        }
                     }
                     safeCreateIcons();
                 });
@@ -2969,6 +2939,7 @@ Return ONLY a valid JSON array of objects.`;
         }
 
         window.addEventListener('load', initApp);
+        document.addEventListener('DOMContentLoaded', safeCreateIcons);
     </script>
 </body>
 </html>
