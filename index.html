@@ -49,11 +49,33 @@
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js" type="module"></script>
 
     <style>
+        /* Force Browser Form Controls to Light Mode so Mobile Dark Mode Never Turns Text White-on-White */
+        html {
+            color-scheme: light !important;
+        }
+
+        /* Mobile Form Auto-Zoom Prevention & Universal Input Contrast Fix */
         @media (max-width: 768px) {
             input, select, textarea {
                 font-size: 16px !important;
                 touch-action: manipulation;
             }
+        }
+
+        /* Prevent Mobile Browser Forced Dark Mode from Rendering White Text on White Inputs */
+        input:not(#global-search-input):not(#mobile-search-input), 
+        select, 
+        textarea {
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+            background-color: #ffffff !important;
+        }
+
+        /* Explicit Styling for Top Header Dark Search Inputs */
+        #global-search-input, #mobile-search-input {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            background-color: #0f172a !important;
         }
 
         /* Standard 80mm High-Contrast Thermal Slip Print Optimization */
@@ -157,7 +179,7 @@
             <!-- Desktop 1-Click Universal Rate & Network Search -->
             <div class="relative flex-1 max-w-xs md:max-w-md mx-2 hidden sm:block">
                 <div class="relative">
-                    <input type="text" id="global-search-input" onkeyup="window.globalQuickSearch()" placeholder="Rate & Stock Quick Lookup..." class="w-full pl-8 pr-10 py-1.5 text-xs bg-brand-900/90 text-white placeholder-brand-200 border border-brand-600 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                    <input type="text" id="global-search-input" onkeyup="window.globalQuickSearch()" placeholder="Rate & Stock Quick Lookup..." class="w-full pl-8 pr-10 py-1.5 text-xs text-white placeholder-brand-200 border border-brand-600 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-400">
                     <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-2 text-brand-300"></i>
                     <button id="clear-global-search" onclick="window.clearGlobalSearch()" class="hidden absolute right-2.5 top-2 text-brand-200 hover:text-white">
                         <i data-lucide="x" class="w-3.5 h-3.5"></i>
@@ -190,7 +212,7 @@
         <!-- Mobile Dedicated Rate & Stock Lookup Bar -->
         <div class="sm:hidden px-3 pb-2.5 pt-1 border-t border-brand-700 bg-brand-900/50">
             <div class="relative">
-                <input type="text" id="mobile-search-input" onkeyup="window.mobileQuickSearch()" placeholder="Rate check (medicine name likhein)..." class="w-full pl-8 pr-7 py-2 text-sm bg-brand-950 text-white placeholder-brand-200 border border-brand-600 rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-400">
+                <input type="text" id="mobile-search-input" onkeyup="window.mobileQuickSearch()" placeholder="Rate check (medicine name likhein)..." class="w-full pl-8 pr-7 py-2 text-sm text-white placeholder-brand-200 border border-brand-600 rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-400">
                 <i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-2.5 text-brand-300"></i>
                 <button id="clear-mobile-search" onclick="window.clearMobileSearch()" class="hidden absolute right-2.5 top-2.5 text-brand-200 hover:text-white">
                     <i data-lucide="x" class="w-4 h-4"></i>
@@ -202,6 +224,7 @@
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-3.5 mobile-safe-bottom flex flex-col gap-4">
 
+        <!-- Navigation Tabs (Desktop & Tablet) -->
         <nav class="hidden md:flex space-x-2 bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200">
             <button onclick="window.switchTab('dashboard')" id="tab-dashboard" class="tab-btn active-tab flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition bg-brand-700 text-white shadow">
                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
@@ -222,16 +245,19 @@
 
         <section id="view-dashboard" class="tab-content flex flex-col gap-4">
             
-            <!-- Compact Prescription AI Banner -->
-            <div class="bg-gradient-to-r from-brand-900 to-indigo-900 text-white rounded-xl shadow-sm p-3 flex items-center justify-between gap-3">
+            <!-- Sleek Compact Prescription AI Banner -->
+            <div class="bg-gradient-to-r from-brand-900 to-indigo-900 text-white rounded-xl shadow-sm p-3 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center gap-2.5">
                     <div class="p-1.5 bg-amber-400/20 text-amber-300 rounded-lg shrink-0 border border-amber-400/30">
-                        <i data-lucide="scan" class="w-4 h-4"></i>
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
                     </div>
-                    <h2 class="font-bold text-sm tracking-wide">AI Prescription Scanner</h2>
+                    <h2 class="font-bold text-sm tracking-wide flex items-center gap-2">
+                        Prescription AI Reader
+                        <span class="text-[9px] font-bold bg-amber-400 text-slate-900 px-1.5 py-0.5 rounded uppercase hidden sm:inline-block">Smart Vision</span>
+                    </h2>
                 </div>
                 <label class="cursor-pointer bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
-                    <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Image
+                    <i data-lucide="scan" class="w-3.5 h-3.5"></i> Scan Nuskha
                     <input type="file" id="dashboard-presc-input" class="hidden" accept="image/*" onchange="window.handlePrescriptionScan(event)">
                 </label>
             </div>
@@ -330,7 +356,7 @@
                         <h3 class="font-black text-slate-800 text-sm sm:text-base flex items-center gap-2">
                             <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-600"></i> Customer Bill Counter
                         </h3>
-                        <span class="text-[10px] bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full hidden sm:inline">Use Arrow keys & Enter for speed</span>
+                        <span class="text-[10px] bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full hidden sm:inline">Touch buttons ya Arrow keys & Enter use karein</span>
                     </div>
                     <button onclick="window.clearCartPrompt()" class="text-[11px] text-red-600 hover:text-red-700 font-bold flex items-center gap-1">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear Cart
@@ -341,36 +367,43 @@
                 <div class="relative">
                     <label class="block text-xs font-bold text-slate-600 mb-1">Dawai Search Karein (Type medicine name):</label>
                     <div class="relative">
-                        <input type="text" id="pos-search" placeholder="Search brand name or formula..." onkeydown="window.handlePosSearchKey(event)" class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 font-medium text-xs sm:text-sm">
+                        <input type="text" id="pos-search" placeholder="Search brand name or formula..." onkeydown="window.handlePosSearchKey(event)" class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 font-medium text-xs sm:text-sm">
                         <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
                     </div>
                     <div id="pos-search-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto z-20 divide-y divide-slate-100"></div>
                 </div>
 
-                <!-- Selected Item Config Bar -->
-                <div id="pos-item-config" class="bg-slate-50 p-3 rounded-xl border border-slate-200 grid grid-cols-2 md:grid-cols-5 gap-2.5 items-end">
-                    <div>
-                        <span class="block text-[10px] font-bold text-slate-500">Selected Item:</span>
-                        <strong id="pos-selected-title" class="text-xs text-slate-800 truncate block">Koi Select Nahi</strong>
+                <!-- Selected Item Config Bar with Touch-Friendly Unit Switcher -->
+                <div id="pos-item-config" class="bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-200 grid grid-cols-2 md:grid-cols-5 gap-2.5 items-end">
+                    <div class="col-span-2 md:col-span-1">
+                        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Selected Item:</span>
+                        <strong id="pos-selected-title" class="text-xs sm:text-sm text-slate-900 truncate block font-black">Koi Select Nahi</strong>
                     </div>
                     <div>
-                        <span class="block text-[10px] font-bold text-slate-500">Stock:</span>
-                        <span id="pos-selected-stock" class="text-xs font-black text-brand-600">0</span>
+                        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Stock Available:</span>
+                        <span id="pos-selected-stock" class="text-xs font-black text-brand-600 block">0</span>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-500">Unit Type:</label>
-                        <select id="pos-unit-type" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold">
-                            <option value="pack">Full Pack / Dabba</option>
-                            <option value="loose">Loose / Khuli Goli</option>
-                        </select>
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Unit Type:</label>
+                        <div class="flex items-center gap-1 p-1 bg-slate-200/90 rounded-xl border border-slate-300">
+                            <button type="button" id="pos-unit-pack-btn" onclick="window.setPosUnitType('pack')" class="flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition bg-brand-700 text-white shadow-sm flex items-center justify-center gap-1 active:scale-95">
+                                <span>📦 Pack</span>
+                            </button>
+                            <button type="button" id="pos-unit-loose-btn" onclick="window.setPosUnitType('loose')" class="flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition text-slate-700 hover:bg-white flex items-center justify-center gap-1 active:scale-95">
+                                <span>💊 Loose</span>
+                            </button>
+                        </div>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-500">Qty:</label>
-                        <input type="number" id="pos-qty" min="1" value="1" onkeydown="if(event.key==='Enter'){ event.preventDefault(); window.addItemToCart(); }" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-center">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Qty:</label>
+                            <span id="pos-calc-rate-badge" class="text-[9px] font-black text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">Rs. 0</span>
+                        </div>
+                        <input type="number" id="pos-qty" min="1" value="1" oninput="window.updatePosLivePriceHint()" onkeydown="if(event.key==='Enter'){ event.preventDefault(); window.addItemToCart(); }" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-black text-center text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500">
                     </div>
-                    <div>
-                        <button onclick="window.addItemToCart()" id="pos-add-btn" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2 px-2 rounded-lg text-xs font-black transition flex items-center justify-center gap-1 shadow">
-                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add to Bill (Enter)
+                    <div class="col-span-2 md:col-span-1">
+                        <button onclick="window.addItemToCart()" id="pos-add-btn" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 px-2 rounded-xl text-xs font-black transition flex items-center justify-center gap-1 shadow-md active:scale-95">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> Add to Bill
                         </button>
                     </div>
                 </div>
@@ -413,7 +446,7 @@
                         <!-- Discount Box (Strictly Empty by Default) -->
                         <div class="flex items-center justify-between text-slate-600">
                             <span>Discount (%):</span>
-                            <input type="number" id="pos-discount" value="" placeholder="0" min="0" max="100" oninput="window.calculateCartTotals()" class="w-20 px-2 py-1 border border-slate-300 rounded text-right font-extrabold text-xs focus:outline-none focus:border-brand-500">
+                            <input type="number" id="pos-discount" value="" placeholder="0" min="0" max="100" oninput="window.calculateCartTotals()" class="w-20 px-2 py-1 border border-slate-300 rounded text-right font-extrabold text-xs focus:outline-none focus:border-brand-500 text-slate-900 bg-white">
                         </div>
                         <div class="flex justify-between text-slate-600">
                             <span>Discount Amount:</span>
@@ -430,7 +463,7 @@
                 <div class="space-y-3 pt-2 border-t">
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-1">Payment Mode:</label>
-                        <select id="pos-pay-mode" class="w-full px-2.5 py-1.5 border border-slate-200 rounded-xl text-xs bg-slate-50 font-bold">
+                        <select id="pos-pay-mode" class="w-full px-2.5 py-1.5 border border-slate-200 rounded-xl text-xs bg-white font-bold text-slate-900">
                             <option value="Cash">Cash Sale</option>
                             <option value="Online">Easypaisa / JazzCash / Bank</option>
                             <option value="Credit">Udhaar / Customer Khata</option>
@@ -438,9 +471,9 @@
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 mb-1">Customer Name / Phone:</label>
-                        <input type="text" id="pos-customer" placeholder="Walk-in Customer" class="w-full px-2.5 py-1.5 border border-slate-200 rounded-xl text-xs font-semibold">
+                        <input type="text" id="pos-customer" placeholder="Walk-in Customer" class="w-full px-2.5 py-1.5 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 bg-white">
                     </div>
-                    <button onclick="window.completeSale()" id="pos-complete-btn" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl shadow-lg transition flex items-center justify-center gap-1.5 text-xs sm:text-sm">
+                    <button onclick="window.completeSale()" id="pos-complete-btn" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl shadow-lg transition flex items-center justify-center gap-1.5 text-xs sm:text-sm active:scale-95">
                         <i data-lucide="check-circle-2" class="w-4 h-4"></i>
                         <span>Complete Sale & Print Slip</span>
                     </button>
@@ -453,11 +486,11 @@
             <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white rounded-xl shadow-sm p-3 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-2.5">
                     <div class="p-1.5 bg-white/10 rounded-lg shrink-0">
-                        <i data-lucide="scan" class="w-4 h-4 text-emerald-300"></i>
+                        <i data-lucide="scan-line" class="w-4 h-4 text-emerald-300"></i>
                     </div>
-                    <h2 class="font-bold text-sm tracking-wide">AI Bill Scanner (Stock In)</h2>
+                    <h2 class="font-bold text-sm tracking-wide">Wholesale Bill AI Scanner (Stock In)</h2>
                 </div>
-                <label class="cursor-pointer bg-white text-emerald-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
+                <label class="cursor-pointer bg-white text-emerald-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5 active:scale-95">
                     <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Bill
                     <input type="file" class="hidden" accept="image/*" onchange="window.handleRealInvoiceOcr(event)">
                 </label>
@@ -466,7 +499,7 @@
             <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3 justify-between items-center">
                 <!-- Search Bar -->
                 <div class="relative w-full sm:w-80">
-                    <input type="text" id="inv-search" onkeyup="window.filterInventoryTable()" placeholder="Search stock, formula, batch..." class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-brand-500 font-medium">
+                    <input type="text" id="inv-search" onkeyup="window.filterInventoryTable()" placeholder="Search stock, formula, batch..." class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-brand-500 font-medium text-slate-900 bg-white">
                     <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
                 </div>
 
@@ -513,9 +546,9 @@
                     <div class="p-1.5 bg-white/10 rounded-lg shrink-0">
                         <i data-lucide="percent" class="w-4 h-4 text-amber-200"></i>
                     </div>
-                    <h2 class="font-bold text-sm tracking-wide">AI Margin Auditor</h2>
+                    <h2 class="font-bold text-sm tracking-wide">Trade Margin & Profit % AI Auditor</h2>
                 </div>
-                <label class="cursor-pointer bg-white text-amber-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
+                <label class="cursor-pointer bg-white text-amber-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5 active:scale-95">
                     <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Bill
                     <input type="file" class="hidden" accept="image/*" onchange="window.handleAiMarginBillScan(event)">
                 </label>
@@ -532,19 +565,19 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1">Retail Price (MRP) per Dabba:</label>
-                        <input type="number" id="calc-mrp" placeholder="e.g. 500" oninput="window.runMarginCalc()" class="w-full px-3 py-2 border border-slate-200 rounded-xl font-bold text-xs">
+                        <input type="number" id="calc-mrp" placeholder="e.g. 500" oninput="window.runMarginCalc()" class="w-full px-3 py-2 border border-slate-200 rounded-xl font-bold text-xs text-slate-900 bg-white">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1">Invoiced Buy Rate (Kharid):</label>
-                        <input type="number" id="calc-rate" placeholder="e.g. 425" oninput="window.runMarginCalc()" class="w-full px-3 py-2 border border-slate-200 rounded-xl font-bold text-xs">
+                        <input type="number" id="calc-rate" placeholder="e.g. 425" oninput="window.runMarginCalc()" class="w-full px-3 py-2 border border-slate-200 rounded-xl font-bold text-xs text-slate-900 bg-white">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1">Purchased Packs (Kharid Tadad):</label>
-                        <input type="number" id="calc-packs" value="10" min="1" oninput="window.runMarginCalc()" class="w-full px-3 py-2 border border-slate-200 rounded-xl font-bold text-xs">
+                        <input type="number" id="calc-packs" value="10" min="1" oninput="window.runMarginCalc()" class="w-full px-3 py-2 border border-slate-200 rounded-xl font-bold text-xs text-slate-900 bg-white">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1">Free Bonus Packs (Scheme):</label>
-                        <input type="number" id="calc-free" value="0" min="0" oninput="window.runMarginCalc()" class="w-full px-3 py-2 border border-slate-200 rounded-xl font-bold text-xs">
+                        <input type="number" id="calc-free" value="0" min="0" oninput="window.runMarginCalc()" class="w-full px-3 py-2 border border-slate-200 rounded-xl font-bold text-xs text-slate-900 bg-white">
                     </div>
                 </div>
 
@@ -640,12 +673,12 @@
             </div>
         </section>
 
-        <!-- Developer Credit -->
-        <div class="text-center pb-6 pt-4">
-            <p class="text-[10px] text-slate-400 font-medium tracking-wide uppercase">Digital Pharma software developed by shahzadkhakh</p>
+        <!-- Developer Credit Footer at bottom of Main Content -->
+        <div class="text-center py-3 text-xs text-slate-400 font-semibold tracking-wide">
+            Digital Pharma software developed by shahzadkhakh
         </div>
 
-        <!-- Explicit Mobile Space Reserver to Prevent Clipping -->
+        <!-- Explicit Mobile Space Reserver to Prevent Bottom Bar Clipping -->
         <div class="h-16 md:hidden w-full shrink-0" aria-hidden="true"></div>
 
     </main>
@@ -682,7 +715,7 @@
                         <span id="hub-avatar-char">G</span>
                     </div>
                     <div>
-                        <h3 class="font-bold text-slate-800 text-sm">Account & Profile Hub</h3>
+                        <h3 class="font-bold text-slate-800 text-sm">Account & Store Hub</h3>
                         <p class="text-[10px] flex items-center gap-1">
                             <span id="hub-status-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
                             <span id="hub-status-text" class="text-slate-600 font-semibold">Guest Mode (Local System)</span>
@@ -698,24 +731,24 @@
             <div class="space-y-2.5 text-xs">
                 <div class="flex justify-between items-center mb-1">
                     <h4 class="font-bold text-brand-700 text-[11px] uppercase tracking-wider">Store Profile Settings</h4>
-                    <span id="hub-auth-pill" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Guest</span>
+                    <span id="hub-auth-pill" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Local System</span>
                 </div>
                 
                 <div>
                     <label class="block font-bold text-slate-600 mb-0.5">Pharmacy / Store Name:</label>
-                    <input type="text" id="hub-store-name" placeholder="Digital Pharma" class="w-full px-2.5 py-1.5 border rounded-xl font-bold">
+                    <input type="text" id="hub-store-name" placeholder="Apna Medical Store Name" class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-slate-900 bg-white">
                 </div>
                 <div>
                     <label class="block font-bold text-slate-600 mb-0.5">WhatsApp / Phone Number:</label>
-                    <input type="tel" id="hub-store-phone" placeholder="0300-1234567" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
+                    <input type="tel" id="hub-store-phone" placeholder="0300-1234567" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold text-slate-900 bg-white">
                 </div>
                 <div>
                     <label class="block font-bold text-slate-600 mb-0.5">Store Address / City:</label>
-                    <input type="text" id="hub-store-address" placeholder="Main Commercial Market" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
+                    <input type="text" id="hub-store-address" placeholder="Main Commercial Market, City" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold text-slate-900 bg-white">
                 </div>
                 <div>
                     <label class="block font-bold text-slate-600 mb-0.5">Drug Sale License (D.S.L #):</label>
-                    <input type="text" id="hub-store-license" placeholder="DSL-PB-2024" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
+                    <input type="text" id="hub-store-license" placeholder="DSL-PB-2024" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold text-slate-900 bg-white">
                 </div>
                 
                 <button onclick="window.saveAccountHubStoreProfile()" class="w-full py-2 mt-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl shadow-sm border border-slate-300 transition">
@@ -729,8 +762,8 @@
             <div id="hub-unauth-box" class="space-y-3">
                 <h4 class="font-bold text-emerald-700 text-[11px] uppercase tracking-wider">Cloud Backup Sync</h4>
                 <div class="space-y-2.5 text-xs">
-                    <input type="email" id="hub-email" placeholder="Email Address" class="w-full px-2.5 py-1.5 border rounded-xl">
-                    <input type="password" id="hub-password" placeholder="Password (Min 6)" class="w-full px-2.5 py-1.5 border rounded-xl font-mono">
+                    <input type="email" id="hub-email" placeholder="Email Address" class="w-full px-2.5 py-1.5 border rounded-xl text-slate-900 bg-white">
+                    <input type="password" id="hub-password" placeholder="Password (Min 6)" class="w-full px-2.5 py-1.5 border rounded-xl font-mono text-slate-900 bg-white">
                     <div class="flex gap-2 pt-1">
                         <button onclick="window.handleHubLogin()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black shadow">Login</button>
                         <button onclick="window.handleHubSignUp()" class="flex-1 py-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 rounded-xl font-bold">Sign Up</button>
@@ -824,13 +857,13 @@
                     <span id="receipt-barcode-number" class="text-[8px] font-mono tracking-widest text-slate-600 mt-0.5">*INV-1001-DP*</span>
                 </div>
 
-                <!-- Authentic Pharmacy Footnotes & Credit -->
-                <div class="text-center pt-1.5 border-t border-dashed border-slate-700 text-[8px] text-slate-600 leading-tight">
+                <!-- Authentic Pharmacy Footnotes & Developer Credit -->
+                <div class="text-center pt-1.5 border-t border-dashed border-slate-700 text-[8px] text-slate-600 leading-tight space-y-0.5">
                     <p class="font-bold text-slate-800">NOTICE / ZAROORI HIDAYAT:</p>
                     <p>• Fridge items aur khuli patti wapis ya tabdeel nahi hogi.</p>
                     <p>• Dawai tabdeeli kelye asal receipt 3 din ke andar lazmi hai.</p>
-                    <p class="font-black text-slate-900 mt-1 uppercase">Shukriya / Get Well Soon!</p>
-                    <p class="mt-2 text-[6px] text-slate-500 uppercase tracking-wider">Digital Pharma software developed by shahzadkhakh</p>
+                    <p class="font-black text-slate-900 uppercase">Shukriya / Get Well Soon!</p>
+                    <p class="text-[7.5px] text-slate-500 pt-1 border-t border-dotted border-slate-400 mt-1">Digital Pharma software developed by shahzadkhakh</p>
                 </div>
             </div>
 
@@ -849,7 +882,6 @@
         </div>
     </div>
 
-    <!-- AI Prescription Reader Modal -->
     <div id="ai-presc-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-2">
@@ -926,7 +958,87 @@
         </div>
     </div>
 
-    <!-- Medicine Modal, Distributor Modal, Sale Edit Modal -->
+    <div id="ai-scan-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[92vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-2">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-emerald-100 text-emerald-800 rounded-xl">
+                        <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Wholesale Bill AI Scanner (Stock In)</h3>
+                        <p class="text-[10px] text-slate-500">Distributor bill se items, batch aur buy rates auto-extract ho rahy hain.</p>
+                    </div>
+                </div>
+                <button onclick="window.closeAiScanModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Laser Scanner Animation for Wholesale Invoice OCR -->
+            <div id="ai-scan-loading" class="py-8 px-4 flex flex-col items-center justify-center gap-4 text-center">
+                <div class="relative w-48 h-40 bg-slate-950 rounded-2xl border-2 border-emerald-500/80 shadow-2xl overflow-hidden flex items-center justify-center ai-scanner-grid">
+                    <div class="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-emerald-400"></div>
+                    <div class="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-emerald-400"></div>
+                    <div class="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-emerald-400"></div>
+                    <div class="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-emerald-400"></div>
+                    
+                    <div class="flex flex-col items-center gap-1 opacity-70 animate-pulse">
+                        <i data-lucide="file-check-2" class="w-10 h-10 text-emerald-400"></i>
+                        <span class="text-[9px] font-mono tracking-widest text-emerald-300 uppercase">EXTRACTING BILL</span>
+                    </div>
+
+                    <div class="ai-laser-bar"></div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black text-slate-800 tracking-wide flex items-center justify-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
+                        AI Wholesale Invoice Scanner Active
+                    </h4>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Distributor invoice se medicines, batch, tadad aur buy rate parha ja raha hai...</p>
+                </div>
+            </div>
+
+            <!-- Scanned Invoice Items Review Table -->
+            <div id="ai-scan-content" class="hidden space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-slate-600">Distributor / Supplier:</span>
+                        <input type="text" id="ai-bill-distributor" placeholder="Distributor Name" class="px-2 py-1 text-xs border border-slate-300 rounded-lg font-bold text-slate-900 bg-white">
+                        <button onclick="window.applyDistributorToAllScanned()" class="text-[10px] bg-slate-200 hover:bg-slate-300 text-slate-800 px-2 py-1 rounded font-bold">Apply All</button>
+                    </div>
+                    <span class="text-[10px] bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded">Dabba dekh kar Retail MRP darj karein</span>
+                </div>
+
+                <div class="overflow-x-auto border border-slate-200 rounded-xl max-h-64">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-slate-50 border-b text-slate-600 font-bold sticky top-0">
+                            <tr>
+                                <th class="p-2">Item Name</th>
+                                <th class="p-2">Batch</th>
+                                <th class="p-2 text-center">Qty (Packs)</th>
+                                <th class="p-2 text-right">Buy Rate (Rs)</th>
+                                <th class="p-2 text-right text-amber-900 bg-amber-50">Retail MRP (Rs)</th>
+                                <th class="p-2 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ai-scanned-table-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+
+                <div class="flex gap-2 pt-2 border-t">
+                    <button onclick="window.closeAiScanModal()" class="flex-1 py-2 border rounded-xl font-bold text-slate-600 text-xs">
+                        Cancel
+                    </button>
+                    <button onclick="window.saveAiScannedItemsToInventory()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5">
+                        <i data-lucide="check" class="w-4 h-4"></i> Save to Stock Inventory
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="medicine-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-md w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
             <div class="flex items-center justify-between border-b pb-2">
@@ -940,44 +1052,44 @@
                 <input type="hidden" id="med-id">
                 <div>
                     <label class="block font-bold text-slate-600 mb-1">Dawai Ka Name (Brand):</label>
-                    <input type="text" id="med-name" required placeholder="e.g. Panadol 500mg" class="w-full px-2.5 py-1.5 border rounded-xl font-bold">
+                    <input type="text" id="med-name" required placeholder="e.g. Panadol 500mg" class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-slate-900 bg-white">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block font-bold text-slate-600 mb-1">Generic / Formula:</label>
-                        <input type="text" id="med-generic" placeholder="e.g. Paracetamol" class="w-full px-2.5 py-1.5 border rounded-xl">
+                        <input type="text" id="med-generic" placeholder="e.g. Paracetamol" class="w-full px-2.5 py-1.5 border rounded-xl text-slate-900 bg-white">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-600 mb-1">Distributor / Supplier:</label>
-                        <input type="text" id="med-distributor" placeholder="e.g. GSK / Ali Pharma" class="w-full px-2.5 py-1.5 border rounded-xl">
+                        <input type="text" id="med-distributor" placeholder="e.g. GSK / Ali Pharma" class="w-full px-2.5 py-1.5 border rounded-xl text-slate-900 bg-white">
                     </div>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div>
                         <label class="block font-bold text-slate-600 mb-1">Pack Size (Tabs):</label>
-                        <input type="number" id="med-pack" value="20" min="1" required class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-center">
+                        <input type="number" id="med-pack" value="20" min="1" required class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-center text-slate-900 bg-white">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-600 mb-1">Batch Number:</label>
-                        <input type="text" id="med-batch" placeholder="B-102" class="w-full px-2.5 py-1.5 border rounded-xl font-mono text-center">
+                        <input type="text" id="med-batch" placeholder="B-102" class="w-full px-2.5 py-1.5 border rounded-xl font-mono text-center text-slate-900 bg-white">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-600 mb-1">Expiry Date:</label>
-                        <input type="date" id="med-expiry" required class="w-full px-2.5 py-1.5 border rounded-xl text-center">
+                        <input type="date" id="med-expiry" required class="w-full px-2.5 py-1.5 border rounded-xl text-center text-slate-900 bg-white">
                     </div>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div>
                         <label class="block font-bold text-slate-600 mb-1">Buy Rate (Rs):</label>
-                        <input type="number" id="med-buy" step="0.01" required placeholder="180" class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-right">
+                        <input type="number" id="med-buy" step="0.01" required placeholder="180" class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-right text-slate-900 bg-white">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-600 mb-1">Retail MRP (Rs):</label>
-                        <input type="number" id="med-mrp" step="0.01" required placeholder="200" class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-right text-emerald-700">
+                        <input type="number" id="med-mrp" step="0.01" required placeholder="200" class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-right text-emerald-700 bg-white">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-600 mb-1">Stock (Packs):</label>
-                        <input type="number" id="med-stock" min="0" required value="10" class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-center">
+                        <input type="number" id="med-stock" min="0" required value="10" class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-center text-slate-900 bg-white">
                     </div>
                 </div>
                 <div class="flex gap-2 pt-2 border-t">
@@ -988,6 +1100,7 @@
         </div>
     </div>
 
+    <!-- Distributor Rate Comparison Modal -->
     <div id="distributor-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-2">
@@ -1003,6 +1116,7 @@
         </div>
     </div>
 
+    <!-- Sale Edit Modal -->
     <div id="sale-edit-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-md w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
             <div class="flex items-center justify-between border-b pb-2">
@@ -1014,11 +1128,11 @@
             <div class="space-y-2 text-xs">
                 <div>
                     <label class="block font-bold text-slate-600 mb-1">Customer Name / Phone:</label>
-                    <input type="text" id="edit-customer-name" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold">
+                    <input type="text" id="edit-customer-name" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold text-slate-900 bg-white">
                 </div>
                 <div>
                     <label class="block font-bold text-slate-600 mb-1">Payment Status:</label>
-                    <select id="edit-payment-mode" class="w-full px-2.5 py-1.5 border rounded-xl font-bold bg-slate-50">
+                    <select id="edit-payment-mode" class="w-full px-2.5 py-1.5 border rounded-xl font-bold bg-white text-slate-900">
                         <option value="Cash">Cash</option>
                         <option value="Online">Online</option>
                         <option value="Credit">Udhaar / Khata</option>
@@ -1043,9 +1157,6 @@
         </div>
     </div>
 
-    <!-- Hidden Offscreen Canvas for Safe Image Downscaling & Pre-Processing -->
-    <canvas id="camscanner-canvas" class="hidden"></canvas>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -1061,6 +1172,7 @@
         let authUser = null;
         let deferredPrompt = null;
         let activePosSearchIndex = -1;
+        window.posSelectedUnit = 'pack'; // Default: Full Pack
 
         // Firebase Setup & Initialization
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'digital-pharma-erp';
@@ -1313,45 +1425,63 @@
             return null;
         }
 
-        // ==========================================
-        // 100% Robust Mobile Image Preprocessor
-        // Fixes memory crashes and rotation bugs on all mobile phones
-        // ==========================================
+        // ==============================================================
+        // 100% Reliable Mobile Camera Compressor (iOS & Android Safe)
+        // Eliminates 20MB crashes & converts photos to crisp 1280px JPEG
+        // ==============================================================
         async function enhanceImageLikeCamScanner(file) {
             return new Promise((resolve, reject) => {
+                if (!file) {
+                    reject(new Error("Tasweer select nahi hui."));
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const img = new Image();
                     img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-                        const maxDim = 2048; // Kept high for reading crisp text
+                        try {
+                            let width = img.naturalWidth || img.width;
+                            let height = img.naturalHeight || img.height;
+                            const maxDim = 1280; // High OCR clarity while payload remains ~200KB
 
-                        if (width > maxDim || height > maxDim) {
-                            if (width > height) {
-                                height = Math.round((height * maxDim) / width);
-                                width = maxDim;
-                            } else {
-                                width = Math.round((width * maxDim) / height);
-                                height = maxDim;
+                            if (width > maxDim || height > maxDim) {
+                                if (width > height) {
+                                    height = Math.round((height * maxDim) / width);
+                                    width = maxDim;
+                                } else {
+                                    width = Math.round((width * maxDim) / height);
+                                    height = maxDim;
+                                }
                             }
+
+                            const canvas = document.createElement('canvas');
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+
+                            // Solid white background to prevent transparent PNG artifacts
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(0, 0, width, height);
+
+                            ctx.imageSmoothingEnabled = true;
+                            ctx.imageSmoothingQuality = 'high';
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            const base64Clean = canvas.toDataURL('image/jpeg', 0.82).split(',')[1];
+                            if (base64Clean) {
+                                resolve(base64Clean);
+                            } else {
+                                reject(new Error("Image process nahi ho saki."));
+                            }
+                        } catch (err) {
+                            reject(err);
                         }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.imageSmoothingEnabled = true;
-                        ctx.imageSmoothingQuality = 'high';
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        const base64Clean = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
-                        resolve(base64Clean);
                     };
-                    img.onerror = () => reject(new Error("Image load failed"));
+                    img.onerror = () => reject(new Error("Image format load nahi ho saka."));
                     img.src = e.target.result;
                 };
-                reader.onerror = () => reject(new Error("File read failed"));
+                reader.onerror = () => reject(new Error("File read fail ho gayi."));
                 reader.readAsDataURL(file);
             });
         }
@@ -1389,7 +1519,7 @@
                 }
                 await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
             }
-            throw new Error('AI Vision connect nahi ho saka. Internet check karein aur dobara try karein.');
+            throw new Error('AI Vision connect nahi ho saka. Tasweer roshni mein dobara lein.');
         }
 
         window.getStoreConfig = function() {
@@ -1408,27 +1538,21 @@
         window.applyStoreIdentity = function() {
             const config = window.getStoreConfig();
             
-            // App Main Title Fixed to Digital Pharma
-            const title = 'Digital Pharma';
-            document.title = title + ' - Smart Pharmacy ERP & POS';
-            
+            // App Branding remains Digital Pharma
+            document.title = 'Digital Pharma - Smart Pharmacy ERP & POS';
             const pageTitle = document.getElementById('html-page-title');
-            if (pageTitle) pageTitle.innerText = title + ' - Smart Pharmacy ERP & POS';
+            if (pageTitle) pageTitle.innerText = 'Digital Pharma - Smart Pharmacy ERP & POS';
             
             const topName = document.getElementById('top-store-name');
-            if (topName) topName.innerText = title;
+            if (topName) topName.innerText = 'Digital Pharma';
 
-            // Hub Header dynamically shows Store Name or Guest Mode
+            // Top-right Account Pill shows Profile Store Name or Guest Mode
             const hubName = document.getElementById('hub-header-name');
             if (hubName) {
-                if (authUser) {
-                    hubName.innerText = config.name || 'Store Profile';
-                } else {
-                    hubName.innerText = 'Guest Mode';
-                }
+                hubName.innerText = authUser ? (config.name || 'My Store') : 'Guest Mode';
             }
             
-            // Thermal Receipt strictly shows the Store Name
+            // Thermal Receipt strictly shows the custom Pharmacy profile details
             const rTitle = document.getElementById('receipt-store-title');
             if (rTitle) rTitle.innerText = config.name || 'Digital Pharma';
             
@@ -1443,14 +1567,12 @@
 
             const avatarChar = document.getElementById('profile-avatar-char');
             if (avatarChar) {
-                const dispName = authUser ? (config.name || 'S') : 'G';
-                avatarChar.innerText = dispName.trim().charAt(0).toUpperCase();
+                avatarChar.innerText = (authUser ? (config.name || 'S') : 'G').trim().charAt(0).toUpperCase();
             }
 
             const hubAvatarChar = document.getElementById('hub-avatar-char');
             if (hubAvatarChar) {
-                const dispName = authUser ? (config.name || 'S') : 'G';
-                hubAvatarChar.innerText = dispName.trim().charAt(0).toUpperCase();
+                hubAvatarChar.innerText = (authUser ? (config.name || 'S') : 'G').trim().charAt(0).toUpperCase();
             }
         };
 
@@ -1580,7 +1702,6 @@
                 return;
             }
 
-            // Normal typing search
             setTimeout(() => {
                 activePosSearchIndex = -1;
                 window.searchMedicineForPos();
@@ -1617,7 +1738,7 @@
                     <div tabindex="0" onclick="window.selectMedicineForPos('${m.id}')" class="pos-result-row p-2.5 hover:bg-brand-50 outline-none cursor-pointer flex justify-between items-center text-xs transition">
                         <div>
                             <strong class="text-slate-800 text-xs">${m.name}</strong>
-                            <span class="text-[10px] text-slate-400 block">Stock: ${m.stock} packs (${m.packSize} tabs/pack) • Batch: ${m.batch || 'B-01'}</span>
+                            <span class="text-[10px] text-slate-400 block">Stock: ${m.stock} packs (${m.packSize || 1} tabs/pack) • Batch: ${m.batch || 'B-01'}</span>
                         </div>
                         <span class="font-black text-emerald-700 text-xs">Rs. ${Number(m.mrp).toFixed(2)}</span>
                     </div>
@@ -1630,17 +1751,70 @@
             const med = medicines.find(m => m.id === id);
             if (!med) return;
             currentSelectedMed = med;
+            window.posSelectedUnit = 'pack'; // Reset to pack on new selection
+
             document.getElementById('pos-selected-title').innerText = med.name;
-            document.getElementById('pos-selected-stock').innerText = `${med.stock} packs (${med.stock * med.packSize} tabs)`;
+            document.getElementById('pos-selected-stock').innerText = `${med.stock} packs (${med.stock * (med.packSize || 1)} tabs)`;
             document.getElementById('pos-search-results').classList.add('hidden');
             document.getElementById('pos-search').value = '';
             
-            // Seamless keyboard leap to quantity input
+            // Sync unit buttons UI
+            window.setPosUnitType('pack');
+
             const qtyInput = document.getElementById('pos-qty');
             if (qtyInput) {
                 qtyInput.value = '1';
-                qtyInput.focus();
-                qtyInput.select();
+            }
+            window.updatePosLivePriceHint();
+        };
+
+        // Mobile-Friendly Unit Switcher (Pack vs Loose Goli)
+        window.setPosUnitType = function(type) {
+            window.posSelectedUnit = type;
+            const packBtn = document.getElementById('pos-unit-pack-btn');
+            const looseBtn = document.getElementById('pos-unit-loose-btn');
+
+            if (type === 'pack') {
+                if (packBtn) {
+                    packBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition bg-brand-700 text-white shadow-sm flex items-center justify-center gap-1';
+                }
+                if (looseBtn) {
+                    looseBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition text-slate-700 hover:bg-white flex items-center justify-center gap-1';
+                }
+            } else {
+                if (packBtn) {
+                    packBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition text-slate-700 hover:bg-white flex items-center justify-center gap-1';
+                }
+                if (looseBtn) {
+                    looseBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition bg-emerald-600 text-white shadow-sm flex items-center justify-center gap-1';
+                }
+            }
+            window.updatePosLivePriceHint();
+        };
+
+        // Live Price & Total Indicator for Cashier Accuracy
+        window.updatePosLivePriceHint = function() {
+            const badge = document.getElementById('pos-calc-rate-badge');
+            if (!badge) return;
+
+            if (!currentSelectedMed) {
+                badge.innerText = 'Rs. 0';
+                return;
+            }
+
+            const packSize = Math.max(1, Number(currentSelectedMed.packSize) || 1);
+            const mrp = Number(currentSelectedMed.mrp) || 0;
+            const qty = Math.max(1, parseInt(document.getElementById('pos-qty')?.value) || 1);
+
+            if (window.posSelectedUnit === 'loose') {
+                const perTabPrice = mrp / packSize;
+                const total = perTabPrice * qty;
+                badge.innerText = `Rs. ${perTabPrice.toFixed(2)}/tab (Total: Rs. ${total.toFixed(2)})`;
+                badge.className = 'text-[9px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full';
+            } else {
+                const total = mrp * qty;
+                badge.innerText = `Rs. ${mrp.toFixed(2)}/pack (Total: Rs. ${total.toFixed(2)})`;
+                badge.className = 'text-[9px] font-black text-brand-800 bg-brand-100 px-2 py-0.5 rounded-full';
             }
         };
 
@@ -1650,23 +1824,26 @@
                 document.getElementById('pos-search')?.focus();
                 return;
             }
-            const unitType = document.getElementById('pos-unit-type').value;
+
+            const unitType = window.posSelectedUnit || 'pack';
             const qty = parseInt(document.getElementById('pos-qty').value) || 1;
             if (qty <= 0) return;
 
             let pricePerUnit = 0;
             let stockDeduction = 0;
-            const packSize = currentSelectedMed.packSize || 1;
+            const packSize = Math.max(1, Number(currentSelectedMed.packSize) || 1);
+            const mrp = Number(currentSelectedMed.mrp) || 0;
 
             if (unitType === 'pack') {
-                pricePerUnit = currentSelectedMed.mrp;
+                pricePerUnit = mrp;
                 stockDeduction = qty;
                 if (currentSelectedMed.stock < stockDeduction) {
                     showToast('Stock kam hai! Mojood stock: ' + currentSelectedMed.stock + ' packs', 'error');
                     return;
                 }
             } else {
-                pricePerUnit = currentSelectedMed.mrp / packSize;
+                // Strictly calculate per-loose tablet price
+                pricePerUnit = mrp / packSize;
                 stockDeduction = qty / packSize;
                 const totalTabsAvailable = currentSelectedMed.stock * packSize;
                 if (totalTabsAvailable < qty) {
@@ -1680,7 +1857,7 @@
                 id: currentSelectedMed.id,
                 name: currentSelectedMed.name,
                 unitType: unitType,
-                displayUnit: unitType === 'pack' ? 'Pack' : 'Tab',
+                displayUnit: unitType === 'pack' ? 'Pack' : 'Tab (Loose)',
                 qty: qty,
                 price: pricePerUnit,
                 total: itemTotal,
@@ -1691,12 +1868,12 @@
             document.getElementById('pos-selected-title').innerText = 'Koi Select Nahi';
             document.getElementById('pos-selected-stock').innerText = '0';
             document.getElementById('pos-qty').value = '1';
+            window.setPosUnitType('pack');
 
             renderCartTable();
             window.calculateCartTotals();
-            showToast('Item cart mein shamil ho gaya!', 'success');
+            showToast('Item bill cart mein shamil ho gaya!', 'success');
             
-            // Auto focus back on search for lightning-fast cashier operation
             const searchInput = document.getElementById('pos-search');
             if (searchInput) {
                 searchInput.focus();
@@ -1714,7 +1891,7 @@
             tbody.innerHTML = cart.map((item, index) => `
                 <tr class="border-b border-slate-100 hover:bg-slate-50">
                     <td class="p-2 font-bold text-slate-800">${item.name}</td>
-                    <td class="p-2 text-center text-slate-500 font-semibold">${item.displayUnit}</td>
+                    <td class="p-2 text-center text-slate-600 font-bold">${item.displayUnit}</td>
                     <td class="p-2 text-center font-black">${item.qty}</td>
                     <td class="p-2 text-right text-slate-600">Rs. ${item.price.toFixed(2)}</td>
                     <td class="p-2 text-right font-black text-slate-900">Rs. ${item.total.toFixed(2)}</td>
@@ -1790,7 +1967,7 @@
             for (const c of cart) {
                 const med = medicines.find(m => m.id === c.id);
                 if (med) {
-                    med.stock = Math.max(0, med.stock - c.stockDeduct);
+                    med.stock = Math.max(0, parseFloat((med.stock - c.stockDeduct).toFixed(4)));
                     await saveMedicineToStore(med);
                 }
             }
@@ -1892,7 +2069,8 @@
             if (s.discountAmount > 0) text += `*Discount:* -Rs. ${s.discountAmount.toFixed(2)}\n`;
             text += `*NET PAYABLE:* Rs. ${s.netTotal.toFixed(2)}\n`;
             text += `*Payment:* ${s.paymentMode}\n\n`;
-            text += `_Shukriya for purchasing!_`;
+            text += `_Shukriya for purchasing!_\n`;
+            text += `_Digital Pharma software developed by shahzadkhakh_`;
 
             const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
             window.open(url, '_blank');
@@ -1918,7 +2096,8 @@
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
                 const prompt = `You are an expert Pakistani & global medical prescription OCR reader.
-CRITICAL INSTRUCTION: Never say the image is unreadable, blurry, or fail to process. Make your absolute best guess for all fields even if captured on a smartphone with shadows, lighting variations, or rushed handwriting. DO NOT output error messages.
+CRITICAL INSTRUCTION: Never say the image is unreadable, blurry, or fail to process. Always make your best logical guess from whatever text is visible. Even if captured on a smartphone with shadows, lighting variations, or rushed handwriting, examine every word carefully.
+Decipher doctor handwriting, clinic slips, printed or handwritten doctor prescriptions.
 Extract:
 - doctor (doctor name/clinic if legible)
 - patient (patient name/details if legible)
@@ -1938,7 +2117,7 @@ Return ONLY valid JSON matching this schema exactly:
                 const parsed = extractJsonObject(rawText);
 
                 if (!parsed || !parsed.medicines || parsed.medicines.length === 0) {
-                    throw new Error('AI Vision cannot extract text from this image. Ek aur pic try karein.');
+                    throw new Error('AI could not parse standard data. Saaf photo roshni mein dobara lein.');
                 }
 
                 document.getElementById('presc-doc-name').innerText = 'Doctor: ' + (parsed.doctor || 'Doctor details not found');
@@ -2013,7 +2192,7 @@ Return ONLY valid JSON matching this schema exactly:
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
                 const prompt = `You are an expert pharmacy wholesale bill OCR reader.
-CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Make your absolute best guess for all fields. Scan this wholesale distributor invoice (even if captured on a smartphone with shadows, dot-matrix print, or slight angle). DO NOT output error messages.
+CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Always make your best logical guess from whatever text is visible. Scan this wholesale distributor invoice (even if captured on a smartphone with shadows, dot-matrix print, or slight angle).
 Extract all medicine line items:
 - name (string: exact brand and mg strength)
 - generic (string: formula if mentioned, else empty)
@@ -2031,7 +2210,7 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
                 const items = extractJsonArray(rawText);
 
                 if (!items || !Array.isArray(items) || items.length === 0) {
-                    throw new Error('AI Vision cannot extract text from this image. Ek aur pic try karein.');
+                    throw new Error('AI could not parse standard data. Tasweer roshni mein saaf lein aur dobara try karein.');
                 }
 
                 const detectedDistributor = items.find(i => i.distributor)?.distributor || '';
@@ -2074,16 +2253,16 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
             tbody.innerHTML = aiExtractedBuffer.map((item, idx) => `
                 <tr class="border-b border-slate-100">
                     <td class="p-2">
-                        <input type="text" value="${item.name}" onchange="window.updateScannedItem(${idx}, 'name', this.value)" class="w-full px-1.5 py-1 border rounded text-xs font-bold">
+                        <input type="text" value="${item.name}" onchange="window.updateScannedItem(${idx}, 'name', this.value)" class="w-full px-1.5 py-1 border rounded text-xs font-bold text-slate-900 bg-white">
                     </td>
                     <td class="p-2">
-                        <input type="text" value="${item.batch}" onchange="window.updateScannedItem(${idx}, 'batch', this.value)" class="w-20 px-1.5 py-1 border rounded text-xs font-mono">
+                        <input type="text" value="${item.batch}" onchange="window.updateScannedItem(${idx}, 'batch', this.value)" class="w-20 px-1.5 py-1 border rounded text-xs font-mono text-slate-900 bg-white">
                     </td>
                     <td class="p-2 text-center">
-                        <input type="number" min="1" value="${item.qty}" onchange="window.updateScannedItem(${idx}, 'qty', this.value)" class="w-14 px-1.5 py-1 border rounded text-xs text-center font-bold">
+                        <input type="number" min="1" value="${item.qty}" onchange="window.updateScannedItem(${idx}, 'qty', this.value)" class="w-14 px-1.5 py-1 border rounded text-xs text-center font-bold text-slate-900 bg-white">
                     </td>
                     <td class="p-2 text-right">
-                        <input type="number" step="0.01" value="${item.buyRate}" onchange="window.updateScannedItem(${idx}, 'buyRate', this.value)" class="w-20 px-1.5 py-1 border rounded text-xs text-right font-bold">
+                        <input type="number" step="0.01" value="${item.buyRate}" onchange="window.updateScannedItem(${idx}, 'buyRate', this.value)" class="w-20 px-1.5 py-1 border rounded text-xs text-right font-bold text-slate-900 bg-white">
                     </td>
                     <td class="p-2 text-right bg-amber-50">
                         <input type="number" step="0.01" placeholder="Box MRP" value="${item.mrp || ''}" onchange="window.updateScannedItem(${idx}, 'mrp', this.value)" class="w-24 px-1.5 py-1 border border-amber-300 rounded text-xs text-right font-black text-emerald-700 bg-white">
@@ -2189,7 +2368,7 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
                         <span class="text-[10px] text-slate-400">${m.generic || 'Formula'}</span>
                     </td>
                     <td class="p-3 text-slate-600 font-semibold">${m.distributor || 'General'}</td>
-                    <td class="p-3 text-slate-500 font-semibold">${m.packSize} Tabs</td>
+                    <td class="p-3 text-slate-500 font-semibold">${m.packSize || 1} Tabs</td>
                     <td class="p-3 font-mono text-slate-700">${m.batch || '-'}</td>
                     <td class="p-3 text-slate-600">${m.expiry || '-'}</td>
                     <td class="p-3 text-right font-bold text-slate-600">Rs. ${Number(m.buyRate).toFixed(2)}</td>
@@ -2363,7 +2542,7 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
                 const prompt = `You are an expert pharmacy wholesale trade margin & discount auditor.
-CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Make your absolute best guess for all fields. Scan this distributor invoice (even if taken from a phone camera) and extract all line items to audit trade discounts and profit percentages. DO NOT output error messages.
+CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Always make your best logical guess from whatever text is visible. Scan this distributor invoice (even if taken from a phone camera) and extract all line items to audit trade discounts and profit percentages.
 Extract for each line:
 - name (string: brand name and dosage strength)
 - buyRate (number: wholesale invoice rate per pack)
@@ -2377,7 +2556,7 @@ Return ONLY a valid JSON array of objects.`;
                 const items = extractJsonArray(rawText);
 
                 if (!items || !Array.isArray(items) || items.length === 0) {
-                    throw new Error('AI Vision cannot extract text from this image. Ek aur pic try karein.');
+                    throw new Error('AI could not parse standard data. Tasweer saaf lein aur dobara try karein.');
                 }
 
                 window.marginScannedItems = items.map((item, idx) => ({
@@ -2689,7 +2868,7 @@ Return ONLY a valid JSON array of objects.`;
                     for (const item of sale.items) {
                         const med = medicines.find(m => m.id === item.id);
                         if (med) {
-                            med.stock += item.stockDeduct;
+                            med.stock = parseFloat((med.stock + item.stockDeduct).toFixed(4));
                             await saveMedicineToStore(med);
                         }
                     }
@@ -2748,9 +2927,6 @@ Return ONLY a valid JSON array of objects.`;
             }
         }
 
-        // ==========================================
-        // UNIFIED ACCOUNT, GUEST MODE & STORE PROFILE HUB
-        // ==========================================
         window.openAccountHubModal = function() {
             const config = window.getStoreConfig();
             document.getElementById('hub-store-name').value = config.name || '';
@@ -2778,7 +2954,7 @@ Return ONLY a valid JSON array of objects.`;
                 statusDot.className = 'w-2 h-2 rounded-full bg-amber-400 inline-block';
                 statusText.innerText = 'Guest Mode (Local System)';
                 statusText.className = 'text-slate-600 font-semibold';
-                authPill.innerText = 'Guest';
+                authPill.innerText = 'Local System';
                 authPill.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800';
                 unauthBox.classList.remove('hidden');
                 authBox.classList.add('hidden');
@@ -2820,7 +2996,7 @@ Return ONLY a valid JSON array of objects.`;
             }
 
             if (!auth) {
-                showToast('Guest mode par chal raha hai.', 'info');
+                showToast('Local system chal raha hai.', 'info');
                 return;
             }
 
@@ -2844,7 +3020,7 @@ Return ONLY a valid JSON array of objects.`;
             }
 
             if (!auth) {
-                showToast('Guest mode par chal raha hai.', 'info');
+                showToast('Local system chal raha hai.', 'info');
                 return;
             }
 
@@ -2902,14 +3078,21 @@ Return ONLY a valid JSON array of objects.`;
                 onAuthStateChanged(auth, (user) => {
                     authUser = user;
                     const hubHeaderStatus = document.getElementById('hub-header-status');
+                    const hubHeaderName = document.getElementById('hub-header-name');
                     const hubAvatarChar = document.getElementById('profile-avatar-char');
+                    const config = window.getStoreConfig();
 
                     if (user) {
                         if (hubHeaderStatus) {
                             hubHeaderStatus.innerText = 'Online Synced';
                             hubHeaderStatus.className = 'block leading-tight text-[9px] text-emerald-300 font-bold';
                         }
-                        window.applyStoreIdentity(); // Trigger name update
+                        if (hubHeaderName) {
+                            hubHeaderName.innerText = config.name || user.email.split('@')[0];
+                        }
+                        if (hubAvatarChar) {
+                            hubAvatarChar.innerText = (config.name || user.email || 'D').charAt(0).toUpperCase();
+                        }
 
                         if (db) {
                             onSnapshot(collection(db, 'artifacts', appId, 'users', user.uid, 'medicines'), (snapshot) => {
@@ -2935,10 +3118,15 @@ Return ONLY a valid JSON array of objects.`;
                         }
                     } else {
                         if (hubHeaderStatus) {
-                            hubHeaderStatus.innerText = 'Guest Mode (Local System)';
+                            hubHeaderStatus.innerText = 'Local System';
                             hubHeaderStatus.className = 'block leading-tight text-[9px] text-amber-300 font-medium';
                         }
-                        window.applyStoreIdentity(); // Trigger name update back to Guest
+                        if (hubHeaderName) {
+                            hubHeaderName.innerText = 'Guest Mode';
+                        }
+                        if (hubAvatarChar) {
+                            hubAvatarChar.innerText = 'G';
+                        }
                     }
                     safeCreateIcons();
                 });
