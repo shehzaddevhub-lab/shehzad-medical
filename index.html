@@ -49,7 +49,6 @@
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js" type="module"></script>
 
     <style>
-        /* Mobile Form Auto-Zoom Prevention */
         @media (max-width: 768px) {
             input, select, textarea {
                 font-size: 16px !important;
@@ -178,11 +177,11 @@
                 <!-- Unified Account & Profile Hub Button -->
                 <button id="account-hub-btn" onclick="window.openAccountHubModal()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-brand-600 px-2 py-1 rounded-full transition shadow text-left">
                     <div class="flex flex-col hidden sm:block">
-                        <span id="hub-header-name" class="block leading-none text-xs font-bold text-white">Digital Pharma</span>
-                        <span id="hub-header-status" class="block leading-tight text-[9px] text-amber-300 font-medium">Guest / Local</span>
+                        <span id="hub-header-name" class="block leading-none text-xs font-bold text-white">Guest Mode</span>
+                        <span id="hub-header-status" class="block leading-tight text-[9px] text-amber-300 font-medium">Local System</span>
                     </div>
                     <div class="w-7 h-7 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center font-black text-xs shrink-0">
-                        <span id="profile-avatar-char">D</span>
+                        <span id="profile-avatar-char">G</span>
                     </div>
                 </button>
             </div>
@@ -203,7 +202,6 @@
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-3.5 mobile-safe-bottom flex flex-col gap-4">
 
-        <!-- Navigation Tabs (Desktop & Tablet) -->
         <nav class="hidden md:flex space-x-2 bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200">
             <button onclick="window.switchTab('dashboard')" id="tab-dashboard" class="tab-btn active-tab flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition bg-brand-700 text-white shadow">
                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
@@ -224,19 +222,16 @@
 
         <section id="view-dashboard" class="tab-content flex flex-col gap-4">
             
-            <!-- Sleek Compact Prescription AI Banner -->
-            <div class="bg-gradient-to-r from-brand-900 to-indigo-900 text-white rounded-xl shadow-sm p-3 flex flex-wrap items-center justify-between gap-3">
+            <!-- Compact Prescription AI Banner -->
+            <div class="bg-gradient-to-r from-brand-900 to-indigo-900 text-white rounded-xl shadow-sm p-3 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-2.5">
                     <div class="p-1.5 bg-amber-400/20 text-amber-300 rounded-lg shrink-0 border border-amber-400/30">
-                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <i data-lucide="scan" class="w-4 h-4"></i>
                     </div>
-                    <h2 class="font-bold text-sm tracking-wide flex items-center gap-2">
-                        Prescription AI Reader
-                        <span class="text-[9px] font-bold bg-amber-400 text-slate-900 px-1.5 py-0.5 rounded uppercase hidden sm:inline-block">Smart Vision</span>
-                    </h2>
+                    <h2 class="font-bold text-sm tracking-wide">AI Prescription Scanner</h2>
                 </div>
                 <label class="cursor-pointer bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
-                    <i data-lucide="scan" class="w-3.5 h-3.5"></i> Scan Nuskha
+                    <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Image
                     <input type="file" id="dashboard-presc-input" class="hidden" accept="image/*" onchange="window.handlePrescriptionScan(event)">
                 </label>
             </div>
@@ -458,9 +453,9 @@
             <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white rounded-xl shadow-sm p-3 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-2.5">
                     <div class="p-1.5 bg-white/10 rounded-lg shrink-0">
-                        <i data-lucide="scan-line" class="w-4 h-4 text-emerald-300"></i>
+                        <i data-lucide="scan" class="w-4 h-4 text-emerald-300"></i>
                     </div>
-                    <h2 class="font-bold text-sm tracking-wide">Wholesale Bill AI Scanner (Stock In)</h2>
+                    <h2 class="font-bold text-sm tracking-wide">AI Bill Scanner (Stock In)</h2>
                 </div>
                 <label class="cursor-pointer bg-white text-emerald-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
                     <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Bill
@@ -518,7 +513,7 @@
                     <div class="p-1.5 bg-white/10 rounded-lg shrink-0">
                         <i data-lucide="percent" class="w-4 h-4 text-amber-200"></i>
                     </div>
-                    <h2 class="font-bold text-sm tracking-wide">Trade Margin & Profit % AI Auditor</h2>
+                    <h2 class="font-bold text-sm tracking-wide">AI Margin Auditor</h2>
                 </div>
                 <label class="cursor-pointer bg-white text-amber-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
                     <i data-lucide="camera" class="w-3.5 h-3.5"></i> Scan Bill
@@ -645,6 +640,11 @@
             </div>
         </section>
 
+        <!-- Developer Credit -->
+        <div class="text-center pb-6 pt-4">
+            <p class="text-[10px] text-slate-400 font-medium tracking-wide uppercase">Digital Pharma software developed by shahzadkhakh</p>
+        </div>
+
         <!-- Explicit Mobile Space Reserver to Prevent Clipping -->
         <div class="h-16 md:hidden w-full shrink-0" aria-hidden="true"></div>
 
@@ -673,20 +673,19 @@
         </button>
     </nav>
 
-    <!-- Unified Account, Auth & Store Profile Hub Modal -->
     <div id="account-hub-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-sm w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-4 max-h-[92vh] overflow-y-auto">
             
             <div class="flex items-center justify-between border-b pb-3">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-black flex items-center justify-center text-lg shadow-sm border border-brand-200">
-                        <span id="hub-avatar-char">D</span>
+                        <span id="hub-avatar-char">G</span>
                     </div>
                     <div>
                         <h3 class="font-bold text-slate-800 text-sm">Account & Profile Hub</h3>
                         <p class="text-[10px] flex items-center gap-1">
                             <span id="hub-status-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
-                            <span id="hub-status-text" class="text-slate-600 font-semibold">Guest Mode (Local Offline)</span>
+                            <span id="hub-status-text" class="text-slate-600 font-semibold">Guest Mode (Local System)</span>
                         </p>
                     </div>
                 </div>
@@ -752,8 +751,6 @@
         </div>
     </div>
 
-    <!-- Modals (Receipt, AI Presc, AI Scan, Edit Medicine, Compare, Edit Sale) -->
-    
     <div id="digital-receipt-modal" class="hidden fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-2xl flex flex-col gap-3 max-h-[94vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-2">
@@ -827,12 +824,13 @@
                     <span id="receipt-barcode-number" class="text-[8px] font-mono tracking-widest text-slate-600 mt-0.5">*INV-1001-DP*</span>
                 </div>
 
-                <!-- Authentic Pharmacy Footnotes -->
+                <!-- Authentic Pharmacy Footnotes & Credit -->
                 <div class="text-center pt-1.5 border-t border-dashed border-slate-700 text-[8px] text-slate-600 leading-tight">
                     <p class="font-bold text-slate-800">NOTICE / ZAROORI HIDAYAT:</p>
                     <p>• Fridge items aur khuli patti wapis ya tabdeel nahi hogi.</p>
                     <p>• Dawai tabdeeli kelye asal receipt 3 din ke andar lazmi hai.</p>
                     <p class="font-black text-slate-900 mt-1 uppercase">Shukriya / Get Well Soon!</p>
+                    <p class="mt-2 text-[6px] text-slate-500 uppercase tracking-wider">Digital Pharma software developed by shahzadkhakh</p>
                 </div>
             </div>
 
@@ -851,6 +849,7 @@
         </div>
     </div>
 
+    <!-- AI Prescription Reader Modal -->
     <div id="ai-presc-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-2">
@@ -927,6 +926,7 @@
         </div>
     </div>
 
+    <!-- Medicine Modal, Distributor Modal, Sale Edit Modal -->
     <div id="medicine-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-md w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
             <div class="flex items-center justify-between border-b pb-2">
@@ -988,7 +988,6 @@
         </div>
     </div>
 
-    <!-- Distributor Rate Comparison Modal -->
     <div id="distributor-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-xl w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-2">
@@ -1004,7 +1003,6 @@
         </div>
     </div>
 
-    <!-- Sale Edit Modal -->
     <div id="sale-edit-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
         <div class="bg-white rounded-2xl max-w-md w-full p-4 sm:p-5 shadow-2xl flex flex-col gap-3">
             <div class="flex items-center justify-between border-b pb-2">
@@ -1315,47 +1313,46 @@
             return null;
         }
 
-        // Extremely Robust Mobile Camera Preprocessor
-        // Fixes orientation issues and preserves delicate handwriting strokes
+        // ==========================================
+        // 100% Robust Mobile Image Preprocessor
+        // Fixes memory crashes and rotation bugs on all mobile phones
+        // ==========================================
         async function enhanceImageLikeCamScanner(file) {
-            return new Promise(async (resolve) => {
-                try {
-                    // This is crucial for mobile: fixes portrait EXIF orientation automatically
-                    const imgBitmap = window.createImageBitmap ? await createImageBitmap(file, { imageOrientation: 'from-image' }) : null;
-                    
-                    if (!imgBitmap) throw new Error("Fallback to FileReader");
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDim = 2048; // Kept high for reading crisp text
 
-                    const canvas = document.getElementById('camscanner-canvas') || document.createElement('canvas');
-                    const ctx = canvas.getContext('2d', { willReadFrequently: true });
-                    
-                    // 1600px is the perfect balance for OCR clarity and keeping payload small for mobile networks
-                    let width = imgBitmap.width;
-                    let height = imgBitmap.height;
-                    const maxDim = 1600;
-                    if (width > maxDim || height > maxDim) {
-                        if (width > height) {
-                            height = Math.round((height * maxDim) / width);
-                            width = maxDim;
-                        } else {
-                            width = Math.round((width * maxDim) / height);
-                            height = maxDim;
+                        if (width > maxDim || height > maxDim) {
+                            if (width > height) {
+                                height = Math.round((height * maxDim) / width);
+                                width = maxDim;
+                            } else {
+                                width = Math.round((width * maxDim) / height);
+                                height = maxDim;
+                            }
                         }
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
 
-                    ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
-                    ctx.drawImage(imgBitmap, 0, 0, width, height);
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        ctx.drawImage(img, 0, 0, width, height);
 
-                    const base64Clean = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
-                    resolve(base64Clean);
-                } catch (err) {
-                    console.warn("Bitmap conversion failed, falling back", err);
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result.split(',')[1]);
-                    reader.readAsDataURL(file);
-                }
+                        const base64Clean = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+                        resolve(base64Clean);
+                    };
+                    img.onerror = () => reject(new Error("Image load failed"));
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => reject(new Error("File read failed"));
+                reader.readAsDataURL(file);
             });
         }
 
@@ -1392,7 +1389,7 @@
                 }
                 await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
             }
-            throw new Error('AI Vision connect nahi ho saka. Tasweer roshni mein dobara lein.');
+            throw new Error('AI Vision connect nahi ho saka. Internet check karein aur dobara try karein.');
         }
 
         window.getStoreConfig = function() {
@@ -1410,7 +1407,9 @@
 
         window.applyStoreIdentity = function() {
             const config = window.getStoreConfig();
-            const title = config.name || 'Digital Pharma';
+            
+            // App Main Title Fixed to Digital Pharma
+            const title = 'Digital Pharma';
             document.title = title + ' - Smart Pharmacy ERP & POS';
             
             const pageTitle = document.getElementById('html-page-title');
@@ -1419,11 +1418,19 @@
             const topName = document.getElementById('top-store-name');
             if (topName) topName.innerText = title;
 
+            // Hub Header dynamically shows Store Name or Guest Mode
             const hubName = document.getElementById('hub-header-name');
-            if (hubName) hubName.innerText = title;
+            if (hubName) {
+                if (authUser) {
+                    hubName.innerText = config.name || 'Store Profile';
+                } else {
+                    hubName.innerText = 'Guest Mode';
+                }
+            }
             
+            // Thermal Receipt strictly shows the Store Name
             const rTitle = document.getElementById('receipt-store-title');
-            if (rTitle) rTitle.innerText = title;
+            if (rTitle) rTitle.innerText = config.name || 'Digital Pharma';
             
             const rAddr = document.getElementById('receipt-store-address');
             if (rAddr) rAddr.innerText = config.address || 'Main Commercial Market';
@@ -1436,12 +1443,14 @@
 
             const avatarChar = document.getElementById('profile-avatar-char');
             if (avatarChar) {
-                avatarChar.innerText = (title.trim().charAt(0) || 'D').toUpperCase();
+                const dispName = authUser ? (config.name || 'S') : 'G';
+                avatarChar.innerText = dispName.trim().charAt(0).toUpperCase();
             }
 
             const hubAvatarChar = document.getElementById('hub-avatar-char');
             if (hubAvatarChar) {
-                hubAvatarChar.innerText = (title.trim().charAt(0) || 'D').toUpperCase();
+                const dispName = authUser ? (config.name || 'S') : 'G';
+                hubAvatarChar.innerText = dispName.trim().charAt(0).toUpperCase();
             }
         };
 
@@ -1909,8 +1918,7 @@
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
                 const prompt = `You are an expert Pakistani & global medical prescription OCR reader.
-CRITICAL INSTRUCTION: Never say the image is unreadable, blurry, or fail to process. Always make your best logical guess from whatever text is visible. Even if captured on a smartphone with shadows, lighting variations, or rushed handwriting, examine every word carefully.
-Decipher doctor handwriting, clinic slips, printed or handwritten doctor prescriptions.
+CRITICAL INSTRUCTION: Never say the image is unreadable, blurry, or fail to process. Make your absolute best guess for all fields even if captured on a smartphone with shadows, lighting variations, or rushed handwriting. DO NOT output error messages.
 Extract:
 - doctor (doctor name/clinic if legible)
 - patient (patient name/details if legible)
@@ -1930,7 +1938,7 @@ Return ONLY valid JSON matching this schema exactly:
                 const parsed = extractJsonObject(rawText);
 
                 if (!parsed || !parsed.medicines || parsed.medicines.length === 0) {
-                    throw new Error('AI could not parse standard data. Saaf photo roshni mein dobara lein.');
+                    throw new Error('AI Vision cannot extract text from this image. Ek aur pic try karein.');
                 }
 
                 document.getElementById('presc-doc-name').innerText = 'Doctor: ' + (parsed.doctor || 'Doctor details not found');
@@ -2005,7 +2013,7 @@ Return ONLY valid JSON matching this schema exactly:
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
                 const prompt = `You are an expert pharmacy wholesale bill OCR reader.
-CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Always make your best logical guess from whatever text is visible. Scan this wholesale distributor invoice (even if captured on a smartphone with shadows, dot-matrix print, or slight angle).
+CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Make your absolute best guess for all fields. Scan this wholesale distributor invoice (even if captured on a smartphone with shadows, dot-matrix print, or slight angle). DO NOT output error messages.
 Extract all medicine line items:
 - name (string: exact brand and mg strength)
 - generic (string: formula if mentioned, else empty)
@@ -2023,7 +2031,7 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
                 const items = extractJsonArray(rawText);
 
                 if (!items || !Array.isArray(items) || items.length === 0) {
-                    throw new Error('AI could not parse standard data. Tasweer roshni mein saaf lein aur dobara try karein.');
+                    throw new Error('AI Vision cannot extract text from this image. Ek aur pic try karein.');
                 }
 
                 const detectedDistributor = items.find(i => i.distributor)?.distributor || '';
@@ -2355,7 +2363,7 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
                 const prompt = `You are an expert pharmacy wholesale trade margin & discount auditor.
-CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Always make your best logical guess from whatever text is visible. Scan this distributor invoice (even if taken from a phone camera) and extract all line items to audit trade discounts and profit percentages.
+CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Make your absolute best guess for all fields. Scan this distributor invoice (even if taken from a phone camera) and extract all line items to audit trade discounts and profit percentages. DO NOT output error messages.
 Extract for each line:
 - name (string: brand name and dosage strength)
 - buyRate (number: wholesale invoice rate per pack)
@@ -2369,7 +2377,7 @@ Return ONLY a valid JSON array of objects.`;
                 const items = extractJsonArray(rawText);
 
                 if (!items || !Array.isArray(items) || items.length === 0) {
-                    throw new Error('AI could not parse standard data. Tasweer saaf lein aur dobara try karein.');
+                    throw new Error('AI Vision cannot extract text from this image. Ek aur pic try karein.');
                 }
 
                 window.marginScannedItems = items.map((item, idx) => ({
@@ -2768,7 +2776,7 @@ Return ONLY a valid JSON array of objects.`;
                 userEmailSpan.innerText = authUser.email;
             } else {
                 statusDot.className = 'w-2 h-2 rounded-full bg-amber-400 inline-block';
-                statusText.innerText = 'Guest Mode (Local Offline)';
+                statusText.innerText = 'Guest Mode (Local System)';
                 statusText.className = 'text-slate-600 font-semibold';
                 authPill.innerText = 'Guest';
                 authPill.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800';
@@ -2812,7 +2820,7 @@ Return ONLY a valid JSON array of objects.`;
             }
 
             if (!auth) {
-                showToast('Guest mode offline chal raha hai.', 'info');
+                showToast('Guest mode par chal raha hai.', 'info');
                 return;
             }
 
@@ -2836,7 +2844,7 @@ Return ONLY a valid JSON array of objects.`;
             }
 
             if (!auth) {
-                showToast('Guest mode offline chal raha hai.', 'info');
+                showToast('Guest mode par chal raha hai.', 'info');
                 return;
             }
 
@@ -2901,9 +2909,7 @@ Return ONLY a valid JSON array of objects.`;
                             hubHeaderStatus.innerText = 'Online Synced';
                             hubHeaderStatus.className = 'block leading-tight text-[9px] text-emerald-300 font-bold';
                         }
-                        if (hubAvatarChar) {
-                            hubAvatarChar.innerText = (user.email || 'D').charAt(0).toUpperCase();
-                        }
+                        window.applyStoreIdentity(); // Trigger name update
 
                         if (db) {
                             onSnapshot(collection(db, 'artifacts', appId, 'users', user.uid, 'medicines'), (snapshot) => {
@@ -2929,9 +2935,10 @@ Return ONLY a valid JSON array of objects.`;
                         }
                     } else {
                         if (hubHeaderStatus) {
-                            hubHeaderStatus.innerText = 'Guest / Local';
+                            hubHeaderStatus.innerText = 'Guest Mode (Local System)';
                             hubHeaderStatus.className = 'block leading-tight text-[9px] text-amber-300 font-medium';
                         }
+                        window.applyStoreIdentity(); // Trigger name update back to Guest
                     }
                     safeCreateIcons();
                 });
