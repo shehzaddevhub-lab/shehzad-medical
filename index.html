@@ -50,8 +50,9 @@
 
     <style>
         /* Force Browser Form Controls to Light Mode so Mobile Dark Mode Never Turns Text White-on-White */
-        html {
-            color-scheme: light !important;
+        :root, html, body {
+            color-scheme: light only !important;
+            forced-color-adjust: none !important;
         }
 
         /* Mobile Form Auto-Zoom Prevention & Universal Input Contrast Fix */
@@ -62,13 +63,30 @@
             }
         }
 
-        /* Prevent Mobile Browser Forced Dark Mode from Rendering White Text on White Inputs */
+        /* Prevent Mobile Browser Forced Dark Mode from Inverting Inputs */
         input:not(#global-search-input):not(#mobile-search-input), 
         select, 
         textarea {
             color: #0f172a !important;
             -webkit-text-fill-color: #0f172a !important;
             background-color: #ffffff !important;
+            caret-color: #0f172a !important;
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: #94a3b8 !important;
+            -webkit-text-fill-color: #94a3b8 !important;
+        }
+
+        /* Autofill contrast guard */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill,
+        select:-webkit-autofill {
+            -webkit-text-fill-color: #0f172a !important;
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
 
         /* Explicit Styling for Top Header Dark Search Inputs */
@@ -76,6 +94,12 @@
             color: #ffffff !important;
             -webkit-text-fill-color: #ffffff !important;
             background-color: #0f172a !important;
+            caret-color: #ffffff !important;
+        }
+
+        #global-search-input::placeholder, #mobile-search-input::placeholder {
+            color: #93c5fd !important;
+            -webkit-text-fill-color: #93c5fd !important;
         }
 
         /* Standard 80mm High-Contrast Thermal Slip Print Optimization */
@@ -307,7 +331,6 @@
 
             <!-- Two-Column Alerts & Sales History -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <!-- Stock & Expiry Alerts Container -->
                 <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-4">
                     <div>
                         <div class="flex items-center justify-between mb-2">
@@ -333,7 +356,6 @@
                     </div>
                 </div>
 
-                <!-- Recent Sales Activity & Invoice Management -->
                 <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col">
                     <div class="flex items-center justify-between mb-3 border-b pb-2">
                         <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
@@ -356,7 +378,7 @@
                         <h3 class="font-black text-slate-800 text-sm sm:text-base flex items-center gap-2">
                             <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-600"></i> Customer Bill Counter
                         </h3>
-                        <span class="text-[10px] bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full hidden sm:inline">Touch buttons ya Arrow keys & Enter use karein</span>
+                        <span class="text-[10px] bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full hidden sm:inline">Use Arrow keys & Enter for speed</span>
                     </div>
                     <button onclick="window.clearCartPrompt()" class="text-[11px] text-red-600 hover:text-red-700 font-bold flex items-center gap-1">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear Cart
@@ -367,13 +389,13 @@
                 <div class="relative">
                     <label class="block text-xs font-bold text-slate-600 mb-1">Dawai Search Karein (Type medicine name):</label>
                     <div class="relative">
-                        <input type="text" id="pos-search" placeholder="Search brand name or formula..." onkeydown="window.handlePosSearchKey(event)" class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 font-medium text-xs sm:text-sm">
+                        <input type="text" id="pos-search" placeholder="Search brand name or formula..." onkeydown="window.handlePosSearchKey(event)" class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 font-medium text-xs sm:text-sm text-slate-900">
                         <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
                     </div>
                     <div id="pos-search-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto z-20 divide-y divide-slate-100"></div>
                 </div>
 
-                <!-- Selected Item Config Bar with Touch-Friendly Unit Switcher -->
+                <!-- Selected Item Config Bar with Standard Dropdown -->
                 <div id="pos-item-config" class="bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-200 grid grid-cols-2 md:grid-cols-5 gap-2.5 items-end">
                     <div class="col-span-2 md:col-span-1">
                         <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">Selected Item:</span>
@@ -385,14 +407,10 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-1">Unit Type:</label>
-                        <div class="flex items-center gap-1 p-1 bg-slate-200/90 rounded-xl border border-slate-300">
-                            <button type="button" id="pos-unit-pack-btn" onclick="window.setPosUnitType('pack')" class="flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition bg-brand-700 text-white shadow-sm flex items-center justify-center gap-1 active:scale-95">
-                                <span>📦 Pack</span>
-                            </button>
-                            <button type="button" id="pos-unit-loose-btn" onclick="window.setPosUnitType('loose')" class="flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition text-slate-700 hover:bg-white flex items-center justify-center gap-1 active:scale-95">
-                                <span>💊 Loose</span>
-                            </button>
-                        </div>
+                        <select id="pos-unit-type" onchange="window.updatePosLivePriceHint()" oninput="window.updatePosLivePriceHint()" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="pack">📦 Full Pack</option>
+                            <option value="loose">💊 Loose / Tab</option>
+                        </select>
                     </div>
                     <div>
                         <div class="flex justify-between items-center mb-1">
@@ -683,6 +701,7 @@
 
     </main>
 
+    <!-- Mobile Fixed Bottom Navigation Bar -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/98 backdrop-blur-md border-t border-slate-200 px-2 py-2 z-40 flex items-center justify-around shadow-2xl">
         <button onclick="window.switchTab('dashboard')" id="mob-tab-dashboard" class="flex flex-col items-center p-1.5 text-brand-700 font-black">
             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
@@ -1066,8 +1085,11 @@
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div>
-                        <label class="block font-bold text-slate-600 mb-1">Pack Size (Tabs):</label>
-                        <input type="number" id="med-pack" value="20" min="1" required class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-center text-slate-900 bg-white">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block font-bold text-slate-600">Pack Size:</label>
+                            <span id="med-pack-hint" class="text-[9px] font-bold text-brand-600">Total: 20</span>
+                        </div>
+                        <input type="text" id="med-pack" value="20" required placeholder="e.g. 2x7 or 100" oninput="window.updateMedPackHintLive()" class="w-full px-2.5 py-1.5 border rounded-xl font-bold text-center text-slate-900 bg-white">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-600 mb-1">Batch Number:</label>
@@ -1172,7 +1194,48 @@
         let authUser = null;
         let deferredPrompt = null;
         let activePosSearchIndex = -1;
-        window.posSelectedUnit = 'pack'; // Default: Full Pack
+
+        // ==============================================================
+        // INTELLIGENT PHARMACY PACK SIZE PARSER
+        // Parses formats like "2x7", "10x10", "1 x 5", "200 tabs", "30"
+        // ==============================================================
+        function parsePackSize(packInput) {
+            if (!packInput && packInput !== 0) return { totalUnits: 20, displayText: '20 Tabs' };
+            const str = String(packInput).trim();
+            
+            // Check for multiplication expressions anywhere in string e.g. 2x7, 10x10, 1 x 5, 2*14
+            const multMatch = str.match(/(\d+)\s*[xX*]\s*(\d+)/);
+            if (multMatch) {
+                const p1 = parseInt(multMatch[1], 10) || 1;
+                const p2 = parseInt(multMatch[2], 10) || 1;
+                const total = p1 * p2;
+                return {
+                    totalUnits: total > 0 ? total : 20,
+                    displayText: `${p1}x${p2} (${total} Tabs)`
+                };
+            }
+
+            // Extract plain numbers
+            const numMatch = str.match(/\d+/);
+            if (numMatch) {
+                const total = parseInt(numMatch[0], 10) || 20;
+                return {
+                    totalUnits: total > 0 ? total : 20,
+                    displayText: `${total} Tabs`
+                };
+            }
+
+            return { totalUnits: 20, displayText: '20 Tabs' };
+        }
+        window.parsePackSize = parsePackSize;
+
+        window.updateMedPackHintLive = function() {
+            const input = document.getElementById('med-pack');
+            const hint = document.getElementById('med-pack-hint');
+            if (!input || !hint) return;
+            const parsed = parsePackSize(input.value);
+            hint.innerText = `Total: ${parsed.totalUnits} units/pack`;
+        };
 
         // Firebase Setup & Initialization
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'digital-pharma-erp';
@@ -1391,99 +1454,170 @@
         }
         window.safeCreateIcons = safeCreateIcons;
 
-        function extractJsonArray(text) {
-            if (!text || typeof text !== 'string') return null;
+        // Universal Resilient JSON Parser
+        function extractSmartJson(rawText) {
+            if (!rawText || typeof rawText !== 'string') return null;
             try {
-                return JSON.parse(text);
-            } catch (e) {
-                try {
-                    const cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-                    const startIdx = cleaned.indexOf('[');
-                    const endIdx = cleaned.lastIndexOf(']');
-                    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
-                        return JSON.parse(cleaned.substring(startIdx, endIdx + 1));
-                    }
-                } catch (err2) {}
+                return JSON.parse(rawText);
+            } catch (e) {}
+
+            const cleaned = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+            try {
+                return JSON.parse(cleaned);
+            } catch (e) {}
+
+            // Try finding array
+            const sArr = cleaned.indexOf('[');
+            const eArr = cleaned.lastIndexOf(']');
+            if (sArr !== -1 && eArr > sArr) {
+                try { return JSON.parse(cleaned.substring(sArr, eArr + 1)); } catch(e) {}
+            }
+
+            // Try finding object
+            const sObj = cleaned.indexOf('{');
+            const eObj = cleaned.lastIndexOf('}');
+            if (sObj !== -1 && eObj > sObj) {
+                try { return JSON.parse(cleaned.substring(sObj, eObj + 1)); } catch(e) {}
             }
             return null;
         }
 
-        function extractJsonObject(text) {
-            if (!text || typeof text !== 'string') return null;
-            try {
-                return JSON.parse(text);
-            } catch (e) {
-                try {
-                    const cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-                    const startIdx = cleaned.indexOf('{');
-                    const endIdx = cleaned.lastIndexOf('}');
-                    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
-                        return JSON.parse(cleaned.substring(startIdx, endIdx + 1));
-                    }
-                } catch (err2) {}
+        // Normalizes any prescription output format so mobile OCR never fails
+        function normalizePrescriptionData(parsed) {
+            if (!parsed) return null;
+            let meds = [];
+            if (Array.isArray(parsed)) {
+                meds = parsed;
+            } else if (Array.isArray(parsed.medicines)) {
+                meds = parsed.medicines;
+            } else if (Array.isArray(parsed.items)) {
+                meds = parsed.items;
+            } else if (Array.isArray(parsed.drugs)) {
+                meds = parsed.drugs;
+            } else if (Array.isArray(parsed.prescription)) {
+                meds = parsed.prescription;
+            } else if (parsed.medicines && typeof parsed.medicines === 'object') {
+                meds = Object.values(parsed.medicines);
             }
-            return null;
+
+            return {
+                doctor: parsed.doctor || parsed.doctor_name || parsed.clinic || 'Doctor Prescription',
+                patient: parsed.patient || parsed.patient_name || 'Patient',
+                advice: parsed.advice || parsed.precautions || parsed.instructions || 'Dawai waqt par lein aur doctor se follow-up karein.',
+                medicines: meds.filter(m => m && (m.name || m.medicine || m.brand)).map(m => ({
+                    name: m.name || m.medicine || m.brand || 'Medicine',
+                    formula: m.formula || m.generic || m.salt || '',
+                    form: m.form || m.type || 'Tab/Cap',
+                    timing: m.timing || m.dosage || m.schedule || '1+0+1 (Doctor ki hidayat ke mutabiq)',
+                    purpose: m.purpose || m.indication || m.use || 'Treatment'
+                }))
+            };
         }
 
-        // ==============================================================
-        // 100% Reliable Mobile Camera Compressor (iOS & Android Safe)
-        // Eliminates 20MB crashes & converts photos to crisp 1280px JPEG
-        // ==============================================================
+        // Normalizes any wholesale invoice items output so bill OCR never fails
+        function normalizeInvoiceItems(parsed) {
+            if (!parsed) return [];
+            let list = [];
+            if (Array.isArray(parsed)) {
+                list = parsed;
+            } else if (Array.isArray(parsed.items)) {
+                list = parsed.items;
+            } else if (Array.isArray(parsed.medicines)) {
+                list = parsed.medicines;
+            } else if (Array.isArray(parsed.invoicedItems)) {
+                list = parsed.invoicedItems;
+            } else if (Array.isArray(parsed.lines)) {
+                list = parsed.lines;
+            }
+            return list.filter(item => item && (item.name || item.item || item.description)).map(item => ({
+                name: item.name || item.item || item.description || 'Medicine',
+                generic: item.generic || item.formula || '',
+                batch: item.batch || item.batch_no || item.batchNumber || 'B-01',
+                expiry: item.expiry || item.exp || '',
+                packSize: item.packSize || item.pack_size || item.pack || '20',
+                qty: Number(item.qty || item.quantity || item.packs || 1) || 1,
+                buyRate: Number(item.buyRate || item.rate || item.tradePrice || item.tp || 0) || 0,
+                distributor: item.distributor || item.supplier || '',
+                mrp: '' // Strictly blank for physical verification
+            }));
+        }
+
         async function enhanceImageLikeCamScanner(file) {
-            return new Promise((resolve, reject) => {
-                if (!file) {
-                    reject(new Error("Tasweer select nahi hui."));
-                    return;
+            if (!file) throw new Error("Tasweer select nahi hui.");
+            
+            let sourceWidth = 0;
+            let sourceHeight = 0;
+            let drawSource = null;
+            let bitmap = null;
+
+            // Attempt native orientation normalization
+            try {
+                if (window.createImageBitmap) {
+                    bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+                    sourceWidth = bitmap.width;
+                    sourceHeight = bitmap.height;
+                    drawSource = bitmap;
                 }
+            } catch(e) {
+                bitmap = null;
+            }
 
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        try {
-                            let width = img.naturalWidth || img.width;
-                            let height = img.naturalHeight || img.height;
-                            const maxDim = 1280; // High OCR clarity while payload remains ~200KB
+            if (!bitmap) {
+                // Reliable FileReader fallback
+                const dataUrl = await new Promise((resolve, reject) => {
+                    const r = new FileReader();
+                    r.onload = () => resolve(r.target.result);
+                    r.onerror = () => reject(new Error("File read fail ho gayi."));
+                    r.readAsDataURL(file);
+                });
 
-                            if (width > maxDim || height > maxDim) {
-                                if (width > height) {
-                                    height = Math.round((height * maxDim) / width);
-                                    width = maxDim;
-                                } else {
-                                    width = Math.round((width * maxDim) / height);
-                                    height = maxDim;
-                                }
-                            }
+                const img = await new Promise((resolve, reject) => {
+                    const i = new Image();
+                    i.onload = () => resolve(i);
+                    i.onerror = () => reject(new Error("Image format load nahi ho saka."));
+                    i.src = dataUrl;
+                });
 
-                            const canvas = document.createElement('canvas');
-                            canvas.width = width;
-                            canvas.height = height;
-                            const ctx = canvas.getContext('2d');
+                sourceWidth = img.naturalWidth || img.width;
+                sourceHeight = img.naturalHeight || img.height;
+                drawSource = img;
+            }
 
-                            // Solid white background to prevent transparent PNG artifacts
-                            ctx.fillStyle = '#ffffff';
-                            ctx.fillRect(0, 0, width, height);
+            // Downscale to 1400px to maintain crisp OCR while preventing mobile memory errors
+            const maxDim = 1400;
+            let width = sourceWidth;
+            let height = sourceHeight;
+            if (width > maxDim || height > maxDim) {
+                if (width > height) {
+                    height = Math.round((height * maxDim) / width);
+                    width = maxDim;
+                } else {
+                    width = Math.round((width * maxDim) / height);
+                    height = maxDim;
+                }
+            }
 
-                            ctx.imageSmoothingEnabled = true;
-                            ctx.imageSmoothingQuality = 'high';
-                            ctx.drawImage(img, 0, 0, width, height);
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
 
-                            const base64Clean = canvas.toDataURL('image/jpeg', 0.82).split(',')[1];
-                            if (base64Clean) {
-                                resolve(base64Clean);
-                            } else {
-                                reject(new Error("Image process nahi ho saki."));
-                            }
-                        } catch (err) {
-                            reject(err);
-                        }
-                    };
-                    img.onerror = () => reject(new Error("Image format load nahi ho saka."));
-                    img.src = e.target.result;
-                };
-                reader.onerror = () => reject(new Error("File read fail ho gayi."));
-                reader.readAsDataURL(file);
-            });
+            // Solid white background to eliminate transparency artifacts
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(drawSource, 0, 0, width, height);
+
+            if (bitmap && typeof bitmap.close === 'function') {
+                bitmap.close();
+            }
+
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+            const base64 = dataUrl.split(',')[1];
+            if (!base64) throw new Error("Image process nahi ho saki.");
+            return base64;
         }
 
         async function callGeminiVisionWithBackoff(prompt, base64Data, retries = 3) {
@@ -1515,7 +1649,7 @@
                         if (text) return text;
                     }
                 } catch (e) {
-                    // Retry on network glitch
+                    // Retry on temporary network drop
                 }
                 await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
             }
@@ -1538,7 +1672,7 @@
         window.applyStoreIdentity = function() {
             const config = window.getStoreConfig();
             
-            // App Branding remains Digital Pharma
+            // App Branding remains strictly Digital Pharma
             document.title = 'Digital Pharma - Smart Pharmacy ERP & POS';
             const pageTitle = document.getElementById('html-page-title');
             if (pageTitle) pageTitle.innerText = 'Digital Pharma - Smart Pharmacy ERP & POS';
@@ -1669,7 +1803,6 @@
             }
         });
 
-        // Fast Arrow & Enter Keyboard Control for Counter Billing
         window.handlePosSearchKey = function(event) {
             const resultsContainer = document.getElementById('pos-search-results');
             const resultItems = resultsContainer.querySelectorAll('.pos-result-row');
@@ -1734,15 +1867,18 @@
             if (matches.length === 0) {
                 results.innerHTML = `<p class="p-3 text-xs text-slate-400 text-center">Koi medicine nahi mili.</p>`;
             } else {
-                results.innerHTML = matches.map((m) => `
-                    <div tabindex="0" onclick="window.selectMedicineForPos('${m.id}')" class="pos-result-row p-2.5 hover:bg-brand-50 outline-none cursor-pointer flex justify-between items-center text-xs transition">
-                        <div>
-                            <strong class="text-slate-800 text-xs">${m.name}</strong>
-                            <span class="text-[10px] text-slate-400 block">Stock: ${m.stock} packs (${m.packSize || 1} tabs/pack) • Batch: ${m.batch || 'B-01'}</span>
+                results.innerHTML = matches.map((m) => {
+                    const packInfo = parsePackSize(m.packSize);
+                    return `
+                        <div tabindex="0" onclick="window.selectMedicineForPos('${m.id}')" class="pos-result-row p-2.5 hover:bg-brand-50 outline-none cursor-pointer flex justify-between items-center text-xs transition">
+                            <div>
+                                <strong class="text-slate-800 text-xs">${m.name}</strong>
+                                <span class="text-[10px] text-slate-400 block">Stock: ${m.stock} packs (${packInfo.displayText}) • Batch: ${m.batch || 'B-01'}</span>
+                            </div>
+                            <span class="font-black text-emerald-700 text-xs">Rs. ${Number(m.mrp).toFixed(2)}</span>
                         </div>
-                        <span class="font-black text-emerald-700 text-xs">Rs. ${Number(m.mrp).toFixed(2)}</span>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
             results.classList.remove('hidden');
         };
@@ -1751,48 +1887,25 @@
             const med = medicines.find(m => m.id === id);
             if (!med) return;
             currentSelectedMed = med;
-            window.posSelectedUnit = 'pack'; // Reset to pack on new selection
+
+            const packInfo = parsePackSize(med.packSize);
+            const totalTabs = Math.floor(med.stock * packInfo.totalUnits);
 
             document.getElementById('pos-selected-title').innerText = med.name;
-            document.getElementById('pos-selected-stock').innerText = `${med.stock} packs (${med.stock * (med.packSize || 1)} tabs)`;
+            document.getElementById('pos-selected-stock').innerText = `${med.stock} packs (${totalTabs} tabs)`;
             document.getElementById('pos-search-results').classList.add('hidden');
             document.getElementById('pos-search').value = '';
             
-            // Sync unit buttons UI
-            window.setPosUnitType('pack');
+            const unitSelect = document.getElementById('pos-unit-type');
+            if (unitSelect) unitSelect.value = 'pack';
 
             const qtyInput = document.getElementById('pos-qty');
-            if (qtyInput) {
-                qtyInput.value = '1';
-            }
+            if (qtyInput) qtyInput.value = '1';
+
             window.updatePosLivePriceHint();
         };
 
-        // Mobile-Friendly Unit Switcher (Pack vs Loose Goli)
-        window.setPosUnitType = function(type) {
-            window.posSelectedUnit = type;
-            const packBtn = document.getElementById('pos-unit-pack-btn');
-            const looseBtn = document.getElementById('pos-unit-loose-btn');
-
-            if (type === 'pack') {
-                if (packBtn) {
-                    packBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition bg-brand-700 text-white shadow-sm flex items-center justify-center gap-1';
-                }
-                if (looseBtn) {
-                    looseBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition text-slate-700 hover:bg-white flex items-center justify-center gap-1';
-                }
-            } else {
-                if (packBtn) {
-                    packBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition text-slate-700 hover:bg-white flex items-center justify-center gap-1';
-                }
-                if (looseBtn) {
-                    looseBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs font-black transition bg-emerald-600 text-white shadow-sm flex items-center justify-center gap-1';
-                }
-            }
-            window.updatePosLivePriceHint();
-        };
-
-        // Live Price & Total Indicator for Cashier Accuracy
+        // Accurately divides Pack MRP by total parsed units in pack
         window.updatePosLivePriceHint = function() {
             const badge = document.getElementById('pos-calc-rate-badge');
             if (!badge) return;
@@ -1802,19 +1915,21 @@
                 return;
             }
 
-            const packSize = Math.max(1, Number(currentSelectedMed.packSize) || 1);
+            const packInfo = parsePackSize(currentSelectedMed.packSize);
+            const totalUnits = Math.max(1, packInfo.totalUnits);
             const mrp = Number(currentSelectedMed.mrp) || 0;
             const qty = Math.max(1, parseInt(document.getElementById('pos-qty')?.value) || 1);
+            const unitType = document.getElementById('pos-unit-type')?.value || 'pack';
 
-            if (window.posSelectedUnit === 'loose') {
-                const perTabPrice = mrp / packSize;
+            if (unitType === 'loose') {
+                const perTabPrice = mrp / totalUnits;
                 const total = perTabPrice * qty;
-                badge.innerText = `Rs. ${perTabPrice.toFixed(2)}/tab (Total: Rs. ${total.toFixed(2)})`;
-                badge.className = 'text-[9px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full';
+                badge.innerText = `Rs. ${perTabPrice.toFixed(2)}/tab (Tot: Rs. ${total.toFixed(2)})`;
+                badge.className = 'text-[9px] font-black text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded truncate max-w-[130px]';
             } else {
                 const total = mrp * qty;
-                badge.innerText = `Rs. ${mrp.toFixed(2)}/pack (Total: Rs. ${total.toFixed(2)})`;
-                badge.className = 'text-[9px] font-black text-brand-800 bg-brand-100 px-2 py-0.5 rounded-full';
+                badge.innerText = `Rs. ${mrp.toFixed(2)}/pack (Tot: Rs. ${total.toFixed(2)})`;
+                badge.className = 'text-[9px] font-black text-brand-800 bg-brand-100 px-1.5 py-0.5 rounded truncate max-w-[130px]';
             }
         };
 
@@ -1825,29 +1940,37 @@
                 return;
             }
 
-            const unitType = window.posSelectedUnit || 'pack';
-            const qty = parseInt(document.getElementById('pos-qty').value) || 1;
-            if (qty <= 0) return;
+            const unitSelect = document.getElementById('pos-unit-type');
+            const unitType = unitSelect ? unitSelect.value : 'pack';
+            const qty = Math.max(1, parseInt(document.getElementById('pos-qty')?.value) || 1);
+
+            const packInfo = parsePackSize(currentSelectedMed.packSize);
+            const totalUnits = Math.max(1, packInfo.totalUnits);
+            const mrp = Number(currentSelectedMed.mrp) || 0;
 
             let pricePerUnit = 0;
             let stockDeduction = 0;
-            const packSize = Math.max(1, Number(currentSelectedMed.packSize) || 1);
-            const mrp = Number(currentSelectedMed.mrp) || 0;
+            let displayUnit = '';
 
-            if (unitType === 'pack') {
-                pricePerUnit = mrp;
-                stockDeduction = qty;
-                if (currentSelectedMed.stock < stockDeduction) {
-                    showToast('Stock kam hai! Mojood stock: ' + currentSelectedMed.stock + ' packs', 'error');
+            if (unitType === 'loose') {
+                // Strictly calculate per-loose tablet price
+                pricePerUnit = mrp / totalUnits;
+                stockDeduction = qty / totalUnits;
+                displayUnit = 'Loose / Tab';
+
+                const totalTabsAvailable = currentSelectedMed.stock * totalUnits;
+                if (totalTabsAvailable < qty) {
+                    showToast(`Stock kam hai! Mojood tabs: ${Math.floor(totalTabsAvailable)}`, 'error');
                     return;
                 }
             } else {
-                // Strictly calculate per-loose tablet price
-                pricePerUnit = mrp / packSize;
-                stockDeduction = qty / packSize;
-                const totalTabsAvailable = currentSelectedMed.stock * packSize;
-                if (totalTabsAvailable < qty) {
-                    showToast('Stock kam hai! Mojood tabs: ' + totalTabsAvailable, 'error');
+                // Full pack rate
+                pricePerUnit = mrp;
+                stockDeduction = qty;
+                displayUnit = `Pack (${packInfo.displayText})`;
+
+                if (currentSelectedMed.stock < stockDeduction) {
+                    showToast(`Stock kam hai! Mojood stock: ${currentSelectedMed.stock} packs`, 'error');
                     return;
                 }
             }
@@ -1857,7 +1980,7 @@
                 id: currentSelectedMed.id,
                 name: currentSelectedMed.name,
                 unitType: unitType,
-                displayUnit: unitType === 'pack' ? 'Pack' : 'Tab (Loose)',
+                displayUnit: displayUnit,
                 qty: qty,
                 price: pricePerUnit,
                 total: itemTotal,
@@ -1868,7 +1991,8 @@
             document.getElementById('pos-selected-title').innerText = 'Koi Select Nahi';
             document.getElementById('pos-selected-stock').innerText = '0';
             document.getElementById('pos-qty').value = '1';
-            window.setPosUnitType('pack');
+            if (unitSelect) unitSelect.value = 'pack';
+            window.updatePosLivePriceHint();
 
             renderCartTable();
             window.calculateCartTotals();
@@ -2095,26 +2219,29 @@
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `You are an expert Pakistani & global medical prescription OCR reader.
-CRITICAL INSTRUCTION: Never say the image is unreadable, blurry, or fail to process. Always make your best logical guess from whatever text is visible. Even if captured on a smartphone with shadows, lighting variations, or rushed handwriting, examine every word carefully.
-Decipher doctor handwriting, clinic slips, printed or handwritten doctor prescriptions.
-Extract:
-- doctor (doctor name/clinic if legible)
-- patient (patient name/details if legible)
-- advice (special precautions, diet or follow up in Roman Urdu/English)
-- medicines array of objects:
-  - name: medicine brand name and potency e.g. Augmentin 625mg
-  - formula: generic salt
-  - form: Tablet / Syrup / Injection / Drops / Capsule
-  - timing: dosage instructions in Roman Urdu e.g. 1 goli subah aur sham khaney ke baad (1+0+1)
-  - purpose: therapeutic use e.g. Bukhar / Infection / Dard
+                const prompt = `You are an expert clinical medical prescription and doctor slip reader.
+Examine this medical prescription or slip carefully (even if handwritten, photographed on a mobile camera, in low light, angled, or has shadows).
+CRITICAL INSTRUCTION: Never say the image is unreadable or blurry. Always extract all legible medicine names, potencies, formulations, dosages, and instructions from whatever text or lines are visible. If a brand name is partially legible, deduce the most likely medicine name based on standard pharmacy practice.
 
-Do NOT hallucinate medicines that aren't on the paper. Extract all decipherable medicines.
-Return ONLY valid JSON matching this schema exactly:
-{"doctor":"","patient":"","advice":"","medicines":[{"name":"","formula":"","form":"","timing":"","purpose":""}]}`;
+Return a JSON object with this exact schema:
+{
+  "doctor": "Doctor name or clinic name if legible, else empty string",
+  "patient": "Patient name or details if legible, else empty string",
+  "advice": "General precautions, diet or follow up advice in Roman Urdu or English",
+  "medicines": [
+    {
+      "name": "Medicine brand name and potency e.g. Augmentin 625mg",
+      "formula": "Generic salt e.g. Co-Amoxiclav",
+      "form": "Tablet, Capsule, Syrup, Injection, Drops, Ointment, etc.",
+      "timing": "Dosage instructions in Roman Urdu e.g. 1 goli subah aur sham (1+0+1)",
+      "purpose": "Therapeutic indication e.g. Bukhar, Dard, Infection"
+    }
+  ]
+}`;
 
                 const rawText = await callGeminiVisionWithBackoff(prompt, base64Data);
-                const parsed = extractJsonObject(rawText);
+                const rawParsed = extractSmartJson(rawText);
+                const parsed = normalizePrescriptionData(rawParsed);
 
                 if (!parsed || !parsed.medicines || parsed.medicines.length === 0) {
                     throw new Error('AI could not parse standard data. Saaf photo roshni mein dobara lein.');
@@ -2191,25 +2318,27 @@ Return ONLY valid JSON matching this schema exactly:
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `You are an expert pharmacy wholesale bill OCR reader.
-CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Always make your best logical guess from whatever text is visible. Scan this wholesale distributor invoice (even if captured on a smartphone with shadows, dot-matrix print, or slight angle).
-Extract all medicine line items:
-- name (string: exact brand and mg strength)
-- generic (string: formula if mentioned, else empty)
-- batch (string: batch number, else empty)
-- expiry (string: YYYY-MM-DD if visible, else empty)
-- packSize (number of units per pack, default 20)
-- qty (number: packs purchased)
-- buyRate (number: wholesale invoice rate per pack)
-- distributor (string: distributor name from top header if visible, else empty)
+                const prompt = `You are an expert pharmacy wholesale bill and distributor invoice OCR reader.
+Scan this wholesale distributor invoice or bill (even if taken on a mobile camera, angled, dotted matrix print, or shaded).
+CRITICAL INSTRUCTION: Never fail or claim the image is unreadable. Always extract all medicine line items you can find on the invoice.
+Extract for each item:
+- name: brand name and strength (e.g. Panadol 500mg, Augmentin 625mg)
+- generic: generic formula if visible, else empty string
+- batch: batch number if visible, else empty string
+- expiry: expiration date in YYYY-MM-DD if visible, else empty string
+- packSize: pack size as a string or number e.g. "2x7", "10x10", "20"
+- qty: quantity of packs purchased (integer)
+- buyRate: wholesale invoiced buy rate per pack (number)
+- distributor: supplier or distributor name from the header if visible, else empty string
 
-STRICT RULE: Leave 'mrp' completely blank/empty string (""). Do not guess MRP. Pharmacist enters MRP manually.
-Return ONLY a valid JSON array of objects exactly matching this schema.`;
+STRICT RULE: Leave 'mrp' as an empty string (""). Pharmacist enters MRP manually.
+Return a JSON array of objects.`;
 
                 const rawText = await callGeminiVisionWithBackoff(prompt, base64Data);
-                const items = extractJsonArray(rawText);
+                const rawParsed = extractSmartJson(rawText);
+                const items = normalizeInvoiceItems(rawParsed);
 
-                if (!items || !Array.isArray(items) || items.length === 0) {
+                if (!items || items.length === 0) {
                     throw new Error('AI could not parse standard data. Tasweer roshni mein saaf lein aur dobara try karein.');
                 }
 
@@ -2222,7 +2351,7 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
                     generic: item.generic || '',
                     batch: item.batch || 'B-' + Math.floor(100 + Math.random() * 900),
                     expiry: item.expiry || new Date(Date.now() + 365*24*60*60*1000).toISOString().split('T')[0],
-                    packSize: Number(item.packSize) || 20,
+                    packSize: item.packSize || '20',
                     qty: Number(item.qty) || 1,
                     buyRate: Number(item.buyRate) || 100,
                     mrp: '', // Strictly empty for manual box check
@@ -2279,7 +2408,7 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
 
         window.updateScannedItem = function(idx, field, value) {
             if (aiExtractedBuffer[idx]) {
-                aiExtractedBuffer[idx][field] = (field === 'qty' || field === 'buyRate' || field === 'mrp' || field === 'packSize') ? Number(value) : value;
+                aiExtractedBuffer[idx][field] = (field === 'qty' || field === 'buyRate' || field === 'mrp') ? Number(value) : value;
             }
         };
 
@@ -2323,7 +2452,7 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
                         name: item.name,
                         generic: item.generic || '',
                         distributor: dist,
-                        packSize: item.packSize || 20,
+                        packSize: item.packSize || '20',
                         batch: item.batch || 'B-' + Math.floor(100 + Math.random() * 900),
                         expiry: item.expiry || '',
                         buyRate: Number(item.buyRate),
@@ -2361,35 +2490,38 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
                 return;
             }
 
-            tbody.innerHTML = filtered.map(m => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-3">
-                        <strong class="text-slate-900 block">${m.name}</strong>
-                        <span class="text-[10px] text-slate-400">${m.generic || 'Formula'}</span>
-                    </td>
-                    <td class="p-3 text-slate-600 font-semibold">${m.distributor || 'General'}</td>
-                    <td class="p-3 text-slate-500 font-semibold">${m.packSize || 1} Tabs</td>
-                    <td class="p-3 font-mono text-slate-700">${m.batch || '-'}</td>
-                    <td class="p-3 text-slate-600">${m.expiry || '-'}</td>
-                    <td class="p-3 text-right font-bold text-slate-600">Rs. ${Number(m.buyRate).toFixed(2)}</td>
-                    <td class="p-3 text-right font-black text-emerald-700">Rs. ${Number(m.mrp).toFixed(2)}</td>
-                    <td class="p-3 text-center">
-                        <span class="px-2 py-0.5 rounded-full font-black text-xs ${m.stock < 10 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
-                            ${m.stock}
-                        </span>
-                    </td>
-                    <td class="p-3 text-center">
-                        <div class="flex items-center justify-center gap-1">
-                            <button onclick="window.openEditMedicineModal('${m.id}')" class="p-1 text-slate-500 hover:text-brand-600">
-                                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                            </button>
-                            <button onclick="window.deleteMedicinePrompt('${m.id}')" class="p-1 text-slate-400 hover:text-red-600">
-                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = filtered.map(m => {
+                const packInfo = parsePackSize(m.packSize);
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3">
+                            <strong class="text-slate-900 block">${m.name}</strong>
+                            <span class="text-[10px] text-slate-400">${m.generic || 'Formula'}</span>
+                        </td>
+                        <td class="p-3 text-slate-600 font-semibold">${m.distributor || 'General'}</td>
+                        <td class="p-3 text-slate-700 font-bold">${packInfo.displayText}</td>
+                        <td class="p-3 font-mono text-slate-700">${m.batch || '-'}</td>
+                        <td class="p-3 text-slate-600">${m.expiry || '-'}</td>
+                        <td class="p-3 text-right font-bold text-slate-600">Rs. ${Number(m.buyRate).toFixed(2)}</td>
+                        <td class="p-3 text-right font-black text-emerald-700">Rs. ${Number(m.mrp).toFixed(2)}</td>
+                        <td class="p-3 text-center">
+                            <span class="px-2 py-0.5 rounded-full font-black text-xs ${m.stock < 10 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
+                                ${m.stock}
+                            </span>
+                        </td>
+                        <td class="p-3 text-center">
+                            <div class="flex items-center justify-center gap-1">
+                                <button onclick="window.openEditMedicineModal('${m.id}')" class="p-1 text-slate-500 hover:text-brand-600">
+                                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button onclick="window.deleteMedicinePrompt('${m.id}')" class="p-1 text-slate-400 hover:text-red-600">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
             safeCreateIcons();
         }
 
@@ -2401,6 +2533,8 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
             document.getElementById('medicine-modal-title').innerText = 'Nayi Medicine Shamil Karein';
             document.getElementById('medicine-form').reset();
             document.getElementById('med-id').value = '';
+            document.getElementById('med-pack').value = '20';
+            window.updateMedPackHintLive();
             document.getElementById('medicine-modal').classList.remove('hidden');
         };
 
@@ -2412,12 +2546,13 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
             document.getElementById('med-name').value = med.name;
             document.getElementById('med-generic').value = med.generic || '';
             document.getElementById('med-distributor').value = med.distributor || '';
-            document.getElementById('med-pack').value = med.packSize || 20;
+            document.getElementById('med-pack').value = med.packSize || '20';
             document.getElementById('med-batch').value = med.batch || '';
             document.getElementById('med-expiry').value = med.expiry || '';
             document.getElementById('med-buy').value = med.buyRate;
             document.getElementById('med-mrp').value = med.mrp;
             document.getElementById('med-stock').value = med.stock;
+            window.updateMedPackHintLive();
             document.getElementById('medicine-modal').classList.remove('hidden');
         };
 
@@ -2433,7 +2568,7 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
                 name: document.getElementById('med-name').value.trim(),
                 generic: document.getElementById('med-generic').value.trim(),
                 distributor: document.getElementById('med-distributor').value.trim() || 'General',
-                packSize: Number(document.getElementById('med-pack').value) || 20,
+                packSize: document.getElementById('med-pack').value.trim() || '20',
                 batch: document.getElementById('med-batch').value.trim(),
                 expiry: document.getElementById('med-expiry').value,
                 buyRate: Number(document.getElementById('med-buy').value),
@@ -2541,30 +2676,35 @@ Return ONLY a valid JSON array of objects exactly matching this schema.`;
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `You are an expert pharmacy wholesale trade margin & discount auditor.
-CRITICAL INSTRUCTION: Never say the image is unreadable or fail to process. Always make your best logical guess from whatever text is visible. Scan this distributor invoice (even if taken from a phone camera) and extract all line items to audit trade discounts and profit percentages.
+                const prompt = `You are an expert pharmacy wholesale trade margin and bonus scheme auditor.
+Scan this wholesale distributor bill or invoice to extract line items for profit percentage auditing.
+CRITICAL INSTRUCTION: Never claim the image is unreadable. Extract whatever medicine rows are visible.
 Extract for each line:
-- name (string: brand name and dosage strength)
-- buyRate (number: wholesale invoice rate per pack)
-- qty (number: invoiced quantity purchased, default 1)
-- freeQty (number: bonus/scheme packs received free e.g. 1 in 10+1 scheme, default 0)
+- name: medicine name and potency
+- buyRate: wholesale invoiced rate per pack (number)
+- qty: quantity of packs invoiced (integer, default 1)
+- freeQty: bonus or free scheme packs received (integer, default 0, e.g. 1 free in a 10+1 scheme)
 
-STRICT RULE: Do NOT populate or guess MRP. Pharmacist enters MRP manually.
-Return ONLY a valid JSON array of objects.`;
+STRICT RULE: Leave 'mrp' as an empty string ("").
+Return a JSON array of objects.`;
 
                 const rawText = await callGeminiVisionWithBackoff(prompt, base64Data);
-                const items = extractJsonArray(rawText);
+                const rawParsed = extractSmartJson(rawText);
+                let items = [];
+                if (Array.isArray(rawParsed)) items = rawParsed;
+                else if (Array.isArray(rawParsed?.items)) items = rawParsed.items;
+                else if (Array.isArray(rawParsed?.medicines)) items = rawParsed.medicines;
 
-                if (!items || !Array.isArray(items) || items.length === 0) {
+                if (!items || items.length === 0) {
                     throw new Error('AI could not parse standard data. Tasweer saaf lein aur dobara try karein.');
                 }
 
                 window.marginScannedItems = items.map((item, idx) => ({
                     id: idx,
                     name: item.name || 'Medicine ' + (idx + 1),
-                    buyRate: Number(item.buyRate) || 0,
-                    qty: Number(item.qty) || 1,
-                    freeQty: Number(item.freeQty) || 0,
+                    buyRate: Number(item.buyRate || item.rate) || 0,
+                    qty: Number(item.qty || item.quantity) || 1,
+                    freeQty: Number(item.freeQty || item.free || item.bonus) || 0,
                     mrp: ''
                 }));
 
@@ -2682,15 +2822,18 @@ Return ONLY a valid JSON array of objects.`;
             let html = '';
             if (myMatch.length > 0) {
                 html += `<div class="p-1.5 text-[10px] font-black uppercase text-brand-700 bg-brand-50 rounded">Aap Ke Store Ka Stock:</div>`;
-                html += myMatch.map(m => `
-                    <div class="p-2 hover:bg-slate-50 flex items-center justify-between text-xs">
-                        <div>
-                            <strong class="text-slate-800">${m.name}</strong>
-                            <span class="text-[10px] text-slate-400 block">Stock: ${m.stock} Packs (${m.batch || 'B-01'})</span>
+                html += myMatch.map(m => {
+                    const packInfo = parsePackSize(m.packSize);
+                    return `
+                        <div class="p-2 hover:bg-slate-50 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-800">${m.name}</strong>
+                                <span class="text-[10px] text-slate-400 block">Stock: ${m.stock} Packs (${packInfo.displayText}) • Batch: ${m.batch || 'B-01'}</span>
+                            </div>
+                            <span class="font-black text-emerald-700">Rs. ${m.mrp.toFixed(2)}</span>
                         </div>
-                        <span class="font-black text-emerald-700">Rs. ${m.mrp.toFixed(2)}</span>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             } else {
                 html += `<div class="p-2 text-xs text-amber-700 bg-amber-50 rounded font-semibold">Aap ke paas yeh medicine khatam hai.</div>`;
             }
@@ -2755,69 +2898,80 @@ Return ONLY a valid JSON array of objects.`;
         };
 
         function renderDashboardMetrics() {
-            document.getElementById('dash-total-items').innerText = medicines.length;
-            const stockCost = medicines.reduce((sum, m) => sum + (m.buyRate * m.stock), 0);
-            document.getElementById('dash-total-value').innerText = 'Rs. ' + stockCost.toLocaleString('en-PK', { maximumFractionDigits: 0 });
+            const elTotalItems = document.getElementById('dash-total-items');
+            if (elTotalItems) elTotalItems.innerText = medicines.length;
 
-            const lowStock = medicines.filter(m => m.stock < 10);
-            document.getElementById('dash-low-stock').innerText = lowStock.length;
+            const stockCost = medicines.reduce((sum, m) => sum + ((Number(m.buyRate) || 0) * (Number(m.stock) || 0)), 0);
+            const elTotalValue = document.getElementById('dash-total-value');
+            if (elTotalValue) elTotalValue.innerText = 'Rs. ' + stockCost.toLocaleString('en-PK', { maximumFractionDigits: 0 });
+
+            const lowStock = medicines.filter(m => (Number(m.stock) || 0) < 10);
+            const elLowStock = document.getElementById('dash-low-stock');
+            if (elLowStock) elLowStock.innerText = lowStock.length;
 
             const today = new Date().toISOString().split('T')[0];
             const todaySales = sales.filter(s => s.timestamp && s.timestamp.startsWith(today));
-            const todayTotal = todaySales.reduce((sum, s) => sum + s.netTotal, 0);
-            document.getElementById('dash-today-sales').innerText = 'Rs. ' + todayTotal.toLocaleString('en-PK', { maximumFractionDigits: 0 });
+            const todayTotal = todaySales.reduce((sum, s) => sum + (Number(s.netTotal) || 0), 0);
+            const elTodaySales = document.getElementById('dash-today-sales');
+            if (elTodaySales) elTodaySales.innerText = 'Rs. ' + todayTotal.toLocaleString('en-PK', { maximumFractionDigits: 0 });
 
             // Low Stock Warning List
             const lowStockList = document.getElementById('low-stock-list');
-            if (lowStock.length === 0) {
-                lowStockList.innerHTML = `<p class="text-xs text-slate-400 py-3 text-center">Tamam medicines ka stock munasib hai.</p>`;
-            } else {
-                lowStockList.innerHTML = lowStock.slice(0, 5).map(m => `
-                    <div class="py-2 flex items-center justify-between text-xs">
-                        <div>
-                            <strong class="text-slate-800">${m.name}</strong>
-                            <span class="text-[10px] text-slate-400 block">${m.distributor || 'General'}</span>
+            if (lowStockList) {
+                if (lowStock.length === 0) {
+                    lowStockList.innerHTML = `<p class="text-xs text-slate-400 py-3 text-center">Tamam medicines ka stock munasib hai.</p>`;
+                } else {
+                    lowStockList.innerHTML = lowStock.slice(0, 5).map(m => `
+                        <div class="py-2 flex items-center justify-between text-xs">
+                            <div>
+                                <strong class="text-slate-800">${m.name}</strong>
+                                <span class="text-[10px] text-slate-400 block">${m.distributor || 'General'}</span>
+                            </div>
+                            <span class="font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">${m.stock} bache hain</span>
                         </div>
-                        <span class="font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">${m.stock} bache hain</span>
-                    </div>
-                `).join('');
+                    `).join('');
+                }
             }
 
             // Expiry Alert List (Next 60 Days)
             const expiryList = document.getElementById('expiry-alert-list');
-            const now = new Date();
-            const sixtyDaysLater = new Date(now.getTime() + 60*24*60*60*1000);
-            const expiringSoon = medicines.filter(m => {
-                if (!m.expiry) return false;
-                const d = new Date(m.expiry);
-                return d >= now && d <= sixtyDaysLater;
-            });
+            if (expiryList) {
+                const now = new Date();
+                const sixtyDaysLater = new Date(now.getTime() + 60*24*60*60*1000);
+                const expiringSoon = medicines.filter(m => {
+                    if (!m.expiry) return false;
+                    const d = new Date(m.expiry);
+                    return d >= now && d <= sixtyDaysLater;
+                });
 
-            if (expiringSoon.length === 0) {
-                expiryList.innerHTML = `<p class="text-xs text-slate-400 py-2 text-center">Agly 60 dino mein koi medicine expire nahi ho rahi.</p>`;
-            } else {
-                expiryList.innerHTML = expiringSoon.slice(0, 5).map(m => `
-                    <div class="py-1.5 flex items-center justify-between text-xs">
-                        <strong class="text-slate-800">${m.name}</strong>
-                        <span class="font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded text-[10px]">Exp: ${m.expiry}</span>
-                    </div>
-                `).join('');
+                if (expiringSoon.length === 0) {
+                    expiryList.innerHTML = `<p class="text-xs text-slate-400 py-2 text-center">Agly 60 dino mein koi medicine expire nahi ho rahi.</p>`;
+                } else {
+                    expiryList.innerHTML = expiringSoon.slice(0, 5).map(m => `
+                        <div class="py-1.5 flex items-center justify-between text-xs">
+                            <strong class="text-slate-800">${m.name}</strong>
+                            <span class="font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded text-[10px]">Exp: ${m.expiry}</span>
+                        </div>
+                    `).join('');
+                }
             }
 
             // Recent Invoices List
             const recentSalesList = document.getElementById('recent-sales-list');
-            if (sales.length === 0) {
-                recentSalesList.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Aaj abhi tak koi sale invoice generate nahi hui.</p>`;
-            } else {
-                recentSalesList.innerHTML = [...sales].reverse().slice(0, 8).map(s => `
-                    <div onclick="window.openSaleEditModal('${s.id}')" class="p-2 bg-slate-50 hover:bg-slate-100 rounded-xl cursor-pointer flex items-center justify-between text-xs transition border border-slate-100">
-                        <div>
-                            <strong class="text-slate-800 block">#${s.invoiceId} - ${s.customer}</strong>
-                            <span class="text-[10px] text-slate-400">${new Date(s.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • ${s.paymentMode}</span>
+            if (recentSalesList) {
+                if (sales.length === 0) {
+                    recentSalesList.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Aaj abhi tak koi sale invoice generate nahi hui.</p>`;
+                } else {
+                    recentSalesList.innerHTML = [...sales].reverse().slice(0, 8).map(s => `
+                        <div onclick="window.openSaleEditModal('${s.id}')" class="p-2 bg-slate-50 hover:bg-slate-100 rounded-xl cursor-pointer flex items-center justify-between text-xs transition border border-slate-100">
+                            <div>
+                                <strong class="text-slate-800 block">#${s.invoiceId} - ${s.customer}</strong>
+                                <span class="text-[10px] text-slate-400">${new Date(s.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • ${s.paymentMode}</span>
+                            </div>
+                            <span class="font-black text-brand-700">Rs. ${Number(s.netTotal).toFixed(2)}</span>
                         </div>
-                        <span class="font-black text-brand-700">Rs. ${s.netTotal.toFixed(2)}</span>
-                    </div>
-                `).join('');
+                    `).join('');
+                }
             }
             safeCreateIcons();
         }
@@ -3060,10 +3214,10 @@ Return ONLY a valid JSON array of objects.`;
             // Seed initial sample medicines if fresh
             if (medicines.length === 0) {
                 medicines = [
-                    { id: 'med_1', name: 'Panadol 500mg', generic: 'Paracetamol', distributor: 'GSK Pakistan', packSize: 200, batch: 'B-849', expiry: '2027-11-20', buyRate: 480, mrp: 540, stock: 25 },
-                    { id: 'med_2', name: 'Augmentin 625mg', generic: 'Co-Amoxiclav', distributor: 'GSK Pakistan', packSize: 14, batch: 'AUG-11', expiry: '2026-12-15', buyRate: 310, mrp: 360, stock: 8 },
-                    { id: 'med_3', name: 'Brufen 400mg', generic: 'Ibuprofen', distributor: 'Abbott Lab', packSize: 100, batch: 'BF-309', expiry: '2027-04-10', buyRate: 260, mrp: 300, stock: 15 },
-                    { id: 'med_4', name: 'Risek 20mg Cap', generic: 'Omeprazole', distributor: 'Getz Pharma', packSize: 14, batch: 'RK-77', expiry: '2026-10-30', buyRate: 240, mrp: 285, stock: 4 }
+                    { id: 'med_1', name: 'Panadol 500mg', generic: 'Paracetamol', distributor: 'GSK Pakistan', packSize: '200', batch: 'B-849', expiry: '2027-11-20', buyRate: 480, mrp: 540, stock: 25 },
+                    { id: 'med_2', name: 'Augmentin 625mg', generic: 'Co-Amoxiclav', distributor: 'GSK Pakistan', packSize: '2x7', batch: 'AUG-11', expiry: '2026-12-15', buyRate: 310, mrp: 360, stock: 8 },
+                    { id: 'med_3', name: 'Brufen 400mg', generic: 'Ibuprofen', distributor: 'Abbott Lab', packSize: '10x10', batch: 'BF-309', expiry: '2027-04-10', buyRate: 260, mrp: 300, stock: 15 },
+                    { id: 'med_4', name: 'Risek 20mg Cap', generic: 'Omeprazole', distributor: 'Getz Pharma', packSize: '2x7', batch: 'RK-77', expiry: '2026-10-30', buyRate: 240, mrp: 285, stock: 4 }
                 ];
                 localStorage.setItem('sm_medicines', JSON.stringify(medicines));
             }
