@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="color-scheme" content="light">
     <meta name="theme-color" content="#1e40af">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,11 +26,13 @@
                         brand: {
                             50: '#eff6ff',
                             100: '#dbeafe',
+                            200: '#bfdbfe',
                             500: '#3b82f6',
                             600: '#2563eb',
                             700: '#1d4ed8',
                             800: '#1e40af',
                             900: '#1e3a8a',
+                            950: '#0f172a'
                         }
                     }
                 }
@@ -49,7 +52,7 @@
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js" type="module"></script>
 
     <style>
-        /* Force Browser Form Controls to Light Mode so Mobile Dark Mode Never Turns Text White-on-White */
+        /* Force Browser Form Controls to Light Mode so Mobile Dark Mode Never Inverts Text */
         :root, html, body {
             color-scheme: light only !important;
             forced-color-adjust: none !important;
@@ -221,12 +224,12 @@
                 </button>
 
                 <!-- Unified Account & Profile Hub Button -->
-                <button id="account-hub-btn" onclick="window.openAccountHubModal()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-brand-600 px-2 py-1 rounded-full transition shadow text-left">
+                <button id="account-hub-btn" onclick="window.openAccountHubModal()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-brand-600 px-2.5 py-1 rounded-full transition shadow text-left">
                     <div class="flex flex-col hidden sm:block">
                         <span id="hub-header-name" class="block leading-none text-xs font-bold text-white">Guest Mode</span>
                         <span id="hub-header-status" class="block leading-tight text-[9px] text-amber-300 font-medium">Local System</span>
                     </div>
-                    <div class="w-7 h-7 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center font-black text-xs shrink-0">
+                    <div class="w-7 h-7 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center font-black text-xs shrink-0 shadow-inner">
                         <span id="profile-avatar-char">G</span>
                     </div>
                 </button>
@@ -270,18 +273,21 @@
         <section id="view-dashboard" class="tab-content flex flex-col gap-4">
             
             <!-- Sleek Compact Prescription AI Banner -->
-            <div class="bg-gradient-to-r from-brand-900 to-indigo-900 text-white rounded-xl shadow-sm p-3 flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="p-1.5 bg-amber-400/20 text-amber-300 rounded-lg shrink-0 border border-amber-400/30">
-                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <div class="bg-gradient-to-r from-brand-900 via-indigo-900 to-slate-900 text-white rounded-2xl shadow-sm p-3.5 flex flex-wrap items-center justify-between gap-3 border border-brand-700/60">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-amber-400/20 text-amber-300 rounded-xl shrink-0 border border-amber-400/30">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
                     </div>
-                    <h2 class="font-bold text-sm tracking-wide flex items-center gap-2">
-                        Prescription AI Reader
-                        <span class="text-[9px] font-bold bg-amber-400 text-slate-900 px-1.5 py-0.5 rounded uppercase hidden sm:inline-block">Smart Vision</span>
-                    </h2>
+                    <div>
+                        <h2 class="font-bold text-sm tracking-wide flex items-center gap-2">
+                            Doctor Prescription AI Reader
+                            <span class="text-[9px] font-bold bg-amber-400 text-slate-900 px-1.5 py-0.5 rounded uppercase hidden sm:inline-block">Smart Vision</span>
+                        </h2>
+                        <p class="text-[11px] text-slate-300">Doctor ka nuskha ya slip scan karein, dawaiyan aur khuraq auto-read hongi.</p>
+                    </div>
                 </div>
-                <label class="cursor-pointer bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition shrink-0 flex items-center gap-1.5">
-                    <i data-lucide="scan" class="w-3.5 h-3.5"></i> Scan Nuskha
+                <label class="cursor-pointer bg-amber-400 hover:bg-amber-500 text-slate-900 font-black text-xs px-3.5 py-2 rounded-xl shadow transition shrink-0 flex items-center gap-1.5 active:scale-95">
+                    <i data-lucide="scan" class="w-4 h-4"></i> Scan Nuskha
                     <input type="file" id="dashboard-presc-input" class="hidden" accept="image/*" onchange="window.handlePrescriptionScan(event)">
                 </label>
             </div>
@@ -415,7 +421,7 @@
                     <div>
                         <div class="flex justify-between items-center mb-1">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Qty:</label>
-                            <span id="pos-calc-rate-badge" class="text-[9px] font-black text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">Rs. 0</span>
+                            <span id="pos-calc-rate-badge" class="text-[9px] font-black text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded truncate max-w-[130px]">Rs. 0</span>
                         </div>
                         <input type="number" id="pos-qty" min="1" value="1" oninput="window.updatePosLivePriceHint()" onkeydown="if(event.key==='Enter'){ event.preventDefault(); window.addItemToCart(); }" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-black text-center text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500">
                     </div>
@@ -501,7 +507,7 @@
 
         <section id="view-inventory" class="tab-content hidden flex flex-col gap-4">
             <!-- Compact Bill Scanner Banner -->
-            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white rounded-xl shadow-sm p-3 flex items-center justify-between gap-3">
+            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white rounded-xl shadow-sm p-3 flex items-center justify-between gap-3 border border-emerald-700">
                 <div class="flex items-center gap-2.5">
                     <div class="p-1.5 bg-white/10 rounded-lg shrink-0">
                         <i data-lucide="scan-line" class="w-4 h-4 text-emerald-300"></i>
@@ -559,7 +565,7 @@
 
         <section id="view-margin" class="tab-content hidden max-w-3xl mx-auto w-full flex flex-col gap-4">
             <!-- Compact Margin AI Scanner Banner -->
-            <div class="bg-gradient-to-r from-amber-600 to-orange-700 text-white rounded-xl shadow-sm p-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="bg-gradient-to-r from-amber-600 to-orange-700 text-white rounded-xl shadow-sm p-3 flex flex-wrap items-center justify-between gap-3 border border-amber-500">
                 <div class="flex items-center gap-2.5">
                     <div class="p-1.5 bg-white/10 rounded-lg shrink-0">
                         <i data-lucide="percent" class="w-4 h-4 text-amber-200"></i>
@@ -669,7 +675,7 @@
         </section>
 
         <section id="view-network" class="tab-content hidden flex flex-col gap-3">
-            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-4 rounded-2xl shadow-md flex items-center justify-between">
+            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-4 rounded-2xl shadow-md flex items-center justify-between border border-emerald-700">
                 <div class="flex items-center gap-3">
                     <div class="p-2.5 bg-white/10 rounded-xl">
                         <i data-lucide="network" class="w-6 h-6 text-emerald-300"></i>
@@ -769,8 +775,15 @@
                     <label class="block font-bold text-slate-600 mb-0.5">Drug Sale License (D.S.L #):</label>
                     <input type="text" id="hub-store-license" placeholder="DSL-PB-2024" class="w-full px-2.5 py-1.5 border rounded-xl font-semibold text-slate-900 bg-white">
                 </div>
+                <div>
+                    <div class="flex justify-between items-center mb-0.5">
+                        <label class="font-bold text-slate-600">Gemini AI API Key (Optional):</label>
+                        <span class="text-[9px] text-slate-400">GitHub Pages kelye</span>
+                    </div>
+                    <input type="password" id="hub-gemini-key" placeholder="AI Studio Key (Optional)" class="w-full px-2.5 py-1.5 border rounded-xl font-mono text-slate-900 bg-white">
+                </div>
                 
-                <button onclick="window.saveAccountHubStoreProfile()" class="w-full py-2 mt-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl shadow-sm border border-slate-300 transition">
+                <button onclick="window.saveAccountHubStoreProfile()" class="w-full py-2 mt-1 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow transition active:scale-95">
                     Save Profile Changes
                 </button>
             </div>
@@ -888,13 +901,13 @@
 
             <!-- Export Actions: Download PNG, WhatsApp Share, Thermal Print -->
             <div class="grid grid-cols-3 gap-2 pt-1">
-                <button onclick="window.downloadThermalSlipImage()" class="py-2.5 bg-slate-900 hover:bg-black text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow">
+                <button onclick="window.downloadThermalSlipImage()" class="py-2.5 bg-slate-900 hover:bg-black text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow active:scale-95">
                     <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i> Slip PNG
                 </button>
-                <button onclick="window.shareReceiptOnWhatsApp()" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow">
+                <button onclick="window.shareReceiptOnWhatsApp()" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow active:scale-95">
                     <i data-lucide="share-2" class="w-3.5 h-3.5"></i> WhatsApp
                 </button>
-                <button onclick="window.printThermalReceipt()" class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow">
+                <button onclick="window.printThermalReceipt()" class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 shadow active:scale-95">
                     <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print (80mm)
                 </button>
             </div>
@@ -1050,7 +1063,7 @@
                     <button onclick="window.closeAiScanModal()" class="flex-1 py-2 border rounded-xl font-bold text-slate-600 text-xs">
                         Cancel
                     </button>
-                    <button onclick="window.saveAiScannedItemsToInventory()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5">
+                    <button onclick="window.saveAiScannedItemsToInventory()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 active:scale-95">
                         <i data-lucide="check" class="w-4 h-4"></i> Save to Stock Inventory
                     </button>
                 </div>
@@ -1116,7 +1129,7 @@
                 </div>
                 <div class="flex gap-2 pt-2 border-t">
                     <button type="button" onclick="window.closeMedicineModal()" class="flex-1 py-2 border rounded-xl font-bold text-slate-600">Cancel</button>
-                    <button type="submit" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow">Save Medicine</button>
+                    <button type="submit" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow active:scale-95">Save Medicine</button>
                 </div>
             </form>
         </div>
@@ -1166,13 +1179,13 @@
                 </div>
             </div>
             <div class="flex gap-2 pt-2 border-t">
-                <button onclick="window.reprintEditedSale()" class="flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs border border-indigo-200 flex items-center justify-center gap-1">
+                <button onclick="window.reprintEditedSale()" class="flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs border border-indigo-200 flex items-center justify-center gap-1 active:scale-95">
                     <i data-lucide="printer" class="w-3.5 h-3.5"></i> Re-Print
                 </button>
-                <button onclick="window.saveSaleEdits()" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs shadow">
+                <button onclick="window.saveSaleEdits()" class="flex-1 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs shadow active:scale-95">
                     Save Changes
                 </button>
-                <button onclick="window.deleteSaleInvoicePrompt()" class="p-2 text-red-600 hover:bg-red-50 rounded-xl" title="Delete Bill & Restock">
+                <button onclick="window.deleteSaleInvoicePrompt()" class="p-2 text-red-600 hover:bg-red-50 rounded-xl active:scale-95" title="Delete Bill & Restock">
                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -1204,7 +1217,7 @@
             const str = String(packInput).trim();
             
             // Check for multiplication expressions anywhere in string e.g. 2x7, 10x10, 1 x 5, 2*14
-            const multMatch = str.match(/(\d+)\s*[xX*]\s*(\d+)/);
+            const multMatch = str.match(/(\d+)\s*[*xX/]\s*(\d+)/);
             if (multMatch) {
                 const p1 = parseInt(multMatch[1], 10) || 1;
                 const p2 = parseInt(multMatch[2], 10) || 1;
@@ -1383,7 +1396,7 @@
                     if (deferredPrompt) {
                         deferredPrompt.prompt();
                     } else {
-                        showToast('Device par 1-click install ready ho raha hai, refresh kar ke dobara click karein.', 'info');
+                        showToast('Browser menu (3 dots) par tap kar ke "Install App" ya "Add to Home Screen" karein.', 'info');
                     }
                 }, 1000);
             }
@@ -1454,7 +1467,6 @@
         }
         window.safeCreateIcons = safeCreateIcons;
 
-        // Universal Resilient JSON Parser
         function extractSmartJson(rawText) {
             if (!rawText || typeof rawText !== 'string') return null;
             try {
@@ -1498,6 +1510,8 @@
                 meds = parsed.prescription;
             } else if (parsed.medicines && typeof parsed.medicines === 'object') {
                 meds = Object.values(parsed.medicines);
+            } else if (parsed.data && typeof parsed.data === 'object') {
+                return normalizePrescriptionData(parsed.data);
             }
 
             return {
@@ -1528,6 +1542,8 @@
                 list = parsed.invoicedItems;
             } else if (Array.isArray(parsed.lines)) {
                 list = parsed.lines;
+            } else if (parsed.data && typeof parsed.data === 'object') {
+                return normalizeInvoiceItems(parsed.data);
             }
             return list.filter(item => item && (item.name || item.item || item.description)).map(item => ({
                 name: item.name || item.item || item.description || 'Medicine',
@@ -1542,45 +1558,39 @@
             }));
         }
 
+        // ==============================================================
+        // 100% RELIABLE MOBILE ORIENTATION-AWARE CAMERA RESIZER
+        // Fixes rotated photos (orientation 6) & high-res RAM choke
+        // ==============================================================
         async function enhanceImageLikeCamScanner(file) {
             if (!file) throw new Error("Tasweer select nahi hui.");
-            
+
+            let drawSource = null;
             let sourceWidth = 0;
             let sourceHeight = 0;
-            let drawSource = null;
-            let bitmap = null;
+            let objectUrl = null;
 
-            // Attempt native orientation normalization
             try {
-                if (window.createImageBitmap) {
-                    bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
-                    sourceWidth = bitmap.width;
-                    sourceHeight = bitmap.height;
-                    drawSource = bitmap;
+                if (typeof window.createImageBitmap === 'function') {
+                    drawSource = await createImageBitmap(file, { imageOrientation: 'from-image' });
+                    sourceWidth = drawSource.width;
+                    sourceHeight = drawSource.height;
                 }
-            } catch(e) {
-                bitmap = null;
+            } catch (bitmapErr) {
+                drawSource = null;
             }
 
-            if (!bitmap) {
-                // Reliable FileReader fallback
-                const dataUrl = await new Promise((resolve, reject) => {
-                    const r = new FileReader();
-                    r.onload = () => resolve(r.target.result);
-                    r.onerror = () => reject(new Error("File read fail ho gayi."));
-                    r.readAsDataURL(file);
-                });
-
+            if (!drawSource) {
+                objectUrl = URL.createObjectURL(file);
                 const img = await new Promise((resolve, reject) => {
                     const i = new Image();
                     i.onload = () => resolve(i);
                     i.onerror = () => reject(new Error("Image format load nahi ho saka."));
-                    i.src = dataUrl;
+                    i.src = objectUrl;
                 });
-
+                drawSource = img;
                 sourceWidth = img.naturalWidth || img.width;
                 sourceHeight = img.naturalHeight || img.height;
-                drawSource = img;
             }
 
             // Downscale to 1400px to maintain crisp OCR while preventing mobile memory errors
@@ -1600,7 +1610,7 @@
             const canvas = document.createElement('canvas');
             canvas.width = width;
             canvas.height = height;
-            const ctx = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
             // Solid white background to eliminate transparency artifacts
             ctx.fillStyle = '#ffffff';
@@ -1610,18 +1620,24 @@
             ctx.imageSmoothingQuality = 'high';
             ctx.drawImage(drawSource, 0, 0, width, height);
 
-            if (bitmap && typeof bitmap.close === 'function') {
-                bitmap.close();
+            // Clean up resources
+            if (drawSource && typeof drawSource.close === 'function') {
+                drawSource.close();
+            }
+            if (objectUrl) {
+                URL.revokeObjectURL(objectUrl);
             }
 
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
             const base64 = dataUrl.split(',')[1];
             if (!base64) throw new Error("Image process nahi ho saki.");
             return base64;
         }
 
         async function callGeminiVisionWithBackoff(prompt, base64Data, retries = 3) {
-            const apiKey = "";
+            // Check for locally configured API key or fallback
+            const customKey = localStorage.getItem('gemini_api_key') || "";
+            const apiKey = customKey || "";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{
@@ -1756,6 +1772,7 @@
             safeCreateIcons();
         };
 
+        // Desktop keyboard workflow
         window.addEventListener('keydown', (e) => {
             if (e.key === 'F1') {
                 e.preventDefault();
@@ -1956,7 +1973,7 @@
                 // Strictly calculate per-loose tablet price
                 pricePerUnit = mrp / totalUnits;
                 stockDeduction = qty / totalUnits;
-                displayUnit = 'Loose / Tab';
+                displayUnit = 'Tab (Loose)';
 
                 const totalTabsAvailable = currentSelectedMed.stock * totalUnits;
                 if (totalTabsAvailable < qty) {
@@ -2020,7 +2037,7 @@
                     <td class="p-2 text-right text-slate-600">Rs. ${item.price.toFixed(2)}</td>
                     <td class="p-2 text-right font-black text-slate-900">Rs. ${item.total.toFixed(2)}</td>
                     <td class="p-2 text-center">
-                        <button onclick="window.removeCartItem(${index})" class="text-red-500 hover:text-red-700 p-1">
+                        <button onclick="window.removeCartItem(${index})" class="text-red-500 hover:text-red-700 p-1 active:scale-90">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                         </button>
                     </td>
@@ -2087,7 +2104,7 @@
                 timestamp: new Date().toISOString()
             };
 
-            // Deduct stock
+            // Deduct stock accurately
             for (const c of cart) {
                 const med = medicines.find(m => m.id === c.id);
                 if (med) {
@@ -2219,11 +2236,14 @@
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `You are an expert clinical medical prescription and doctor slip reader.
-Examine this medical prescription or slip carefully (even if handwritten, photographed on a mobile camera, in low light, angled, or has shadows).
-CRITICAL INSTRUCTION: Never say the image is unreadable or blurry. Always extract all legible medicine names, potencies, formulations, dosages, and instructions from whatever text or lines are visible. If a brand name is partially legible, deduce the most likely medicine name based on standard pharmacy practice.
+                const prompt = `You are a world-class clinical prescription and doctor handwriting deciphering specialist for Pakistani and international medical clinics.
+CRITICAL INSTRUCTION FOR MOBILE CAMERA CAPTURES:
+1. The photograph may be oriented horizontally, vertically, rotated 90 degrees or skewed, and taken in varied room lighting or shadows. Detect the text orientation first and read in whichever direction the handwriting flows.
+2. Pakistani physicians frequently write brand names in cursive, rushed, or stylized shorthand (e.g. Augmentin, Panadol, Risek, Brufen, Novidat, Flagyl, Softin, Arinac, Velosef, Kestine, Klaricid, Tegral, Xanax, Ponstan, Gravinate, Calpol, Caflam, Leflox, Ciproxin, etc.).
+3. DO NOT return an empty medicines list. Transcribe every medicine you can decipher. Even if a brand name is partially legible, deduce the most probable prescription drug from clinical context.
+4. If advice or precautions are written, extract them in Roman Urdu or English.
 
-Return a JSON object with this exact schema:
+Return a JSON object strictly matching this schema:
 {
   "doctor": "Doctor name or clinic name if legible, else empty string",
   "patient": "Patient name or details if legible, else empty string",
@@ -2318,9 +2338,11 @@ Return a JSON object with this exact schema:
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `You are an expert pharmacy wholesale bill and distributor invoice OCR reader.
-Scan this wholesale distributor invoice or bill (even if taken on a mobile camera, angled, dotted matrix print, or shaded).
-CRITICAL INSTRUCTION: Never fail or claim the image is unreadable. Always extract all medicine line items you can find on the invoice.
+                const prompt = `You are a specialist pharmacy wholesale bill and distributor invoice OCR reader.
+CRITICAL INSTRUCTION FOR MOBILE CAMERA CAPTURES:
+1. The photograph may be oriented horizontally, vertically, or rotated by 90 degrees on mobile cameras. Read in whichever direction the table rows and print lines flow.
+2. Invoices may be printed on dot-matrix printers, computer invoices, or handwritten distributor delivery receipts.
+3. Extract ALL medicine rows you can find.
 Extract for each item:
 - name: brand name and strength (e.g. Panadol 500mg, Augmentin 625mg)
 - generic: generic formula if visible, else empty string
@@ -2511,10 +2533,10 @@ Return a JSON array of objects.`;
                         </td>
                         <td class="p-3 text-center">
                             <div class="flex items-center justify-center gap-1">
-                                <button onclick="window.openEditMedicineModal('${m.id}')" class="p-1 text-slate-500 hover:text-brand-600">
+                                <button onclick="window.openEditMedicineModal('${m.id}')" class="p-1 text-slate-500 hover:text-brand-600 active:scale-90">
                                     <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                                 </button>
-                                <button onclick="window.deleteMedicinePrompt('${m.id}')" class="p-1 text-slate-400 hover:text-red-600">
+                                <button onclick="window.deleteMedicinePrompt('${m.id}')" class="p-1 text-slate-400 hover:text-red-600 active:scale-90">
                                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                                 </button>
                             </div>
@@ -2676,10 +2698,11 @@ Return a JSON array of objects.`;
 
             try {
                 const base64Data = await enhanceImageLikeCamScanner(file);
-                const prompt = `You are an expert pharmacy wholesale trade margin and bonus scheme auditor.
+                const prompt = `You are a specialist pharmacy wholesale trade margin and bonus scheme auditor.
 Scan this wholesale distributor bill or invoice to extract line items for profit percentage auditing.
-CRITICAL INSTRUCTION: Never claim the image is unreadable. Extract whatever medicine rows are visible.
-Extract for each line:
+CRITICAL INSTRUCTION:
+1. Photos taken on phone cameras may be horizontal or vertical. Detect the orientation and read the rows carefully.
+2. Extract for each line:
 - name: medicine name and potency
 - buyRate: wholesale invoiced rate per pack (number)
 - qty: quantity of packs invoiced (integer, default 1)
@@ -2845,7 +2868,7 @@ Return a JSON array of objects.`;
                         <strong class="text-slate-800">${p.store}</strong>
                         <span class="text-[10px] text-slate-400 block">${p.stock} dastiyab hai</span>
                     </div>
-                    <a href="https://wa.me/92${p.phone.replace(/^0/, '')}?text=${encodeURIComponent('Assalam-o-Alaikum, kya aap ke paas ' + query + ' medicine dastiyab hai?')}" target="_blank" class="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-bold flex items-center gap-1 shadow">
+                    <a href="https://wa.me/92${p.phone.replace(/^0/, '')}?text=${encodeURIComponent('Assalam-o-Alaikum, kya aap ke paas ' + query + ' medicine dastiyab hai?')}" target="_blank" class="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-bold flex items-center gap-1 shadow active:scale-95">
                         <i data-lucide="message-circle" class="w-3 h-3"></i> WhatsApp
                     </a>
                 </div>
@@ -2889,7 +2912,7 @@ Return a JSON array of objects.`;
                         <span>Active Stock:</span>
                         <strong class="text-brand-700">${s.items}+ Medicines</strong>
                     </div>
-                    <a href="https://wa.me/92${s.phone.replace(/^0/, '')}?text=${encodeURIComponent('Assalam-o-Alaikum, Digital Pharma network se rabta kiya hai.')}" target="_blank" class="w-full py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition">
+                    <a href="https://wa.me/92${s.phone.replace(/^0/, '')}?text=${encodeURIComponent('Assalam-o-Alaikum, Digital Pharma network se rabta kiya hai.')}" target="_blank" class="w-full py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95">
                         <i data-lucide="message-square" class="w-3.5 h-3.5"></i> Contact via WhatsApp
                     </a>
                 </div>
@@ -3087,6 +3110,7 @@ Return a JSON array of objects.`;
             document.getElementById('hub-store-phone').value = config.phone || '';
             document.getElementById('hub-store-address').value = config.address || '';
             document.getElementById('hub-store-license').value = config.licenseNo || '';
+            document.getElementById('hub-gemini-key').value = localStorage.getItem('gemini_api_key') || '';
 
             const statusDot = document.getElementById('hub-status-dot');
             const statusText = document.getElementById('hub-status-text');
@@ -3127,6 +3151,13 @@ Return a JSON array of objects.`;
             const phone = document.getElementById('hub-store-phone').value.trim();
             const address = document.getElementById('hub-store-address').value.trim();
             const licenseNo = document.getElementById('hub-store-license').value.trim() || 'DSL-PB-2024-8901';
+            const geminiKey = document.getElementById('hub-gemini-key').value.trim();
+
+            if (geminiKey) {
+                localStorage.setItem('gemini_api_key', geminiKey);
+            } else {
+                localStorage.removeItem('gemini_api_key');
+            }
 
             const config = {
                 name: name,
@@ -3137,7 +3168,7 @@ Return a JSON array of objects.`;
             };
             localStorage.setItem('sm_store_config', JSON.stringify(config));
             window.applyStoreIdentity();
-            showToast('Store details save ho gayin!', 'success');
+            showToast('Store details & settings save ho gayin!', 'success');
         };
 
         window.handleHubLogin = async function() {
